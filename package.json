@@ -1,6 +1,6 @@
 {
   "name": "wanxiangli",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "private": true,
   "description": "Independent work, journal, process, trace and resource ownership libraries, written in F#.",
   "type": "module",
@@ -10,13 +10,14 @@
     "./eventstore": { "types": "./src/eventstore/index.d.ts", "import": "./dist/eventstore/SqliteJournal.js" },
     "./durable-work": { "types": "./src/assembly/index.d.ts", "import": "./dist/assembly/DurableWork.js" },
     "./process": { "types": "./src/process/index.d.ts", "import": "./dist/process/ProcessSession.js" },
+    "./supervision": { "types": "./src/supervision/index.d.ts", "import": "./dist/supervision/SupervisedProcess.js" },
     "./trace": { "types": "./src/trace/index.d.ts", "import": "./dist/trace/Trace.js" },
     "./ownership": { "types": "./src/session/index.d.ts", "import": "./dist/session/Ownership.js" }
   },
-  "files": ["dist/", "src/lifecycle/index.d.ts", "src/eventstore/index.d.ts", "src/assembly/index.d.ts", "src/process/index.d.ts", "src/trace/index.d.ts", "src/session/index.d.ts", "README.md", "PROCESS.md", "TRACE.md", "OWNERSHIP.md", "MIGRATION.md", "THIRD_PARTY_NOTICES"],
+  "files": ["dist/", "src/lifecycle/index.d.ts", "src/eventstore/index.d.ts", "src/assembly/index.d.ts", "src/process/index.d.ts", "src/supervision/index.d.ts", "src/supervision/README.md", "src/trace/index.d.ts", "src/session/index.d.ts", "README.md", "PROCESS.md", "TRACE.md", "OWNERSHIP.md", "MIGRATION.md", "THIRD_PARTY_NOTICES"],
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "npm run build && node --test src/lifecycle/tests/*.test.mjs src/eventstore/tests/*.test.mjs src/assembly/tests/*.test.mjs src/process/tests/*.test.mjs src/trace/tests/*.test.mjs src/session/tests/*.test.mjs scripts/tests/*.test.mjs",
+    "test": "npm run build && node --test src/lifecycle/tests/*.test.mjs src/eventstore/tests/*.test.mjs src/assembly/tests/*.test.mjs src/process/tests/*.test.mjs src/supervision/tests/*.test.mjs src/trace/tests/*.test.mjs src/session/tests/*.test.mjs scripts/tests/*.test.mjs",
     "prepack": "npm run build"
   },
   "devDependencies": {

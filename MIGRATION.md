@@ -1,5 +1,15 @@
 # 渐进抽取与旧仓接线边界
 
+## 0.6.0：完整采集与保留组长身份的监管
+
+`ProcessSession(options, 'Capture')` 新增单消费者原始字节交付；默认构造仍是留尾。完整输出消费者必须持续调用 `takeOutput`，落盘失败须显式丢弃并终止，不能把尾部或丢弃后的状态算成完整保存。
+
+`wanxiangli/supervision` 是新增契约，说明见 [SupervisedProcess](src/supervision/README.md)。目标退出后，同组后代持管道时仍可安全请求本次执行终止；目标退出事实与监管器退出分别报告。它不承诺脱组后代清理、宿主崩溃恢复或任意进程树已死。基础 ProcessSession 仍拒绝向已观察退出的旧 PGID 发信号。
+
+Trace 新增只追加的 OpeningBound；大 Opening 通过已完成消息部件分片，保留完整原件。首条小 Opening 的编码保持原样；晚绑定不重建轨迹，旧 through 不读取后来绑定。旧坏版本被外部另存的 cut 不保证自动升级，不能静默重算它的身份。
+
+主仓按当前授权接入本版本。新库仍只通过 npm tarball 交付；主仓的完整接线、真实 PTY、原件权威迁移及未关闭边界以主仓修复记录为准。下文是各刀最初交付时的历史范围，不作为当前主仓仍未获授权的判断。
+
 ## 第四刀补充：0.5.0 资源归属与收尾
 
 独立入口 `wanxiangli/ownership` 只管理已登记的收尾范围与资源义务；说明见 `OWNERSHIP.md`。本轮没有读取或修改旧仓，前三刀生产实现没有改动。它不是新的业务 Work，也不接管 ProcessSession 的物理判断。

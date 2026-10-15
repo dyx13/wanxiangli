@@ -19,6 +19,21 @@ test('SPEC[trace-004] a frozen window never sees later parts, message completion
   assert.equal(trace.materialize(begin, trace.head()).statement.content.text, 'firstlater')
 })
 
+test('SPEC[trace-004] late opening binding does not rewrite old cuts or leak into an earlier window', () => {
+  const trace = fresh()
+  message(trace, user(), 'earlier confirmed material')
+  const through = trace.head()
+  const frozen = trace.materialize(trace.cut(0), through)
+  trace.capture({ ...user('opening'), role: 'system', origin: 'host-internal' })
+  trace.capture(part('opening', 'late confirmed opening', 0, 'chunk', 'binary'))
+  trace.capture(finish('opening'))
+  const beforeBinding = trace.head()
+  trace.capture({ type: 'OpeningBound', messageId: 'opening' })
+  assert.deepEqual(trace.materialize(trace.cut(0), through), frozen)
+  assert.equal(trace.materialize(trace.cut(0), beforeBinding).opening, null)
+  assert.equal(whole(trace).opening.text, 'late confirmed opening')
+})
+
 test('SPEC[trace-004] late parts of a predecessor stay raw observations, not successor messages', () => {
   const trace = capturedUser()
   trace.capture(started())

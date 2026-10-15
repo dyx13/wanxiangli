@@ -11,6 +11,7 @@ type internal PartInfo =
 [<RequireQualifiedAccess>]
 type internal Observation =
     | Opening of string
+    | OpeningBound of message: string
     | RunStarted of string
     | MessageObserved of MessageInfo
     | PartConfirmed of PartInfo
@@ -34,6 +35,9 @@ module internal Observation =
         | "Opening" ->
             check [ payloadName ]
             Observation.Opening(payload ())
+        | "OpeningBound" ->
+            check [ "messageId" ]
+            Observation.OpeningBound(identifier (read "messageId"))
         | "RunStarted" ->
             check [ "runId" ]
             Observation.RunStarted(identifier (read "runId"))
@@ -66,6 +70,7 @@ module internal Observation =
         let tagged tag fields = make (("type", box tag) :: fields)
         match fact with
         | Observation.Opening data -> tagged "Opening" [ payload data ]
+        | Observation.OpeningBound message -> tagged "OpeningBound" [ "messageId", box message ]
         | Observation.RunStarted run -> tagged "RunStarted" [ "runId", box run ]
         | Observation.MessageObserved message ->
             tagged "MessageObserved"
@@ -84,6 +89,7 @@ module internal Observation =
         let fields =
             match fact with
             | Observation.Opening _ -> [ "Opening" ]
+            | Observation.OpeningBound _ -> [ "Opening" ]
             | Observation.RunStarted run -> [ "RunStarted"; run ]
             | Observation.MessageObserved message -> [ "MessageObserved"; message.Id ]
             | Observation.PartConfirmed part -> [ "PartConfirmed"; part.Message; part.Id ]

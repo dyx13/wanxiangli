@@ -15,6 +15,24 @@ test('SPEC[trace-005] canonical records restore the same bytes, identities and f
   assert.deepEqual(restored.records(), trace.records())
 })
 
+test('SPEC[trace-005] opening binding restores through the same cuts and rejects incomplete material', () => {
+  const trace = fresh()
+  trace.capture(user())
+  const before = trace.head()
+  trace.capture({ ...user('opening'), role: 'system', origin: 'host-internal' })
+  trace.capture(part('opening', 'bound material', 0, 'chunk', 'binary'))
+  trace.capture(finish('opening'))
+  const binding = { type: 'OpeningBound', messageId: 'opening' }
+  trace.capture(binding)
+  const restored = new Trace('trace-a', trace.records())
+  assert.deepEqual(restored.materialize(restored.cut(0), restored.head()), whole(trace))
+  assert.deepEqual(restored.read(restored.cut(0), before), trace.read(trace.cut(0), before))
+  assert.equal(restored.capture(binding).status, 'Replayed')
+  const frames = trace.records().map(JSON.parse)
+  frames.splice(3, 1)
+  assert.throws(() => new Trace('trace-a', resign(frames)), /finished/)
+})
+
 for (const [name, corrupt] of [
   ['missing record', rows => rows.filter((_, index) => index !== 1)],
   ['duplicate record', rows => [...rows, rows.at(-1)]],

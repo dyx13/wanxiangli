@@ -32,11 +32,12 @@ restored.read(beginning, through) // 同一条历史、同一段材料
 
 `Trace` 返回封装状态的对象，不以可读写实例字段或继承工作。结果和字节都是分离视图；用户后续修改输入或结果不能改写对象内的原件。
 
-## 捕获的六类事实
+## 捕获的七类事实
 
 | type | 输入及含义 |
 |---|---|
 | Opening | bytes；可选开场，只能在第一条出现，同内容重放幂等 |
+| OpeningBound | messageId；把一个已完成的 host-internal system 消息绑定为开场材料 |
 | RunStarted | runId；已经观察到该 provider 运行存在 |
 | MessageObserved | messageId、role、origin、runId；冻结消息归属并分配首次观察游标 |
 | PartConfirmed | messageId、partId、index、kind、bytes；该消息已确认的完整部件 |
@@ -48,6 +49,10 @@ restored.read(beginning, through) // 同一条历史、同一段材料
 部件 kind 为 text、tool-call、tool-result 或 binary。tool-call 只能属于 assistant，tool-result 只能属于 tool。每条消息的 index 从零连续增长；不同消息可以交错捕获。partId 在消息内唯一；同身份对应不同内容、index 或 kind 时拒绝。
 
 消息完成后不再接受新部件，运行结束前其所有已观察消息必须完成。已完成对象仍接受完全相同的历史观察重放，但不接受缺失的新事实。宿主必须先排好已确认事实的因果顺序，不能先终结、再靠轨迹库补写迟到材料。未知运行结果不是 RunFinished。
+
+`Opening` 仍只接受首条、不超过 512 KiB 的完整字节。大开场或事后确认的开场使用现有消息协议：先观察一个 `role: 'system', origin: 'host-internal', runId: null` 的稳定消息，把完整材料按不超过 512 KiB 的 `PartConfirmed` 连续分片，完成消息，最后捕获 `OpeningBound`。绑定引用该消息全部已确认部件，不重新捕获或移动原件。来源由调用方明确报告，不把装配后的开场当作新的 human 消息。
+
+两种开场形式共有一个身份：只能采用其中一种，同一绑定可重放，换消息或换形式属于冲突。绑定前 `materialize().opening` 为 null；绑定后返回完整部件字节的连接。冻结在绑定之前的窗口始终没有这份开场，即使以后查询或重新恢复，也不会看到后来才确认的证据。缺消息、缺部件、未完成或非内部 system 消息都不能绑定。
 
 确认只是适配者通过这个协议报告的事实，库无法证明宿主没有说谎。流式临时快照、可覆盖候选和失败探针不属于捕获词表；原消息被用户编辑时须使用新的稳定观察身份，不能覆盖旧身份。
 
@@ -81,7 +86,7 @@ BOM、NUL、CRLF、组合字符、任意非 UTF-8 字节均按原件保存，不
 |---|---|
 | messages | 首次观察游标落在区间内的消息；部件和完成状态只读到 through |
 | originals | 从轨迹起点到 through 的全部 human 消息及其已确认部件；不受 after 过滤 |
-| opening | through 已包含的那份固定开场；可由表示层不渲染，但原件不删除 |
+| opening | through 已包含 Opening 或 OpeningBound 的完整开场；可由表示层不渲染，但原件不删除 |
 | statement | messages 中最后一条已完成、含 text 部件的助手消息；只连接 text 原始字节并列出 partIds，没有则 null |
 
 前任消息后来才到的部件仍能在原始观察中找到，但不会把该消息搬进后任 messages。最后助手散文不掺 tool-call/tool-result，也不选尚未完成的助手消息；它是原件引用和字节连接，不是总结、证书或自动评审结果。
@@ -95,6 +100,8 @@ Trace 不知道 Journal。外侧 C 读取已提交记录建立候选，向候选
 `scripts/tests/trace-consumer.mjs` 是这段显式合作的可运行消费者。安装包测试分别在 Node/Bun 上真实写 SQLite，保持连接打开后 SIGKILL，再从新进程按保留边界读回原字节；重放不重复写入。另删除所有前两刀产物与类型，验证 Trace 单独恢复和取材。
 
 这里没有新增自动持久包装器，Appended 不等于 Committed。真实宿主的捕获/提交顺序、断电行为与多写入者观察合流不在本刀证明内。
+
+旧版 `Opening` records 按原格式恢复，既有 cut 不变。`OpeningBound` 是新增观察词表，旧版库不能读取包含它的新记录；发布方必须先升级读写端，再写新词表。业务侧若曾重建同名历史或截断输入，本库不会替那条历史重算可信边界，也不能从截断记录补回未保存的原件。
 
 ## 验证
 

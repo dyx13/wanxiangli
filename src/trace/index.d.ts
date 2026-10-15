@@ -3,6 +3,7 @@ export type Role = 'user' | 'assistant' | 'tool' | 'system';
 export type PartKind = 'text' | 'tool-call' | 'tool-result' | 'binary';
 export type Observation =
   | { type: 'Opening'; bytes: Uint8Array }
+  | { type: 'OpeningBound'; messageId: string }
   | { type: 'RunStarted'; runId: string }
   | ({ type: 'MessageObserved'; messageId: string } & (
       | { role: 'user'; origin: 'human' | 'plugin' | 'host-internal'; runId: null }

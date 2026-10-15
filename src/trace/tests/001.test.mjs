@@ -23,6 +23,27 @@ test('SPEC[trace-001] opening cannot be added late or overwritten', () => {
   unchanged(without, () => without.capture({ type: 'Opening', bytes: bytes('late') }), /first/)
 })
 
+test('SPEC[trace-001] opening binding requires complete internal material and remains unique', () => {
+  const trace = fresh()
+  const binding = { type: 'OpeningBound', messageId: 'opening' }
+  unchanged(trace, () => trace.capture(binding), /observed/)
+  trace.capture({ ...user('opening'), role: 'system', origin: 'host-internal' })
+  trace.capture(part('opening', 'confirmed opening', 0, 'opening-part', 'binary'))
+  unchanged(trace, () => trace.capture(binding), /finished/)
+  trace.capture(finish('opening'))
+  const receipt = trace.capture(binding)
+  assert.deepEqual(trace.capture(binding), { ...receipt, status: 'Replayed' })
+  unchanged(trace, () => trace.capture({ type: 'Opening', bytes: bytes('changed') }), /conflict/)
+  unchanged(trace, () => trace.capture({ ...binding, messageId: 'other' }), /conflict/)
+  unchanged(trace, () => trace.capture(part('opening', 'late', 1)), /finished/)
+
+  const human = fresh()
+  human.capture(user())
+  human.capture(part('user-1', 'human material'))
+  human.capture(finish('user-1'))
+  unchanged(human, () => human.capture({ ...binding, messageId: 'user-1' }), /internal/)
+})
+
 test('SPEC[trace-001] interleaved messages share a trace but not part indices or part identities', () => {
   const trace = fresh()
   trace.capture(user('a'))

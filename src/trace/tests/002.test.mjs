@@ -52,6 +52,23 @@ test('SPEC[trace-002] byte and record budgets reject oversize content without pa
   assert.deepEqual(whole(trace).originals[0].parts[0].content.bytes, data)
 })
 
+test('SPEC[trace-002] opening binding joins large confirmed chunks without losing bytes or counting them twice', () => {
+  const trace = fresh()
+  const source = Buffer.concat([Buffer.from('\ufeff\u0000\r\n'), Buffer.alloc(600 * 1024, 255), bytes('尾部')])
+  trace.capture({ ...user('opening'), role: 'system', origin: 'host-internal' })
+  trace.capture(part('opening', source.subarray(0, 524288), 0, 'chunk-0', 'binary'))
+  trace.capture(part('opening', source.subarray(524288), 1, 'chunk-1', 'binary'))
+  assert.equal(whole(trace).opening, null)
+  unchanged(trace, () => trace.capture(finish('opening', 3)), /count/)
+  trace.capture(finish('opening', 2))
+  trace.capture({ type: 'OpeningBound', messageId: 'opening' })
+  assert.deepEqual(whole(trace).opening.bytes, new Uint8Array(source))
+  assert.equal(whole(trace).opening.text, null)
+  assert.equal(trace.inspect().bytes, source.length)
+  whole(trace).opening.bytes.fill(0)
+  assert.deepEqual(whole(trace).opening.bytes, new Uint8Array(source))
+})
+
 test('SPEC[trace-002] strings, ordinary arrays, shared bytes and resizable buffers are not byte observations', () => {
   const trace = fresh()
   trace.capture(user())

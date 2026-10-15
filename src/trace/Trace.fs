@@ -30,6 +30,11 @@ type private Run() =
 type private Entry =
     { Fact: Observation; Encoded: string; Record: string; Digest: string }
 
+[<RequireQualifiedAccess>]
+type private OpeningSource =
+    | Inline of string
+    | MessageParts of Message
+
 let Trace (traceId: string) (initialRecords: obj): TraceMessages =
     let traceId = identifier (box traceId)
     let genesis = sha256 (stringify (box [| "trace-origin-v1"; traceId |]))
@@ -38,7 +43,7 @@ let Trace (traceId: string) (initialRecords: obj): TraceMessages =
     let messages = Dictionary<string, Message>()
     let messageOrder = ResizeArray<Message>()
     let runs = Dictionary<string, Run>()
-    let mutable opening: string option = None
+    let mutable opening: (int * OpeningSource) option = None
     let mutable byteCount = 0.
     let mutable busy = false
 
@@ -72,8 +77,14 @@ let Trace (traceId: string) (initialRecords: obj): TraceMessages =
         | Observation.Opening data ->
             require (entries.Count = 0 && opening.IsNone) "Opening must be the first observation"
             fun () ->
-                opening <- Some data
+                opening <- Some(cursor, OpeningSource.Inline data)
                 byteCount <- byteCount + float (bytes data).Length
+        | Observation.OpeningBound id ->
+            require opening.IsNone "Opening is already bound"
+            let message = findMessage id
+            require (message.Info.Role = "system" && message.Info.Origin = "host-internal") "Opening binding requires internal system material"
+            require message.Finished.IsSome "Opening material is not finished"
+            fun () -> opening <- Some(cursor, OpeningSource.MessageParts message)
         | Observation.RunStarted id ->
             require (not (runs.ContainsKey id)) "Run identity already exists"
             let run = Run()
@@ -197,6 +208,19 @@ let Trace (traceId: string) (initialRecords: obj): TraceMessages =
                "firstCursor", box message.Cursor; "finished", box (message.Finished |> Option.exists (fun cursor -> cursor <= through))
                "parts", box parts ]
 
+    let openingView through =
+        match opening with
+        | Some(cursor, source) when cursor <= through ->
+            match source with
+            | OpeningSource.Inline data -> content data
+            | OpeningSource.MessageParts message ->
+                message.Parts
+                |> Seq.map (fun (_, part) -> bytes part.Base64)
+                |> Seq.toArray
+                |> Array.concat
+                |> contentBytes
+        | _ -> null
+
     let materialize after through =
         guard (fun () ->
             let first, last = interval after through
@@ -217,7 +241,7 @@ let Trace (traceId: string) (initialRecords: obj): TraceMessages =
                                   "content", contentBytes raw ]
                             Some(make data))
             make [ "after", cutAt first; "through", cutAt last
-                   "opening", (if last = 0 then null else opening |> Option.map content |> Option.defaultValue null)
+                   "opening", openingView last
                    "messages", box (selected |> Array.map (messageView last))
                    "originals", box originals; "statement", statement |> Option.defaultValue null ])
 

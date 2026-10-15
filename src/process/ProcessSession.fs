@@ -69,7 +69,9 @@ let ProcessSession (input: obj) (outputMode: obj): SessionMessages =
     let tryOutput channel =
         let stream = Native.get child channel
         let count = min 65536 (Native.readableLength stream)
-        if count <= 0 then None
+        if count <= 0 then
+            Native.readStream stream 0 |> ignore
+            None
         else
             let received = Native.readStream stream count
             if isNull received then None

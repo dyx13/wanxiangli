@@ -1,5 +1,6 @@
 import { writeSync, writeFileSync, closeSync } from 'node:fs'
 import { spawn } from 'node:child_process'
+import { once } from 'node:events'
 import { fileURLToPath } from 'node:url'
 
 const [mode, ...args] = process.argv.slice(2)
@@ -43,6 +44,32 @@ switch (mode) {
     for (let i = 0; i < 16; i++) writeSync(2, block)
     writeSync(1, Buffer.from('最后的原始输出🧭\n'))
     writeSync(2, Buffer.from('stderr-tail\n'))
+    break
+  }
+  case 'relay-flood': {
+    const child = spawn(process.execPath, [fileURLToPath(import.meta.url), 'duplex-flood'], { stdio: ['pipe', 'pipe', 'pipe'], env: {} })
+    child.stdout.pipe(process.stdout, { end: false })
+    child.stderr.pipe(process.stderr, { end: false })
+    process.stdin.pipe(child.stdin)
+    child.stdin.on('error', () => {})
+    child.on('close', () => {
+      process.stdout.write(new Uint8Array(0), () => {
+        process.stderr.write(new Uint8Array(0), () => writeFileSync(args[0], 'flushed'))
+      })
+    })
+    setInterval(() => {}, 60000)
+    break
+  }
+  case 'duplex-flood': {
+    const size = 8 * 1024 * 1024 + 17
+    const write = async (stream, byte) => {
+      const block = Buffer.alloc(65521, byte)
+      for (let offset = 0; offset < size; offset += block.length) {
+        if (!stream.write(block.subarray(0, Math.min(block.length, size - offset)))) await once(stream, 'drain')
+      }
+      await new Promise(resolve => stream.write(Buffer.from([0, 255, 13, 10, byte]), resolve))
+    }
+    await Promise.all([write(process.stdout, 65), write(process.stderr, 66)])
     break
   }
   case 'split': {

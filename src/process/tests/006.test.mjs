@@ -1,11 +1,13 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
 import childProcess from 'node:child_process'
 import { syncBuiltinESMExports } from 'node:module'
 import { setTimeout as delay } from 'node:timers/promises'
 import { ProcessSession } from 'wanxiangli/process'
-import { options, ready, closed } from './support.mjs'
+import { options, ready, closed, temporary, until } from './support.mjs'
 
 function capture(t, mode, args = [], overrides = {}) {
   const run = new ProcessSession(options(mode, args, overrides), 'Capture')
@@ -100,6 +102,32 @@ test('SPEC[process-006] a killed capture drains accepted bytes before its closed
   run.signal('SIGKILL')
   assert.equal((await run.takeOutput()).kind, 'Closed')
   assert.equal(run.inspect().exit.signal, 'SIGKILL')
+})
+
+test('SPEC[process-006] killing a forwarding process reaches actual pipe EOF after all captured bytes', { timeout: 5000 }, async t => {
+  const marker = join(temporary(t), 'flushed')
+  const expected = {
+    stdout: 8 * 1024 * 1024 + 22,
+    stderr: 8 * 1024 * 1024 + 22,
+  }
+  const run = capture(t, 'relay-flood', [marker], { tailBytes: 0 })
+  await ready(run)
+  await delay(75)
+  const lengths = { stdout: 0, stderr: 0 }
+  while (lengths.stdout < expected.stdout || lengths.stderr < expected.stderr) {
+    const part = await run.takeOutput()
+    assert.equal(part.kind, 'Chunk')
+    lengths[part.channel] += part.bytes.length
+  }
+  const pending = run.takeOutput()
+  await until(() => existsSync(marker), 'forwarded pipes flushed')
+  assert.equal(run.signal('SIGKILL').kind, 'Requested')
+  const output = await Promise.race([
+    pending,
+    delay(1000).then(() => { throw new Error(`Capture did not reach EOF: ${JSON.stringify(run.inspect())}`) }),
+  ])
+  assert.equal(output.kind, 'Closed')
+  assert.equal(output.state.exit.signal, 'SIGKILL')
 })
 
 test('SPEC[process-006] native output errors settle a waiting consumer without fabricating exit', async t => {

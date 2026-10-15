@@ -1,6 +1,8 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { DatabaseSync } from 'node:sqlite'
+import { spawnSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
 import { createJournal, temporary } from './support.mjs'
 
 test('SPEC[eventstore-002] a failure after INSERT but before COMMIT is rolled back as NotWritten', t => {
@@ -43,5 +45,21 @@ for (const afterCommit of [false, true]) {
     const restored = createJournal(database)
     t.after(() => restored.close())
     assert.deepEqual(restored.read('stream'), afterCommit ? ['body'] : [])
+    assert.equal(restored.append('stream', afterCommit ? 1 : 0, 'next', 'next body').status, 'Committed')
   })
+}
+
+for (const [runtime, executable] of [['node', process.execPath], ['bun', 'bun']]) {
+  for (const mode of ['close', 'initialize', 'read', 'commit-before', 'commit-after']) {
+    test(`SPEC[eventstore-002] ${runtime} releases native statements after ${mode} without garbage collection`, t => {
+      if (runtime === 'bun' && spawnSync(executable, ['--version']).status !== 0) {
+        t.skip('Bun is not installed')
+        return
+      }
+      const helper = fileURLToPath(new URL('./recovery-consumer.mjs', import.meta.url))
+      const result = spawnSync(executable, [helper, runtime, mode, temporary(t)], { encoding: 'utf8', timeout: 10000 })
+      assert.ifError(result.error)
+      assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`)
+    })
+  }
 }

@@ -189,6 +189,8 @@ Accepted 在 SessionCreated 持久绑定之前会被拒绝。NotStarted 必须�
 
 SQLite 使用 `BEGIN IMMEDIATE`、WAL、`synchronous=FULL` 和零等待竞争策略。整个事务体作为 UTF-8 BLOB 保存，包含 BOM、NUL、组合字符的字节可完整读回；非法 UTF-16 孤立代理项拒绝，不静默替换。单笔体积上限 1 MiB。读回检查修订连续性与摘要，普通 UPDATE/DELETE 被 schema 拒绝；没有自动修复。
 
+Journal 独占连接及自己创建的 statement。Bun 的 statement 在每次操作的 finally 中 finalize；Node DatabaseSync 由连接关闭时释放。自定义 `SqliteConnection` 若不提供 statement.finalize，就必须在 close 时释放全部 statement。未知提交仍返回 Unknown 并封存实例；重开后先核对同一请求，连接释放不构成再次发起外部效果的许可。
+
 这是一份本地磁盘上的同步小型事实日志，不用于 token 流，不包含多机同步、远程合并、保留策略或磁盘断电证明。DurableWork 每次读取本工作的历史；Work 创建候选也重放已有记录，成本随历史长度增长。这里先保留最简完整实现，不建立持久快照或通用缓存。真实负载证明需要时，再各自加强，不改变参与者之间的依赖方向。
 
 ## 验收入口与迁移范围

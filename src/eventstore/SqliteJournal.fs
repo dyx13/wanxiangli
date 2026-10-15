@@ -42,6 +42,9 @@ module private Native =
     let digest value = hash crypto value
     let require condition message = if not condition then invalidOp message
 
+    [<Emit("typeof $0.finalize === 'function' ? $0.finalize() : undefined")>]
+    let finalize (_statement: obj): unit = jsNative
+
     let result (status: string) (revision: float) (reason: string): obj =
         createObj [ "status" ==> status; "revision" ==> revision; "reason" ==> reason ]
 
@@ -57,8 +60,11 @@ let SqliteJournal (database: obj): IJournal =
 
     let ensureOpen () = Native.require (not closed) "Journal is closed; reopen after an unknown commit"
     let execute (sql: string): unit = database?exec(sql)
-    let prepare (sql: string): obj = database?prepare(sql)
     let closeConnection (): unit = database?close()
+
+    let withStatement (sql: string) action =
+        let statement: obj = database?prepare(sql)
+        try action statement finally Native.finalize statement
 
     do
         try
@@ -78,7 +84,7 @@ BEGIN SELECT RAISE(ABORT, 'Journal is append-only'); END;
 CREATE TRIGGER IF NOT EXISTS journal_no_delete BEFORE DELETE ON journal_entries
 BEGIN SELECT RAISE(ABORT, 'Journal is append-only'); END;
 """
-            let check: obj = (prepare "PRAGMA quick_check")?get()
+            let check: obj = withStatement "PRAGMA quick_check" (fun statement -> statement?get())
             let integrity: string = check?quick_check
             Native.require (integrity = "ok") "SQLite integrity check failed"
         with error ->
@@ -89,7 +95,9 @@ BEGIN SELECT RAISE(ABORT, 'Journal is append-only'); END;
     let read (stream: string): string array =
         ensureOpen ()
         Native.require (Native.isKey (box stream)) "Stream must be valid text without NUL"
-        let rows: obj array = (prepare "SELECT revision, body, checksum FROM journal_entries WHERE stream=? ORDER BY revision")?all(stream)
+        let rows: obj array =
+            withStatement "SELECT revision, body, checksum FROM journal_entries WHERE stream=? ORDER BY revision"
+                (fun statement -> statement?all(stream))
         rows |> Array.mapi (fun index row ->
             let revision: float = row?revision
             let bytes: obj = row?body
@@ -110,7 +118,9 @@ BEGIN SELECT RAISE(ABORT, 'Journal is append-only'); END;
         try
             execute "BEGIN IMMEDIATE"
             started <- true
-            let duplicate: obj = (prepare "SELECT revision, body, checksum FROM journal_entries WHERE stream=? AND request_id=?")?get(stream, requestId)
+            let duplicate: obj =
+                withStatement "SELECT revision, body, checksum FROM journal_entries WHERE stream=? AND request_id=?"
+                    (fun statement -> statement?get(stream, requestId))
             if not (isNullOrUndefined duplicate) then
                 execute "ROLLBACK"
                 started <- false
@@ -122,7 +132,9 @@ BEGIN SELECT RAISE(ABORT, 'Journal is append-only'); END;
                     Native.result "Replayed" revision null
                 else Native.result "Conflict" expectedRevision "RequestIdConflict"
             else
-                let head: obj = (prepare "SELECT COUNT(*) AS count, COALESCE(MAX(revision),0) AS revision FROM journal_entries WHERE stream=?")?get(stream)
+                let head: obj =
+                    withStatement "SELECT COUNT(*) AS count, COALESCE(MAX(revision),0) AS revision FROM journal_entries WHERE stream=?"
+                        (fun statement -> statement?get(stream))
                 let revision: float = head?revision
                 let count: float = head?count
                 Native.require (revision = count) "Journal revision gap"
@@ -131,8 +143,9 @@ BEGIN SELECT RAISE(ABORT, 'Journal is append-only'); END;
                     started <- false
                     Native.result "Conflict" revision "RevisionConflict"
                 else
-                    let statement = prepare "INSERT INTO journal_entries (stream, revision, request_id, body, checksum) VALUES (?, ?, ?, ?, ?)"
-                    let _: obj = statement?run(stream, revision + 1., requestId, bytes, Native.digest body)
+                    let _: obj =
+                        withStatement "INSERT INTO journal_entries (stream, revision, request_id, body, checksum) VALUES (?, ?, ?, ?, ?)"
+                            (fun statement -> statement?run(stream, revision + 1., requestId, bytes, Native.digest body))
                     committing <- true
                     execute "COMMIT"
                     started <- false

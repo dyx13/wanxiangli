@@ -1,5 +1,11 @@
 # 渐进抽取与旧仓接线边界
 
+## 0.6.1：原生 SQLite 资源收尾
+
+Journal 保留原 append/read/close 协议及 Unknown 含义。新增公开 `SqliteStatement` 契约：有 finalize 时，每次操作在 finally 中调用；否则连接 close 必须释放全部 statement。真实 Node DatabaseSync 与 Bun Database 可以继续直接传入。自定义连接若包裹原生 statement，必须保留 finalize，或在自己的 close 中承担释放责任。
+
+本次未变更记录格式，不需要迁移已提交历史。释放未知提交的连接，只使重开和核对恢复可行，不授权再次启动外部效果。Node/Bun 的源测试与实际安装包均须覆盖 COMMIT 前后丢回执后立即追加，无需 GC 或延时重试。
+
 ## 0.6.0：完整采集与保留组长身份的监管
 
 `ProcessSession(options, 'Capture')` 新增单消费者原始字节交付；默认构造仍是留尾。完整输出消费者必须持续调用 `takeOutput`，落盘失败须显式丢弃并终止，不能把尾部或丢弃后的状态算成完整保存。

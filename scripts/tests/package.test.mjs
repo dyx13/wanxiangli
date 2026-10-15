@@ -37,6 +37,7 @@ test('SPEC[build-002] an installed tarball survives a real effect and process de
   assert.equal(existsSync(path.join(consumer, 'node_modules/esbuild')), false)
   assert.equal(existsSync(path.join(consumer, 'node_modules/wanxiangli/scripts')), false)
   for (const file of ['consumer.mjs', 'consumer.ts']) copyFileSync(path.join(root, 'scripts/tests', file), path.join(consumer, file))
+  copyFileSync(path.join(root, 'src/eventstore/tests/recovery-consumer.mjs'), path.join(consumer, 'journal-recovery.mjs'))
   succeed(spawnSync(process.execPath, [path.join(root, 'node_modules/typescript/bin/tsc'), '--noEmit', '--strict', '--target', 'es2022', '--module', 'nodenext', 'consumer.ts'], { cwd: consumer, env: cleanEnvironment, encoding: 'utf8', timeout: 30000 }))
   const script = path.join(consumer, 'consumer.mjs')
   const runtimes = [ ['node', process.execPath] ]
@@ -44,6 +45,11 @@ test('SPEC[build-002] an installed tarball survives a real effect and process de
   if (bun.status === 0) runtimes.push(['bun', 'bun'])
   else t.diagnostic('Bun is absent; only the Node package consumer can be proven in this environment.')
   for (const [runtime, executable] of runtimes) {
+    await t.test(`installed journal releases native statements on ${runtime}`, () => {
+      for (const mode of ['close', 'initialize', 'read', 'commit-before', 'commit-after']) {
+        succeed(spawnSync(executable, [path.join(consumer, 'journal-recovery.mjs'), runtime, mode, path.join(temporary, `${runtime}-${mode}.sqlite`)], { cwd: tmpdir(), env: cleanEnvironment, encoding: 'utf8', timeout: 10000 }))
+      }
+    })
     await t.test(`installed consumer on ${runtime}`, async subtest => {
       const database = path.join(temporary, `${runtime}.sqlite`)
       const effects = path.join(temporary, `${runtime}-effects.jsonl`)

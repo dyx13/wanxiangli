@@ -17,14 +17,14 @@
    - 推理：调用者只有知道提交边界，才不会把未知变成重复外部效果。
 3. [AXIOM 1] 历史只追加，读回检验连续性及内容摘要。没有可变业务快照、自动修复或日志翻译。
    - 推理：派生快照不能成为第二事实源。
-4. [AXIOM 2, 3] 组装方显式创建原生 SQLite 连接，日志只用 exec、prepare、close；不探测宿主，不复制 SQL 规则。
-   - 推理：两种真实驱动具有这组共同操作；差异只留在具体连接的构造处。
+4. [AXIOM 2, 3; 根 LEMMA 3] 组装方显式创建原生 SQLite 连接；日志独占连接和它创建的 statement，不探测宿主，不复制 SQL 规则。statement 提供 finalize 时，每次操作都在 finally 中释放；否则由 connection.close 负责释放全部 statement。
+   - 推理：Node DatabaseSync 在关闭连接时释放 statement；Bun prepare 的 statement 由使用者管理，close 默认允许它继续存活。连接的三种共同操作不等于相同的资源释放保证，日志必须兑现自己的关闭责任。
 
 ## SPEC
 1. [LEMMA 1] `BEGIN IMMEDIATE` 内比较修订号并插入；`COMMIT` 成功才返回 Committed。WAL、synchronous=FULL、busy_timeout=0；竞争失败显式返回，不隐式等待重试。
    - 证明：`tests/001.test.mjs`，真实双进程争抢同一修订号，以及 production append 在 COMMIT 前和确认后两处 SIGKILL。相同请求再次提交返回 Replayed，不重新签发首次提交结果。
 2. [LEMMA 2] 提交前事务失败并成功回滚为 NotWritten；COMMIT 调用后报错为 Unknown，并封存该连接，要求重开。
-   - 证明：`tests/003.test.mjs` 对实际 SQLite 方法注入 INSERT 后故障及 COMMIT 前/后丢回执，核对回滚、连接封存与重开结果。没有证明断电或磁盘控制器行为。
+   - 证明：`tests/003.test.mjs` 对实际 SQLite 方法注入 INSERT 后故障及 COMMIT 前/后丢回执，核对回滚、连接封存、重开读回和立即追加。Node/Bun 的真实 statement 保留引用，验证正常关闭、初始化失败、读取失败及未知提交，无需 GC。没有证明断电或磁盘控制器行为。
 3. [LEMMA 3] requestId 冲突、修订号缺口、摘要损坏拒绝；schema 禁止普通 UPDATE/DELETE。读操作不追加业务事实。
    - 证明：`tests/002.test.mjs` 主动篡改、删掉中间修订、非法输入；`001` 核对含 BOM、NUL、组合字符的 UTF-8 BLOB 字节。
 4. [LEMMA 4] 同一 npm 产物接受 Node DatabaseSync 与 Bun Database，两者运行相同的工作交付、外部效果、强杀和恢复场景。
@@ -34,7 +34,7 @@
 
 ## 边界
 
-- 连接由组装提供：Node 的 `node:sqlite` 或 Bun 的 `bun:sqlite`。没有原生 npm 扩展编译或自动探测回退。日志负责关闭传入连接，不与其他写入对象共享该连接。
+- 连接由组装提供：Node 的 `node:sqlite` 或 Bun 的 `bun:sqlite`。没有原生 npm 扩展编译或自动探测回退。日志负责关闭传入连接，不与其他写入对象共享该连接。自定义连接须遵守同一 statement 释放契约，不能把 finalize 丢在适配器外。
 - 本地磁盘、单数据库；不是远程 Git 同步或多机共识。不能把旧主机的文件复制过程当作在线合并。
 - 同步 API 诚实保留同步性；本库用于小型工作事实，不用于 provider token 流。大流量需求出现后再测量并隔离工作线程。
 - 原草稿的自建 NDJSON 段、载荷外置、多流归并与保留策略撤回，不作为实现义务。SQLite 数据格式与旧日志不同，切换必须以新工作为边界。

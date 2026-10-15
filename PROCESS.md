@@ -38,6 +38,40 @@ try {
 
 Node 和 Bun 使用同一入口、同一实现，走各自的 `node:child_process` 兼容接口。构建仍用现有 npm Fable 工具链，不增加依赖或构建框架。实际验证的平台与运行时见 `施工顺序.md`。
 
+## 完整字节采集
+
+需要把完整输出交给磁盘或其他消费者时，显式使用 `new ProcessSession(options, 'Capture')`。默认构造仍持续排空并只保留尾部；Capture 是另一种输出交付契约，不会把留尾容量当成完整日志。
+
+Capture 增加两个消息：
+
+| 消息 | 结果及边界 |
+|---|---|
+| takeOutput() | 每次取得一个 stdout 或 stderr 原始块，最多 65,536 字节，带该通道的 `[from, to)`；同一时刻只允许一个待决读取。无数据时等待，真实关闭返回 Closed，启动或输出读取失败返回 Failed |
+| discardOutput() | 幂等放弃未交付输出并关闭本实例的两个读管道；待决与后续读取返回 Discarded。它不发信号，也不确认进程退出 |
+
+调用方处理完一块后再取下一块。未取时不从原生流读取，积压留在运行时的有界 readable 缓冲和操作系统 pipe，并向写入方传递背压。库不创建输出队列；每次只复制一个至多 64 KiB 的返回块。`tailBytes` 仍只控制每路私有尾部，Capture 的 observed/retained 统计已交付的字节，不推断尚在原生管道中的字节。返回副本和调用方保留的数据不计入私有尾部上限。
+
+```js
+const run = new ProcessSession(options, 'Capture')
+const start = await run.started()
+if (start.kind === 'Failed') throw new Error(start.error.message)
+run.endInput()
+try {
+  while (true) {
+    const output = await run.takeOutput()
+    if (output.kind === 'Closed') break
+    if (output.kind !== 'Chunk') throw new Error('Complete output is unavailable')
+    await saveBytes(output.channel, output.bytes)
+  }
+} catch (error) {
+  run.signal('SIGKILL')
+  run.discardOutput()
+  throw error
+}
+```
+
+示例中的 `saveBytes` 由调用方实现，不注入 ProcessSession。磁盘失败必须作为失败传播；不能继续宣称保存了完整输出。`discardOutput` 会使子进程后续写入遇到关闭的管道，使用者须明确选择这一后果并另行等待真实关闭。未消费且未放弃 Capture 输出时，进程可能因背压等待，`wait` 超时仍不代表进程结束。Capture 不增强旧 PGID 的信号权限，也不提供完整磁盘日志或进程树监管。
+
 ## 输入必须明确
 
 构造参数六项都必填，不隐式继承环境或工作目录。

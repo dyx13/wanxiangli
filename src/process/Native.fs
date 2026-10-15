@@ -79,6 +79,15 @@ module internal Native =
     [<Emit("$0.end()")>]
     let endStream (_stream: obj): unit = jsNative
 
+    [<Emit("$0.readableLength")>]
+    let readableLength (_stream: obj): int = jsNative
+
+    [<Emit("$0.read($1)")>]
+    let readStream (_stream: obj) (_count: int): obj = jsNative
+
+    [<Emit("$0.destroy()")>]
+    let destroyStream (_stream: obj): unit = jsNative
+
     [<Emit("$0.kill(-$1, $2)")>]
     let killGroup (_runtime: obj) (_pid: int) (_signal: string): unit = jsNative
 

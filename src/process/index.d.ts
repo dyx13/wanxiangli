@@ -44,4 +44,16 @@ export interface ProcessSession {
   signal(name: SignalName): SignalResult;
   wait(milliseconds: number): Promise<{ kind: 'Closed' | 'TimedOut'; state: ProcessState }>;
 }
-export const ProcessSession: { new(options: ProcessOptions): ProcessSession };
+export type CapturedOutput =
+  | { kind: 'Chunk'; channel: 'stdout' | 'stderr'; from: number; to: number; bytes: Uint8Array }
+  | { kind: 'Closed'; state: ProcessState }
+  | { kind: 'Failed'; error: Failure }
+  | { kind: 'Discarded' };
+export interface CapturedProcessSession extends ProcessSession {
+  takeOutput(): Promise<CapturedOutput>;
+  discardOutput(): void;
+}
+export const ProcessSession: {
+  new(options: ProcessOptions): ProcessSession;
+  new(options: ProcessOptions, outputMode: 'Capture'): CapturedProcessSession;
+};

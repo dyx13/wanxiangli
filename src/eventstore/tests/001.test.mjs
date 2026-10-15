@@ -1,5 +1,8 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { once } from 'node:events'
+import { DatabaseSync } from 'node:sqlite'
+import { SqliteJournal } from 'wanxiangli/eventstore'
 import { createJournal, temporary, worker, message, kill } from './support.mjs'
 
 test('SPEC[eventstore-001] durable append preserves exact UTF-8 text across close and reopen', t => {
@@ -33,14 +36,30 @@ test('SPEC[eventstore-001] two real processes cannot both win revision zero', { 
   const second = worker(t, database, 'race', 'second')
   await Promise.all([message(first), message(second)])
   const results = [message(first), message(second)]
+  const exits = [once(first, 'exit'), once(second, 'exit')]
   first.send('go')
   second.send('go')
   const replies = (await Promise.all(results)).map(value => value.reply)
   assert.equal(replies.filter(reply => reply.status === 'Committed').length, 1)
   assert.ok(replies.some(reply => ['NotWritten', 'Conflict'].includes(reply.status)))
+  for (const exit of await Promise.all(exits)) assert.deepEqual(exit, [0, null])
   const journal = createJournal(database)
   t.after(() => journal.close())
   assert.equal(journal.read('race').length, 1)
+})
+
+test('SPEC[eventstore-001] initialization lock contention is explicit and closes the rejected connection', t => {
+  const file = temporary(t)
+  const owner = new DatabaseSync(file)
+  const candidate = new DatabaseSync(file)
+  t.after(() => owner.close())
+  owner.exec('CREATE TABLE lock_fixture(value TEXT); BEGIN EXCLUSIVE')
+  try {
+    assert.throws(() => new SqliteJournal(candidate), /locked/i)
+    assert.throws(() => candidate.exec('SELECT 1'), /not open|closed/i)
+  } finally {
+    owner.exec('ROLLBACK')
+  }
 })
 
 test('SPEC[eventstore-001] SIGKILL after acknowledged commit preserves the entire transaction', { timeout: 20000, skip: process.platform === 'win32' }, async t => {

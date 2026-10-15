@@ -1,11 +1,17 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { existsSync } from 'node:fs'
+import { existsSync, realpathSync } from 'node:fs'
 import path from 'node:path'
 import childProcess from 'node:child_process'
 import { syncBuiltinESMExports } from 'node:module'
 import { ProcessSession } from 'wanxiangli/process'
-import { options, session, ready, closed, output, temporary } from './support.mjs'
+import { options, session, ready, closed, output, temporary, workerFile } from './support.mjs'
+
+function nativeReport(cwd, env, args = []) {
+  const result = childProcess.spawnSync(process.execPath, [workerFile, 'report', ...args], { cwd, env })
+  assert.equal(result.status, 0, result.stderr.toString())
+  return JSON.parse(result.stdout.toString())
+}
 
 function noSpawn(action) {
   const original = childProcess.spawn
@@ -26,8 +32,8 @@ test('SPEC[process-001] direct argv, explicit cwd and environment reach a real p
   assert.equal(state.failure, null)
   const report = JSON.parse(output(run).text)
   assert.deepEqual(report.args, args)
-  assert.equal(report.cwd, cwd)
-  assert.deepEqual(report.env, { ONLY_THIS: '确切值' })
+  assert.equal(realpathSync(report.cwd), realpathSync(cwd))
+  assert.deepEqual(report.env, nativeReport(cwd, { ONLY_THIS: '确切值' }, args).env)
   assert.equal(output(run, 'stderr').text, 'diagnostic\n')
 })
 
@@ -42,7 +48,35 @@ test('SPEC[process-001] environment property names are literal data, not prototy
   const env = Object.fromEntries([['__proto__', 'literal-value'], ['constructor', 'another-value'], ['EMPTY', '']])
   const run = session(t, 'report', [], { env })
   await closed(run)
-  assert.deepEqual(JSON.parse(output(run).text).env, env)
+  assert.deepEqual(JSON.parse(output(run).text).env, nativeReport(options('report').cwd, env).env)
+})
+
+test('SPEC[process-001] spawn receives the exact environment and never inherits a host sentinel', async t => {
+  const original = childProcess.spawn
+  const sentinel = 'WANXIANGLI_HOST_SENTINEL'
+  const previous = process.env[sentinel]
+  const env = Object.fromEntries([['__proto__', 'literal-value'], ['constructor', 'another-value'], ['EMPTY', '']])
+  let observed
+  process.env[sentinel] = 'must-not-leak'
+  childProcess.spawn = (file, args, config) => {
+    observed = config
+    return original(file, args, config)
+  }
+  syncBuiltinESMExports()
+  let run
+  try {
+    run = session(t, 'report', [], { env })
+  } finally {
+    childProcess.spawn = original
+    syncBuiltinESMExports()
+    if (previous === undefined) delete process.env[sentinel]
+    else process.env[sentinel] = previous
+  }
+  assert.deepEqual(Object.fromEntries(Object.entries(observed.env)), env)
+  await closed(run)
+  const actual = JSON.parse(output(run).text).env
+  assert.equal(actual[sentinel], undefined)
+  for (const key of Object.keys(env)) assert.equal(actual[key], env[key])
 })
 
 test('SPEC[process-001] absent executable produces one failed start and no invented zero exit', async t => {

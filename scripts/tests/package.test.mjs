@@ -46,7 +46,7 @@ test('SPEC[build-002] an installed tarball survives a real effect and process de
   else t.diagnostic('Bun is absent; only the Node package consumer can be proven in this environment.')
   for (const [runtime, executable] of runtimes) {
     await t.test(`installed journal releases native statements on ${runtime}`, () => {
-      for (const mode of ['close', 'initialize', 'read', 'commit-before', 'commit-after']) {
+      for (const mode of ['close', 'initialize', 'read', 'commit-before', 'commit-after', 'close-retry', 'commit-close-retry']) {
         succeed(spawnSync(executable, [path.join(consumer, 'journal-recovery.mjs'), runtime, mode, path.join(temporary, `${runtime}-${mode}.sqlite`)], { cwd: tmpdir(), env: cleanEnvironment, encoding: 'utf8', timeout: 10000 }))
       }
     })

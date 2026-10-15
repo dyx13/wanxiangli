@@ -9,9 +9,18 @@ const connection = new Database(filename)
 const statements = []
 const prepare = connection.prepare
 const execute = connection.exec
+const close = connection.close
+let closeAttempts = 0
+if (mode.endsWith('close-retry')) {
+  connection.close = function () {
+    closeAttempts += 1
+    if (closeAttempts === 1) throw new Error('Injected connection close failure')
+    return close.call(this)
+  }
+}
 connection.prepare = function (sql) {
   const statement = prepare.call(this, sql)
-  statements.push(statement)
+  statements.push({ statement, get: statement.get })
   if ((mode === 'initialize' && sql === 'PRAGMA quick_check') || (mode === 'read' && sql.startsWith('SELECT revision'))) {
     const method = mode === 'initialize' ? 'get' : 'all'
     const original = statement[method]
@@ -40,20 +49,31 @@ try {
     } else if (mode === 'read') {
       assert.throws(() => journal.read('stream'), /Injected statement failure/)
       if (runtime === 'bun') {
-        assert.throws(() => statements.at(-1).get(), /finalized|closed/i)
+        const retained = statements.at(-1)
+        assert.throws(() => retained.get.call(retained.statement), /finaliz/i)
       }
     } else {
       assert.equal(journal.append('stream', 0, 'first', 'body').status, 'Committed')
       assert.deepEqual(journal.read('stream'), ['body'])
     }
+    if (mode === 'close-retry') {
+      assert.throws(() => journal.close(), /Injected connection close failure/)
+      assert.throws(() => journal.read('stream'), /closed/)
+      assert.throws(() => journal.append('stream', 1, 'second', 'body'), /closed/)
+    }
     journal.close()
+    if (mode.endsWith('close-retry')) {
+      assert.equal(closeAttempts, 2, 'the explicit close must retry physical release after the first failure')
+      journal.close()
+      assert.equal(closeAttempts, 2, 'a confirmed close remains idempotent')
+    }
   }
-  for (const statement of statements) {
-    assert.throws(() => statement.run(), /finalized|closed/i)
+  for (const { statement, get } of statements) {
+    assert.throws(() => get.call(statement), /finaliz/i)
   }
   const restored = new SqliteJournal(new Database(filename))
   try {
-    const bodies = mode === 'close' || mode === 'commit-after' ? ['body'] : []
+    const bodies = ['close', 'close-retry', 'commit-after'].includes(mode) ? ['body'] : []
     assert.deepEqual(restored.read('stream'), bodies)
     assert.equal(restored.append('stream', bodies.length, 'next', 'next body').status, 'Committed')
     assert.deepEqual(restored.read('stream'), [...bodies, 'next body'])
@@ -63,6 +83,6 @@ try {
 } finally {
   journal?.close()
   connection.exec = execute
-  for (const statement of statements) statement.finalize?.()
-  if (!journal && mode !== 'initialize') connection.close()
+  for (const { statement } of statements) statement.finalize?.()
+  try { close.call(connection) } catch {}
 }

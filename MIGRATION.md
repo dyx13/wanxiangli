@@ -1,5 +1,9 @@
 # 渐进抽取与旧仓接线边界
 
+## 0.6.2：关闭失败后的明确回收
+
+Journal 分别记录业务封存与连接释放。正常 close 或 Unknown 中的 close 一旦开始，read/append 就不再开放；原生 close 抛错时，调用者仍可显式再次 close 请求回收。只有原生 close 成功才记为已释放，此后 close 幂等。不自动重试，不把封存或回收当作新的写入许可，记录格式不变。
+
 ## 0.6.1：原生 SQLite 资源收尾
 
 Journal 保留原 append/read/close 协议及 Unknown 含义。新增公开 `SqliteStatement` 契约：有 finalize 时，每次操作在 finally 中调用；否则连接 close 必须释放全部 statement。真实 Node DatabaseSync 与 Bun Database 可以继续直接传入。自定义连接若包裹原生 statement，必须保留 finalize，或在自己的 close 中承担释放责任。

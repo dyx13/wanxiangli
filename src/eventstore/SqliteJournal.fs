@@ -51,6 +51,7 @@ module private Native =
 let SqliteJournal (database: obj): IJournal =
     do Native.require (Native.isDatabase database) "An explicit SQLite connection is required"
     let mutable closed = false
+    let mutable connectionClosed = false
     let mutable busy = false
 
     let guard action =
@@ -60,7 +61,11 @@ let SqliteJournal (database: obj): IJournal =
 
     let ensureOpen () = Native.require (not closed) "Journal is closed; reopen after an unknown commit"
     let execute (sql: string): unit = database?exec(sql)
-    let closeConnection (): unit = database?close()
+    let closeConnection (): unit =
+        closed <- true
+        if not connectionClosed then
+            database?close()
+            connectionClosed <- true
 
     let withStatement (sql: string) action =
         let statement: obj = database?prepare(sql)
@@ -89,7 +94,6 @@ BEGIN SELECT RAISE(ABORT, 'Journal is append-only'); END;
             Native.require (integrity = "ok") "SQLite integrity check failed"
         with error ->
             closeConnection ()
-            closed <- true
             raise error
 
     let read (stream: string): string array =
@@ -158,17 +162,11 @@ BEGIN SELECT RAISE(ABORT, 'Journal is append-only'); END;
                     rolledBack <- true
                 with _ -> ()
             if committing || not rolledBack then
-                closed <- true
                 try closeConnection () with _ -> ()
                 Native.result "Unknown" expectedRevision error.Message
             else Native.result "NotWritten" expectedRevision error.Message
 
-    let close (): unit =
-        if not closed then
-            closeConnection ()
-            closed <- true
-
     { new IJournal with
         member _.read(stream) = guard (fun () -> read stream)
         member _.append(stream, expectedRevision, requestId, body) = guard (fun () -> append (stream, expectedRevision, requestId, body))
-        member _.close() = guard close }
+        member _.close() = guard closeConnection }

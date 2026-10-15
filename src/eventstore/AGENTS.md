@@ -25,6 +25,7 @@
    - 证明：`tests/001.test.mjs`，真实双进程争抢同一修订号，以及 production append 在 COMMIT 前和确认后两处 SIGKILL。相同请求再次提交返回 Replayed，不重新签发首次提交结果。
 2. [LEMMA 2] 提交前事务失败并成功回滚为 NotWritten；COMMIT 调用后报错为 Unknown，并封存该连接，要求重开。
    - 证明：`tests/003.test.mjs` 对实际 SQLite 方法注入 INSERT 后故障及 COMMIT 前/后丢回执，核对回滚、连接封存、重开读回和立即追加。Node/Bun 的真实 statement 保留引用，验证正常关闭、初始化失败、读取失败及未知提交，无需 GC。没有证明断电或磁盘控制器行为。
+   - 关闭失败不解除封存，也不等于连接已释放。0.6.2 的真实 Node/Bun 测试注入一次性 close 失败，显式再次 close 后重开追加成功；未确认关闭前只允许继续回收，不能继续 read/append。statement 的释放用保存的原生 get 检验 finalized，不用 Bun 的 run 报 closed 冒充。
 3. [LEMMA 3] requestId 冲突、修订号缺口、摘要损坏拒绝；schema 禁止普通 UPDATE/DELETE。读操作不追加业务事实。
    - 证明：`tests/002.test.mjs` 主动篡改、删掉中间修订、非法输入；`001` 核对含 BOM、NUL、组合字符的 UTF-8 BLOB 字节。
 4. [LEMMA 4] 同一 npm 产物接受 Node DatabaseSync 与 Bun Database，两者运行相同的工作交付、外部效果、强杀和恢复场景。

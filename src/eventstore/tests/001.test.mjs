@@ -33,8 +33,9 @@ test('SPEC[eventstore-001] two real processes cannot both win revision zero', { 
   const database = temporary(t)
   createJournal(database).close()
   const first = worker(t, database, 'race', 'first')
+  await message(first)
   const second = worker(t, database, 'race', 'second')
-  await Promise.all([message(first), message(second)])
+  await message(second)
   const results = [message(first), message(second)]
   const exits = [once(first, 'exit'), once(second, 'exit')]
   first.send('go')

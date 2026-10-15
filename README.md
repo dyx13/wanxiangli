@@ -191,6 +191,8 @@ SQLite 使用 `BEGIN IMMEDIATE`、WAL、`synchronous=FULL` 和零等待竞争策
 
 Journal 独占连接及自己创建的 statement。Bun 的 statement 在每次操作的 finally 中 finalize；Node DatabaseSync 由连接关闭时释放。自定义 `SqliteConnection` 若不提供 statement.finalize，就必须在 close 时释放全部 statement。未知提交仍返回 Unknown 并封存实例；重开后先核对同一请求，连接释放不构成再次发起外部效果的许可。
 
+close 抛错时，Journal 仍封存业务操作，但保留显式再次 close 的回收路径；原生关闭成功后才将连接标为已释放。这里没有隐式重试，不能在关闭失败后继续 read/append。
+
 这是一份本地磁盘上的同步小型事实日志，不用于 token 流，不包含多机同步、远程合并、保留策略或磁盘断电证明。DurableWork 每次读取本工作的历史；Work 创建候选也重放已有记录，成本随历史长度增长。这里先保留最简完整实现，不建立持久快照或通用缓存。真实负载证明需要时，再各自加强，不改变参与者之间的依赖方向。
 
 ## 验收入口与迁移范围

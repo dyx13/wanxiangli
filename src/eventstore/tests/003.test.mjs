@@ -50,7 +50,7 @@ for (const afterCommit of [false, true]) {
 }
 
 for (const [runtime, executable] of [['node', process.execPath], ['bun', 'bun']]) {
-  for (const mode of ['close', 'initialize', 'read', 'commit-before', 'commit-after']) {
+  for (const mode of ['close', 'initialize', 'read', 'commit-before', 'commit-after', 'close-retry', 'commit-close-retry']) {
     test(`SPEC[eventstore-002] ${runtime} releases native statements after ${mode} without garbage collection`, t => {
       if (runtime === 'bun' && spawnSync(executable, ['--version']).status !== 0) {
         t.skip('Bun is not installed')

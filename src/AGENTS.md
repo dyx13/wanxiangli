@@ -56,7 +56,7 @@
     - 证明：[TODO] 第一条 canary：F# → Fable → JS 产物被 omp 真实载入，然后做到三件事——读到工作区根、拦到一次 provider 请求、起一个子会话。任一条做不到，AXIOM 2 的假设与本文的分层都要重写。
 
 4. [AXIOM 1, 4; 根 LEMMA 4, 6] 首刀承接开立、评审、接力、交付与恢复；Work 的 Applied 不表示落盘，实际外部效果只由更外层在首次 Committed 后发起。
-    - 证明：48 项无存储领域测试、18 项真实 SQLite 组合测试、Node/Bun 安装包强杀恢复分别通过。旧仓接线、旧职责删除与宿主 canary 仍未完成。
+    - 证明：48 项无存储领域测试、18 项真实 SQLite 组合测试、Node/Bun 安装包强杀恢复为 0.2.0 历史证据。当前主仓已通过 npm 消费 Work/Journal/DurableWork；原件接管等更大范围仍按主仓看板分项验收，不能沿用“旧仓尚未接线”概括全部现状。真实宿主 canary 仍未证明。
 
 5. [AXIOM 1; LEMMA 4] 一轮工作结束必须留下可复核的记录：发生了什么、现在什么成立、路因此怎么变。记录由内核产生，形状不跟宿主走。
     - 证明：[TODO] 记录的最小形状与生成点，在对应子模块落地时证明。
@@ -68,7 +68,7 @@
     - 证明：[TODO] 成对资源可由机械检查证明；注释语言靠评审，不设扫描门禁。
 
 8. [LEMMA 1, 6; 根 SPEC 2, 3, 4] 第二刀使用独立 ProcessSession 承接真实进程、有限输出和显式等待；超时、信号、退出分别报告，不能自动重启或冒称全树终止。
-    - 证明：`process/tests/` 的 49 项测试，以及隔离编译和删除第一刀产物后的 Node/Bun 安装包验收均通过。只有 Linux 实测，PTY、逃逸后代监管、全量落盘与宿主接线未实现。完整命令见 `PROCESS.md`。
+    - 证明：`process/tests/` 的原 49 项测试及安装包验收属于 0.3.0 历史范围。0.6.0 后补充 Capture 和独立 SupervisedProcess；0.6.1 在 macOS/Node 26.6.0/Bun 1.3.14 复跑源码、监管组合、Node/Bun 安装包及独立构建，主仓已接完整 Spool 与所选非 PTY 监管。基础 Process 的 Linux 限定安装套件在本机仍 skip；不承诺 PTY、脱组后代或崩溃接管。完整能力边界见 `PROCESS.md`、`supervision/README.md` 与施工记录。
 
 9. [LEMMA 4, 5; 根 LEMMA 3, 4, 5] 第三刀由独立 Trace 维护确认轨迹及固定边界：明确来源，不根据正文推断；原始字节不被消息投影或最后助手散文覆盖。持久化由外侧组合，不进入 Trace。
     - 证明：`trace/tests/` 验证逐字节取回、去重、单一终态、固定窗口及恢复拒绝；`scripts/tests/trace-package.test.mjs` 实际安装后完成 Node/Bun 的 SQLite 强杀恢复及去掉前两刀的单独使用。完整回归结果见 `施工顺序.md`；宿主捕获、完整 LWR 与压缩仍未实现。
@@ -78,12 +78,12 @@
 
 # TODO
 
-- 子模块目录已建，共 19 个。每个的 `AGENTS.md` 按重要度逐个落，已落的写进下面这张表；`——` 表示尚未落。
+- 子模块目录已建，共 20 个。每个的 `AGENTS.md` 按重要度逐个落，已落的写进下面这张表；`——` 表示尚未落。
 
   | 层 | 目录 |
   |---|---|
   | 内核 | `lifecycle` `authority` `delegation` `events` `eventstore` `failure` `capability` `trace` `workrecord` `session` `identity` `time` `prefix` `compression` `resources` |
-  | 物理能力 | `process` |
+  | 物理能力 | `process` `supervision` |
   | GAP | `host-omp` |
   | 组装 | `assembly` |
   | 测试入口 | `tests`（只放跨子模块的竖切与 canary） |
@@ -91,4 +91,4 @@
 - 旧系统里这些包不再建：`journal`（并入 `events` 与 `eventstore`）、多副本收敛（并入 `eventstore`）、`participant`（并入 `identity` 与 `capability`）、行为诊断与规则书、`guidance`、`knowledge`、`strength`、`sphinx`、`repository-*`。它们大多只守可撤销的动作，或只为旧宿主服务。出现真实义务或第二个真实使用方时再建。
 - 旧系统的用户可见行为由各子模块在自己的 `AGENTS.md` 里承接；本文只承接到"一次委托驱动多轮无人值守工作且逐轮可复核"这条验收。
 - 施工顺序见仓库根 `施工顺序.md`。本次已由使用者改为大粒度渐进抽取，不再把 omp canary 作为独立内核的前置条件。
-- 除 lifecycle、eventstore、assembly、process、trace、session 外均为未实现候选；其中旧的“注入即独立”“只接线无协作责任”等表述不是实现依据。实际开工时依据根规则重判，不因草稿存在而扩大工作包。Trace 的最后助手散文不代表完整 LWR；Ownership 的资源归属不代表实际宿主会话管理已经完成。
+- 除 lifecycle、eventstore、assembly、process、supervision、trace、session 外均为未实现候选；其中旧的“注入即独立”“只接线无协作责任”等表述不是实现依据。实际开工时依据根规则重判，不因草稿存在而扩大工作包。Trace 的最后助手散文不代表完整 LWR；Ownership 的资源归属不代表实际宿主会话管理已经完成。

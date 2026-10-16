@@ -3,8 +3,7 @@ import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
-import childProcess from 'node:child_process'
-import { syncBuiltinESMExports } from 'node:module'
+import { Readable } from 'node:stream'
 import { setTimeout as delay } from 'node:timers/promises'
 import { ProcessSession } from 'wanxiangli/process'
 import { options, ready, closed, temporary, until } from './support.mjs'
@@ -131,27 +130,32 @@ test('SPEC[process-006] killing a forwarding process reaches actual pipe EOF aft
 })
 
 test('SPEC[process-006] native output errors settle a waiting consumer without fabricating exit', async t => {
-  const original = childProcess.spawn
-  let child
-  childProcess.spawn = (...args) => {
-    child = original(...args)
-    return child
-  }
-  syncBuiltinESMExports()
-  let run
-  try {
-    run = capture(t, 'idle')
-  } finally {
-    childProcess.spawn = original
-    syncBuiltinESMExports()
-  }
+  const run = capture(t, 'idle')
   await ready(run)
-  await run.takeOutput()
+  const original = Readable.prototype.read
+  const streams = []
+  Readable.prototype.read = function (size) {
+    const bytes = original.call(this, size)
+    if (bytes?.length) streams.push(this)
+    return bytes
+  }
+  let first
+  try {
+    first = await run.takeOutput()
+  } finally {
+    Readable.prototype.read = original
+  }
+  assert.equal(first.kind, 'Chunk')
+  assert.equal(first.channel, 'stdout')
+  assert.equal(Buffer.from(first.bytes).toString(), 'ready\n')
+  assert.equal(streams.length, 1, 'capture must reach the actual native stdout read')
   const pending = run.takeOutput()
-  child.stdout.destroy(Object.assign(new Error('capture read failed'), { code: 'EIO' }))
+  const observed = streams[0].emit('error', Object.assign(new Error('capture read failed'), { code: 'EIO' }))
+  assert.equal(observed, true, 'the production stdout error listener must receive the injected event')
   const result = await pending
   assert.equal(result.kind, 'Failed')
   assert.equal(result.error.code, 'EIO')
+  assert.equal(result.error.operation, 'stdout')
   assert.equal(run.inspect().exit, null)
   result.error.message = 'rewritten'
   assert.equal((await run.takeOutput()).error.message, 'capture read failed')

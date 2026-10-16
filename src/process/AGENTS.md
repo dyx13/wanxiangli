@@ -36,7 +36,7 @@
 5. [LEMMA 5] 公开生成对象不暴露原生句柄与缓冲；输入和返回值不泄漏可变别名。只携带 process 源码即可编译并跑本库测试，安装包在没有其他入口文件时仍可运行。
    - 证明：`tests/005.test.mjs` 的实际生成对象及多实例测试通过；`scripts/tests/build.test.mjs` 仅提供 process 源码时编译并运行全部 49 项本库测试。`scripts/tests/process-package.test.mjs` 实际安装 tarball 后删除全部第一刀产物，在 Node 25.9.0、Bun 1.3.14 / Linux 上分别通过 stdin、大输出和真实进程组信号场景。
 6. [LEMMA 6] Capture 保全双路字节与各自游标，慢消费者不丢数据，拒绝重叠读取；启动/读取失败可见，显式放弃及时释放待决读取，但不写入退出事实。
-   - 证明：`tests/006.test.mjs` 在 macOS / Node 26.6.0 上通过真实双路大输出、慢消费者、返回字节隔离、重叠读取、主动放弃、ENOENT、SIGKILL 及真实 native stream 错误注入。默认模式的 `002`—`005` 同时回归通过。独立安装 tarball 后，Node 26.6.0 / Bun 1.3.14 均逐字节消费双路合计 32 MiB，TypeScript 正反类型检查通过。没有测量完整 RSS，不把每块大小等同于全部进程内存；Draining 监管仍不在本能力内。
+   - 证明：`tests/006.test.mjs` 在 macOS / Node 26.6.0、Bun 1.3.14 分别 7/7，通过真实双路大输出、慢消费者、返回字节隔离、重叠读取、主动放弃、ENOENT、SIGKILL 及实际 stdout error 事件注入；后者不是设备 I/O 故障实测。Node Process/Supervision 69/69，Bun Capture/Supervision 19/19；Bun 全部 Process/Supervision 另有四项平台与夹具失败，见施工顺序，未声称全绿。此前独立安装 tarball 的 Node/Bun 双路 32 MiB 及 TypeScript 证据保留。没有测量完整 RSS，不把块大小等同全部内存；Draining 监管不在本能力内。
 
 ## 边界与草稿重判
 

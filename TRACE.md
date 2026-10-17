@@ -2,6 +2,12 @@
 
 `wanxiangli/trace` 的 `Trace` 是一个独立内存对象。它保存已经确认的观察和原始字节，分配本地游标，冻结取材边界；没有磁盘、进程、Work、Journal 或宿主服务参数。
 
+## 0.6.4：观察元数据保持原值
+
+`MaterialConfirmed.providerRun/toolName` 和 `TerminalBound.providerRun` 是观察到的字符串，不再套用库内身份的 1024 字符、NUL 或 Unicode 成对限制。缺失仍为 null，已有值逐字符保留，分片/终结的相等性判断不变。单条记录仍有 1 MiB 容量边界；这不是无限元数据承诺。
+
+`traceId`、材料 `identity` 及旧完整消息协议的身份限制保持原样。组合者应把任意外部身份通过无歧义编码映射到有限的内部身份，不能简单加前缀后假定仍满足容量限制。主仓的旧 journal 恢复与实际 Host 接线由其 T-01 报告单独验收。
+
 ## 0.6.3：已确认材料
 
 当宿主没有提供消息或运行完成事实时，使用 `MaterialConfirmed`：`identity` 是调用方给出的不透明材料身份，`role` 原样保留，`kind` 区分 text/reasoning/tool-call/tool-result/media-omitted，`providerRun` 与 `toolName` 可为 null。每个字节块至多 512 KiB；同一材料声明固定的正数 `chunks`，`chunk` 从 0 连续追加。分片齐备只证明这份材料完整，不生成消息或运行终态，也不推断 human/provider 来源。相同分片重放返回原游标，元数据或字节冲突零追加。

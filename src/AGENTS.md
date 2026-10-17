@@ -71,7 +71,7 @@
     - 证明：`process/tests/` 的原 49 项测试及安装包验收属于 0.3.0 历史范围。0.6.0 后补充 Capture 和独立 SupervisedProcess；0.6.1 在 macOS/Node 26.6.0/Bun 1.3.14 复跑源码、监管组合、Node/Bun 安装包及独立构建，主仓已接完整 Spool 与所选非 PTY 监管。基础 Process 的 Linux 限定安装套件在本机仍 skip；不承诺 PTY、脱组后代或崩溃接管。完整能力边界见 `PROCESS.md`、`supervision/README.md` 与施工记录。
 
 9. [LEMMA 4, 5; 根 LEMMA 3, 4, 5] 第三刀由独立 Trace 维护确认轨迹及固定边界：明确来源，不根据正文推断；原始字节不被消息投影或最后助手散文覆盖。持久化由外侧组合，不进入 Trace。
-    - 证明：`trace/tests/` 验证逐字节取回、去重、单一终态、固定窗口及恢复拒绝；`scripts/tests/trace-package.test.mjs` 实际安装后完成 Node/Bun 的 SQLite 强杀恢复及去掉前两刀的单独使用。完整回归结果见 `施工顺序.md`；宿主捕获、完整 LWR 与压缩仍未实现。
+    - 证明：`trace/tests/` 验证逐字节取回、去重、单一终态、固定窗口及恢复拒绝；`scripts/tests/trace-package.test.mjs` 实际安装后完成 Node/Bun 的 SQLite 强杀恢复及拆除后的单独使用。完整回归结果见 `施工顺序.md`。主仓 T-01 已提供限定范围的捕获和原件消费证据，见其 `proposals/extraction-kanban/TRACE-ORIGINALS-2026-10-17.md`；本库不实现 Host 捕获、完整 LWR 或压缩。
 
 10. [LEMMA 1, 7; 根 SPEC 2, 3, 4] 第四刀在外部效果之前预留归属；Reserved/Running 均阻止关闭，Drain 不释放，Ended 绑定该次实例。C 关闭准入、确认物理结束后才允许范围关闭与业务退休。
     - 证明：`session/tests/` 覆盖森林、抢占、容器复用、迟到终态、原子关闭和恢复；`scripts/tests/ownership-composition.test.mjs` 覆盖真实 SQLite 竞争及未知提交；安装包在 Node/Bun 上验证实际进程、Work 阻塞、强杀恢复与 Ownership 单独使用。未证明未登记资源发现或完整进程树监管。

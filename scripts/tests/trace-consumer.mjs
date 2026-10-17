@@ -8,6 +8,9 @@ const observed = { type: 'MessageObserved', messageId: 'user', role: 'user', ori
 const confirmed = { type: 'PartConfirmed', messageId: 'user', partId: 'original', index: 0, kind: 'binary', bytes: source }
 const finished = { type: 'MessageFinished', messageId: 'user', partCount: 1 }
 const material = { type: 'MaterialConfirmed', identity: 'actual/part', role: 'assistant', kind: 'reasoning', providerRun: null, toolName: null, chunk: 0, chunks: 1, bytes: source }
+const providerRun = 'r'.repeat(1200) + '\0\ud800'
+const toolName = 't'.repeat(1200) + '\0\ud801'
+const tool = { ...material, identity: 'actual/tool', providerRun, toolName, kind: 'tool-call' }
 assert.deepEqual(Object.keys(await import('wanxiangli/trace')), ['Trace'])
 
 if (mode === 'isolated') {
@@ -22,7 +25,9 @@ if (mode === 'isolated') {
   restored.capture({ ...confirmed, messageId: 'another', bytes: data })
   assert.equal(restored.read(restored.cut(0), before).length, 3)
   restored.capture(material)
+  restored.capture(tool)
   assert.deepEqual(restored.material('actual/part', restored.head()).content.bytes, source)
+  assert.equal(restored.material('actual/tool', restored.head()).toolName, toolName)
   assert.equal(restored.inspect().runs, 0)
   console.log(JSON.stringify({ runtime, isolated: true, bytes: source.length }))
 } else {
@@ -52,9 +57,10 @@ if (mode === 'isolated') {
     capture({ ...finished, messageId: 'assistant' })
     capture({ type: 'RunFinished', runId: 'run', outcome: 'Completed' })
     capture(material)
+    capture(tool)
     const frontier = trace.head()
-    capture({ ...material, identity: 'actual/terminal', providerRun: 'actual-run', kind: 'text', bytes: new TextEncoder().encode('正式终结') })
-    capture({ type: 'TerminalBound', identity: 'actual/terminal', providerRun: 'actual-run', frontier })
+    capture({ ...material, identity: 'actual/terminal', providerRun, kind: 'text', bytes: new TextEncoder().encode('正式终结') })
+    capture({ type: 'TerminalBound', identity: 'actual/terminal', providerRun, frontier })
     console.log(JSON.stringify({ phase: 'committed', checkpoint: trace.head() }))
     // 保持原生连接打开；父测试在确认提交后强杀这个真实进程。
     setInterval(() => {}, 1000)
@@ -68,7 +74,10 @@ if (mode === 'isolated') {
     assert.equal(frozen.statement.content.text, '可核对的结论')
     assert.deepEqual(frozen.materials[0].content.bytes, source)
     assert.equal(frozen.materials[0].providerRun, null)
+    assert.equal(frozen.materials[1].providerRun, providerRun)
+    assert.equal(frozen.materials[1].toolName, toolName)
     assert.equal(frozen.terminals[0].content.text, '正式终结')
+    assert.equal(frozen.terminals[0].providerRun, providerRun)
     assert.equal(trace.inspect().runs, 1)
     const records = journal.read(id)
     assert.equal(capture(confirmed).status, 'Replayed')

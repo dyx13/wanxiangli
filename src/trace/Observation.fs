@@ -46,8 +46,8 @@ module internal Observation =
         require (List.contains selected options) "Unknown protocol choice"
         selected
 
-    let private optionalId value =
-        if isNull value then None else Some(identifier value)
+    let private optionalText value =
+        if isNull value then None else Some(text value)
 
     let decode fromRecord value =
         let read key = field value key
@@ -95,8 +95,8 @@ module internal Observation =
                 { Identity = identifier (read "identity")
                   Role = text (read "role")
                   Kind = choice [ "text"; "reasoning"; "tool-call"; "tool-result"; "media-omitted" ] (read "kind")
-                  ProviderRun = optionalId (read "providerRun")
-                  ToolName = optionalId (read "toolName")
+                  ProviderRun = optionalText (read "providerRun")
+                  ToolName = optionalText (read "toolName")
                   Chunks = index (read "chunks") }
             require (info.Kind <> "tool-call" || info.ToolName.IsSome) "Tool call material requires a tool name"
             let chunk = index (read "chunk")
@@ -108,7 +108,7 @@ module internal Observation =
             exact [ "traceId"; "cursor"; "digest" ] frontier
             Observation.TerminalBound
                 { Identity = identifier (read "identity")
-                  ProviderRun = identifier (read "providerRun")
+                  ProviderRun = text (read "providerRun")
                   TraceId = identifier (field frontier "traceId")
                   Cursor = index (field frontier "cursor")
                   Digest = text (field frontier "digest") }

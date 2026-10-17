@@ -9,6 +9,21 @@ const material = (identity, text, extra = {}) => ({
 })
 const window = trace => trace.materialize(trace.cut(0), trace.head())
 
+test('SPEC[trace-007] observed run and tool metadata remain opaque through replay', () => {
+  const trace = new Trace('opaque-metadata')
+  const providerRun = 'r'.repeat(1200) + '\0\ud800'
+  const toolName = 't'.repeat(1200) + '\0\ud801'
+  trace.capture(material('actual-call', 'input', { kind: 'tool-call', providerRun, toolName }))
+  trace.capture(material('actual-terminal', 'formal', { kind: 'text', providerRun }))
+  trace.capture({ type: 'TerminalBound', identity: 'actual-terminal', providerRun, frontier: trace.cut(1) })
+  const actual = window(trace)
+  assert.equal(actual.materials[0].providerRun, providerRun)
+  assert.equal(actual.materials[0].toolName, toolName)
+  assert.equal(actual.terminals[0].providerRun, providerRun)
+  assert.deepEqual(window(new Trace('opaque-metadata', trace.records())), actual)
+  unchanged(trace, () => trace.capture({ type: 'RunStarted', runId: providerRun }), /identifier/i)
+})
+
 test('SPEC[trace-007] confirmed material retains missing execution evidence and exact bytes', () => {
   const trace = new Trace('confirmed')
   const input = material('g:0/msg:actual/host-part:real', '\uFEFF原件\r\n\0e\u0301')

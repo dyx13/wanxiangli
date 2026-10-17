@@ -1,6 +1,6 @@
 {
   "name": "wanxiangli",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "private": true,
   "description": "Independent work, journal, process, trace and resource ownership libraries, written in F#.",
   "type": "module",

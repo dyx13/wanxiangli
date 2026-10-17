@@ -8,6 +8,26 @@ type internal MessageInfo =
 type internal PartInfo =
     { Message: string; Id: string; Index: float; Kind: string; Base64: string }
 
+type internal MaterialInfo =
+    { Identity: string
+      Role: string
+      Kind: string
+      ProviderRun: string option
+      ToolName: string option
+      Chunks: float }
+
+type internal MaterialChunk =
+    { Info: MaterialInfo
+      Chunk: float
+      Base64: string }
+
+type internal TerminalInfo =
+    { ProviderRun: string
+      Identity: string
+      TraceId: string
+      Cursor: float
+      Digest: string }
+
 [<RequireQualifiedAccess>]
 type internal Observation =
     | Opening of string
@@ -17,12 +37,17 @@ type internal Observation =
     | PartConfirmed of PartInfo
     | MessageFinished of message: string * count: float
     | RunFinished of run: string * outcome: string
+    | MaterialConfirmed of MaterialChunk
+    | TerminalBound of TerminalInfo
 
 module internal Observation =
     let private choice options value =
         let selected = text value
         require (List.contains selected options) "Unknown protocol choice"
         selected
+
+    let private optionalId value =
+        if isNull value then None else Some(identifier value)
 
     let decode fromRecord value =
         let read key = field value key
@@ -64,6 +89,29 @@ module internal Observation =
         | "RunFinished" ->
             check [ "runId"; "outcome" ]
             Observation.RunFinished(identifier (read "runId"), choice [ "Completed"; "Failed"; "Cancelled" ] (read "outcome"))
+        | "MaterialConfirmed" ->
+            check [ "identity"; "role"; "kind"; "providerRun"; "toolName"; "chunk"; "chunks"; payloadName ]
+            let info =
+                { Identity = identifier (read "identity")
+                  Role = text (read "role")
+                  Kind = choice [ "text"; "reasoning"; "tool-call"; "tool-result"; "media-omitted" ] (read "kind")
+                  ProviderRun = optionalId (read "providerRun")
+                  ToolName = optionalId (read "toolName")
+                  Chunks = index (read "chunks") }
+            require (info.Kind <> "tool-call" || info.ToolName.IsSome) "Tool call material requires a tool name"
+            let chunk = index (read "chunk")
+            require (info.Chunks > 0. && chunk < info.Chunks) "Invalid material chunk range"
+            Observation.MaterialConfirmed { Info = info; Chunk = chunk; Base64 = payload () }
+        | "TerminalBound" ->
+            check [ "identity"; "providerRun"; "frontier" ]
+            let frontier = read "frontier"
+            exact [ "traceId"; "cursor"; "digest" ] frontier
+            Observation.TerminalBound
+                { Identity = identifier (read "identity")
+                  ProviderRun = identifier (read "providerRun")
+                  TraceId = identifier (field frontier "traceId")
+                  Cursor = index (field frontier "cursor")
+                  Digest = text (field frontier "digest") }
         | _ -> invalidOp "Unknown trace observation"
 
     let private render payload fact =
@@ -81,6 +129,21 @@ module internal Observation =
                 [ "messageId", box part.Message; "partId", box part.Id; "index", box part.Index; "kind", box part.Kind; payload part.Base64 ]
         | Observation.MessageFinished(message, count) -> tagged "MessageFinished" [ "messageId", box message; "partCount", box count ]
         | Observation.RunFinished(run, outcome) -> tagged "RunFinished" [ "runId", box run; "outcome", box outcome ]
+        | Observation.MaterialConfirmed part ->
+            tagged "MaterialConfirmed"
+                [ "identity", box part.Info.Identity
+                  "role", box part.Info.Role
+                  "kind", box part.Info.Kind
+                  "providerRun", part.Info.ProviderRun |> Option.map box |> Option.defaultValue null
+                  "toolName", part.Info.ToolName |> Option.map box |> Option.defaultValue null
+                  "chunk", box part.Chunk
+                  "chunks", box part.Info.Chunks
+                  payload part.Base64 ]
+        | Observation.TerminalBound terminal ->
+            tagged "TerminalBound"
+                [ "identity", box terminal.Identity
+                  "providerRun", box terminal.ProviderRun
+                  "frontier", make [ "traceId", box terminal.TraceId; "cursor", box terminal.Cursor; "digest", box terminal.Digest ] ]
 
     let encode fact = render (fun value -> "base64", box value) fact
     let view fact = render (fun value -> "content", content value) fact
@@ -95,4 +158,6 @@ module internal Observation =
             | Observation.PartConfirmed part -> [ "PartConfirmed"; part.Message; part.Id ]
             | Observation.MessageFinished(message, _) -> [ "MessageFinished"; message ]
             | Observation.RunFinished(run, _) -> [ "RunFinished"; run ]
+            | Observation.MaterialConfirmed part -> [ "MaterialConfirmed"; part.Info.Identity; string part.Chunk ]
+            | Observation.TerminalBound terminal -> [ "TerminalBound"; terminal.ProviderRun ]
         fields |> List.toArray |> box |> stringify

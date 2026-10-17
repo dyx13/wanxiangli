@@ -2,6 +2,16 @@
 
 `wanxiangli/trace` 的 `Trace` 是一个独立内存对象。它保存已经确认的观察和原始字节，分配本地游标，冻结取材边界；没有磁盘、进程、Work、Journal 或宿主服务参数。
 
+## 0.6.3：已确认材料
+
+当宿主没有提供消息或运行完成事实时，使用 `MaterialConfirmed`：`identity` 是调用方给出的不透明材料身份，`role` 原样保留，`kind` 区分 text/reasoning/tool-call/tool-result/media-omitted，`providerRun` 与 `toolName` 可为 null。每个字节块至多 512 KiB；同一材料声明固定的正数 `chunks`，`chunk` 从 0 连续追加。分片齐备只证明这份材料完整，不生成消息或运行终态，也不推断 human/provider 来源。相同分片重放返回原游标，元数据或字节冲突零追加。
+
+`material(identity, through)` 以已验证 cut 读取该材料的字节副本；缺身份或材料尚未出现返回 null，`complete` 表示 through 时是否齐备。`materialize(after, through)` 的 `materials` 按首次观察选入，正文只含 through 前的分片。已有 messages/originals/statement 仍只对应旧的完整消息协议，不能用 statement 冒充正式 Terminal。
+
+`TerminalBound` 通过 `providerRun`、材料 `identity` 和本轨迹的 `frontier` cut 记录明确终结。材料必须齐备且归属同一 ProviderRun，前沿须已存在且摘要匹配；同运行的冲突绑定拒绝。`terminals` 返回相同材料的字节副本和冻结前沿，不关闭未提供结束事实的 Run。
+
+旧观察记录继续按原含义重放。新观察需 0.6.3 修复线消费；调用方不得把旧描述符当原件，必须保留旧边界身份或为经验证的原件建立新轨迹身份。持久化、缺失材料处置及迁移仍归组合者。
+
 这一刀解决的是“当时究竟记录了什么、属于哪段观察”。不生成摘要，不压缩用户原文，不推断工具权限，也不是完整 LWR 或 provider 请求装配器。
 
 ## 最小用法
@@ -32,7 +42,7 @@ restored.read(beginning, through) // 同一条历史、同一段材料
 
 `Trace` 返回封装状态的对象，不以可读写实例字段或继承工作。结果和字节都是分离视图；用户后续修改输入或结果不能改写对象内的原件。
 
-## 捕获的七类事实
+## 捕获的观察
 
 | type | 输入及含义 |
 |---|---|
@@ -43,6 +53,8 @@ restored.read(beginning, through) // 同一条历史、同一段材料
 | PartConfirmed | messageId、partId、index、kind、bytes；该消息已确认的完整部件 |
 | MessageFinished | messageId、partCount；该消息的部件已收齐 |
 | RunFinished | runId、outcome；Completed、Failed 或 Cancelled 的实际终态 |
+| MaterialConfirmed | identity、role、kind、providerRun、toolName、chunk、chunks、bytes；不要求消息或运行完成的已确认材料 |
+| TerminalBound | identity、providerRun、frontier；把明确终结绑定到完整材料及固定前沿 |
 
 消息 role 为 user、system、assistant 或 tool。user 的 origin 为 human、plugin 或 host-internal；system 不接受 human；assistant/tool 的 origin 必须为 provider，并关联已开始的运行。没有根据正文猜来源的路径，也没有“没识别出来就当 human”的回退。
 
@@ -88,6 +100,8 @@ BOM、NUL、CRLF、组合字符、任意非 UTF-8 字节均按原件保存，不
 | originals | 从轨迹起点到 through 的全部 human 消息及其已确认部件；不受 after 过滤 |
 | opening | through 已包含 Opening 或 OpeningBound 的完整开场；可由表示层不渲染，但原件不删除 |
 | statement | messages 中最后一条已完成、含 text 部件的助手消息；只连接 text 原始字节并列出 partIds，没有则 null |
+| materials | 首次观察位于区间内的已确认材料，分片及 complete 只读到 through |
+| terminals | 绑定游标位于区间内的正式终结材料及冻结前沿，不推导运行结束 |
 
 前任消息后来才到的部件仍能在原始观察中找到，但不会把该消息搬进后任 messages。最后助手散文不掺 tool-call/tool-result，也不选尚未完成的助手消息；它是原件引用和字节连接，不是总结、证书或自动评审结果。
 
@@ -111,4 +125,4 @@ node --test src/trace/tests/*.test.mjs
 npm test
 ```
 
-本库没有 npm 运行时依赖，不调用其他职责库。公开类型为 `src/trace/index.d.ts`，规则与证明在 `src/trace/AGENTS.md`；实际版本验收记在 `施工顺序.md`。本轮不读取或修改旧仓，不把当前新协议冒称旧事件格式兼容。
+本库没有 npm 运行时依赖，不调用其他职责库。公开类型为 `src/trace/index.d.ts`，规则与证明在 `src/trace/AGENTS.md`；实际版本验收记在 `施工顺序.md`。独立库证明不代替旧仓实际接线，也不把新观察冒称旧描述符格式兼容。

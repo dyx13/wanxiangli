@@ -1,5 +1,9 @@
 # 渐进抽取与旧仓接线边界
 
+## 0.6.3：确认材料与明确终结绑定
+
+Trace 新增 `MaterialConfirmed`、`TerminalBound` 和 `material(identity, through)`。不补造缺失的消息、运行完成或来源；原协议、已确认字节和 cut 校验保持。大材料使用连续分片；Terminal 绑定真实 ProviderRun 和固定前沿。类型正反例与真实 SQLite 强杀、恢复、拆除消费包含新观察。旧描述符轨迹不能只换入口继续当原件，主仓接管使用新的 trace identity，既有持久事实及 payload 原样校验重放。
+
 ## 0.6.2：关闭失败后的明确回收
 
 Journal 分别记录业务封存与连接释放。正常 close 或 Unknown 中的 close 一旦开始，read/append 就不再开放；原生 close 抛错时，调用者仍可显式再次 close 请求回收。只有原生 close 成功才记为已释放，此后 close 幂等。不自动重试，不把封存或回收当作新的写入许可，记录格式不变。

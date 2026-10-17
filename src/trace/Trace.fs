@@ -14,6 +14,7 @@ type TraceMessages =
     abstract cut: cursor: float -> obj
     abstract read: after: obj * through: obj -> obj array
     abstract materialize: after: obj * through: obj -> obj
+    abstract material: identity: string * through: obj -> obj
 
 type private Message(info: MessageInfo, cursor: int) =
     let parts = ResizeArray<int * PartInfo>()
@@ -26,6 +27,13 @@ type private Run() =
     let messages = ResizeArray<Message>()
     member _.Messages = messages
     member val Finished: (int * string) option = None with get, set
+
+type private Material(info: MaterialInfo, cursor: int) =
+    let chunks = ResizeArray<int * string>()
+    member _.Info = info
+    member _.Cursor = cursor
+    member _.Chunks = chunks
+    member _.Complete = float chunks.Count = info.Chunks
 
 type private Entry =
     { Fact: Observation; Encoded: string; Record: string; Digest: string }
@@ -43,6 +51,9 @@ let Trace (traceId: string) (initialRecords: obj): TraceMessages =
     let messages = Dictionary<string, Message>()
     let messageOrder = ResizeArray<Message>()
     let runs = Dictionary<string, Run>()
+    let materials = Dictionary<string, Material>()
+    let materialOrder = ResizeArray<Material>()
+    let terminals = ResizeArray<int * TerminalInfo>()
     let mutable opening: (int * OpeningSource) option = None
     let mutable byteCount = 0.
     let mutable busy = false
@@ -64,6 +75,35 @@ let Trace (traceId: string) (initialRecords: obj): TraceMessages =
         match runs.TryGetValue id with
         | true, run -> run
         | _ -> invalidOp "Run has not been started"
+
+    let findMaterial id =
+        match materials.TryGetValue id with
+        | true, material -> material
+        | _ -> invalidOp "Terminal material has not been observed"
+
+    let prepareMaterial part cursor =
+        let existing =
+            match materials.TryGetValue part.Info.Identity with
+            | true, material -> Some material
+            | _ -> None
+        let material = existing |> Option.defaultWith (fun () -> Material(part.Info, cursor))
+        require (material.Info = part.Info) "Material metadata conflict"
+        require (part.Chunk = float material.Chunks.Count) "Material chunk must be the next consecutive chunk"
+        fun () ->
+            if existing.IsNone then
+                materials.Add(part.Info.Identity, material)
+                materialOrder.Add material
+            material.Chunks.Add(cursor, part.Base64)
+            byteCount <- byteCount + float (bytes part.Base64).Length
+
+    let prepareTerminal terminal cursor =
+        let material = findMaterial terminal.Identity
+        require material.Complete "Terminal material is not complete"
+        require (material.Info.ProviderRun = Some terminal.ProviderRun) "Terminal material belongs to a different run"
+        require (terminal.TraceId = traceId) "Foreign terminal frontier trace"
+        require (terminal.Cursor <= float entries.Count) "Terminal frontier is beyond the trace head"
+        require (terminal.Digest = digestAt (int terminal.Cursor)) "Terminal frontier does not match the trace prefix"
+        fun () -> terminals.Add(cursor, terminal)
 
     let requireActive (message: Message) =
         require message.Finished.IsNone "Message is already finished"
@@ -117,6 +157,8 @@ let Trace (traceId: string) (initialRecords: obj): TraceMessages =
             require run.Finished.IsNone "Run is already finished"
             require (run.Messages |> Seq.forall (fun message -> message.Finished.IsSome)) "Run has unfinished messages"
             fun () -> run.Finished <- Some(cursor, outcome)
+        | Observation.MaterialConfirmed part -> prepareMaterial part cursor
+        | Observation.TerminalBound terminal -> prepareTerminal terminal cursor
 
     let envelope fact cursor previous =
         make [ "traceId", box traceId; "cursor", box cursor; "previous", box previous; "observation", Observation.encode fact ]
@@ -221,6 +263,33 @@ let Trace (traceId: string) (initialRecords: obj): TraceMessages =
                 |> contentBytes
         | _ -> null
 
+    let materialContent through (material: Material) =
+        material.Chunks
+        |> Seq.filter (fun (cursor, _) -> cursor <= through)
+        |> Seq.map (snd >> bytes)
+        |> Seq.toArray
+        |> Array.concat
+        |> contentBytes
+
+    let materialView through (material: Material) =
+        let visible = material.Chunks |> Seq.filter (fun (cursor, _) -> cursor <= through) |> Seq.length
+        make
+            [ "identity", box material.Info.Identity
+              "role", box material.Info.Role
+              "kind", box material.Info.Kind
+              "providerRun", material.Info.ProviderRun |> Option.map box |> Option.defaultValue null
+              "toolName", material.Info.ToolName |> Option.map box |> Option.defaultValue null
+              "firstCursor", box material.Cursor
+              "complete", box (float visible = material.Info.Chunks)
+              "content", materialContent through material ]
+
+    let terminalView through (terminal: TerminalInfo) =
+        make
+            [ "identity", box terminal.Identity
+              "providerRun", box terminal.ProviderRun
+              "frontier", cutAt (int terminal.Cursor)
+              "content", materialContent through (findMaterial terminal.Identity) ]
+
     let materialize after through =
         guard (fun () ->
             let first, last = interval after through
@@ -243,7 +312,9 @@ let Trace (traceId: string) (initialRecords: obj): TraceMessages =
             make [ "after", cutAt first; "through", cutAt last
                    "opening", openingView last
                    "messages", box (selected |> Array.map (messageView last))
-                   "originals", box originals; "statement", statement |> Option.defaultValue null ])
+                   "originals", box originals; "statement", statement |> Option.defaultValue null
+                   "materials", box (materialOrder |> Seq.filter (fun material -> material.Cursor > first && material.Cursor <= last) |> Seq.map (materialView last) |> Seq.toArray)
+                   "terminals", box (terminals |> Seq.filter (fun (cursor, _) -> cursor > first && cursor <= last) |> Seq.map (snd >> terminalView last) |> Seq.toArray) ])
 
     { new TraceMessages with
         member _.capture(input) = capture input
@@ -252,4 +323,10 @@ let Trace (traceId: string) (initialRecords: obj): TraceMessages =
         member _.head() = guard (fun () -> cutAt entries.Count)
         member _.cut(cursor) = guard (fun () -> checkedIndex (box cursor) |> cutAt)
         member _.read(after, through) = guard (fun () -> let first, last = interval after through in readRange first last)
-        member _.materialize(after, through) = materialize after through }
+        member _.materialize(after, through) = materialize after through
+        member _.material(identity, through) =
+            guard (fun () ->
+                let through = checkedCut through
+                match materials.TryGetValue(identifier (box identity)) with
+                | true, material when material.Cursor <= through -> materialView through material
+                | _ -> null) }

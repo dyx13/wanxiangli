@@ -5,7 +5,7 @@ import { capturedUser, fresh, user, part, bytes, whole, unchanged } from './supp
 
 test('SPEC[trace-006] the generated object contains only message methods, not maps, byte storage or services', () => {
   const trace = capturedUser()
-  assert.deepEqual(Object.keys(trace).sort(), ['capture', 'cut', 'head', 'inspect', 'materialize', 'read', 'records'])
+  assert.deepEqual(Object.keys(trace).sort(), ['capture', 'cut', 'head', 'inspect', 'material', 'materialize', 'read', 'records'])
   const before = trace.records()
   trace.entries = []
   trace.messages = new Map()

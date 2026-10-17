@@ -7,6 +7,7 @@ const source = Uint8Array.from([...new TextEncoder().encode('\ufeff用户原件\
 const observed = { type: 'MessageObserved', messageId: 'user', role: 'user', origin: 'human', runId: null }
 const confirmed = { type: 'PartConfirmed', messageId: 'user', partId: 'original', index: 0, kind: 'binary', bytes: source }
 const finished = { type: 'MessageFinished', messageId: 'user', partCount: 1 }
+const material = { type: 'MaterialConfirmed', identity: 'actual/part', role: 'assistant', kind: 'reasoning', providerRun: null, toolName: null, chunk: 0, chunks: 1, bytes: source }
 assert.deepEqual(Object.keys(await import('wanxiangli/trace')), ['Trace'])
 
 if (mode === 'isolated') {
@@ -20,6 +21,9 @@ if (mode === 'isolated') {
   restored.capture({ ...observed, messageId: 'another' })
   restored.capture({ ...confirmed, messageId: 'another', bytes: data })
   assert.equal(restored.read(restored.cut(0), before).length, 3)
+  restored.capture(material)
+  assert.deepEqual(restored.material('actual/part', restored.head()).content.bytes, source)
+  assert.equal(restored.inspect().runs, 0)
   console.log(JSON.stringify({ runtime, isolated: true, bytes: source.length }))
 } else {
   const { SqliteJournal } = await import('wanxiangli/eventstore')
@@ -47,6 +51,10 @@ if (mode === 'isolated') {
     capture({ ...confirmed, messageId: 'assistant', bytes: new TextEncoder().encode('可核对的结论'), kind: 'text' })
     capture({ ...finished, messageId: 'assistant' })
     capture({ type: 'RunFinished', runId: 'run', outcome: 'Completed' })
+    capture(material)
+    const frontier = trace.head()
+    capture({ ...material, identity: 'actual/terminal', providerRun: 'actual-run', kind: 'text', bytes: new TextEncoder().encode('正式终结') })
+    capture({ type: 'TerminalBound', identity: 'actual/terminal', providerRun: 'actual-run', frontier })
     console.log(JSON.stringify({ phase: 'committed', checkpoint: trace.head() }))
     // 保持原生连接打开；父测试在确认提交后强杀这个真实进程。
     setInterval(() => {}, 1000)
@@ -58,8 +66,13 @@ if (mode === 'isolated') {
     assert.deepEqual(frozen.originals[0].parts[0].content.bytes, source)
     assert.equal(frozen.originals[0].parts[0].content.text, null)
     assert.equal(frozen.statement.content.text, '可核对的结论')
+    assert.deepEqual(frozen.materials[0].content.bytes, source)
+    assert.equal(frozen.materials[0].providerRun, null)
+    assert.equal(frozen.terminals[0].content.text, '正式终结')
+    assert.equal(trace.inspect().runs, 1)
     const records = journal.read(id)
     assert.equal(capture(confirmed).status, 'Replayed')
+    assert.equal(capture(material).status, 'Replayed')
     assert.deepEqual(journal.read(id), records)
     capture({ ...observed, messageId: 'later-user' })
     assert.deepEqual(trace.materialize(trace.cut(0), checkpoint), frozen)

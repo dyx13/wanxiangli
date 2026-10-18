@@ -159,7 +159,7 @@ module internal BunProcess =
             pendingWrite = complete;
             Promise.resolve().then(() => nativeProcess.stdin.write(bytes)).then(async () => {
               await nativeProcess.stdin.flush();
-              complete();
+              setImmediate(() => complete());
             }).catch(complete);
           },
           final(callback) {

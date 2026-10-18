@@ -1,0 +1,10 @@
+✔ SPEC[build-001] the second cut builds without replacing any first-cut artifact (1499.222666ms)
+✔ SPEC[build-001] supervision compiles with only its own owner and the one shared native adapter (1337.293333ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2891.781583

@@ -1,0 +1,121 @@
+bun test v1.3.14 (d1632b29)
+
+src/supervision/tests/001.test.mjs:
+(pass) SPEC[supervision-001] input EOF follows every target write under real output backpressure [158.31ms]
+(pass) SPEC[supervision-001] a target that closes input still owns its later output and native exit [168.13ms]
+(pass) SPEC[supervision-001] both input pipes flush large buffered writes to the actual target [309.99ms]
+(pass) SPEC[supervision-001] target options are validated before a worker or target is started [0.52ms]
+(pass) SPEC[supervision-001] startup refers to the actual target and forwards explicit input unchanged [76.81ms]
+(pass) SPEC[supervision-001] target ENOENT is never reported as worker startup or exit zero [34.63ms]
+(pass) SPEC[supervision-001] the final target preserves literal environment keys through both physical launches [58.68ms]
+(pass) SPEC[supervision-001] failed startup cleans its control directory and poll without a capture consumer [34.63ms]
+(pass) SPEC[supervision-001] input uses real pipes and completed snapshots do not alias state [63.45ms]
+
+src/supervision/tests/003.test.mjs:
+(pass) SPEC[supervision-003] TERM and KILL reach the same group after target exit while a descendant holds output [101.63ms]
+(pass) SPEC[supervision-003] natural completion cleans same-group descendants without inherited output [76.66ms]
+
+src/supervision/tests/002.test.mjs:
+(pass) SPEC[supervision-002] paused supervision propagates backpressure through the real Worker to the target [5612.63ms]
+(pass) SPEC[supervision-002] a final extent cannot authorize natural group cleanup before Capture receives each channel [85.24ms]
+(pass) SPEC[supervision-002] zero-output and one-channel target completion do not wait for an absent channel [99.44ms]
+(pass) SPEC[supervision-002] natural exit preserves multi-MiB tails on both streams before group cleanup [261.87ms]
+
+src/supervision/tests/004.test.mjs:
+(pass) SPEC[supervision-004] legacy output extent is control failure rather than guessed completion [42.34ms]
+(pass) SPEC[supervision-004] false output extent is control failure rather than guessed completion [34.40ms]
+(pass) SPEC[supervision-004] negative output extent is control failure rather than guessed completion [34.96ms]
+(pass) SPEC[supervision-004] fraction output extent is control failure rather than guessed completion [35.57ms]
+(pass) SPEC[supervision-004] unsafe output extent is control failure rather than guessed completion [35.39ms]
+(pass) SPEC[supervision-004] string output extent is control failure rather than guessed completion [35.38ms]
+(pass) SPEC[supervision-004] channel extents are checked separately even when their sum is correct [58.87ms]
+(pass) SPEC[supervision-004] short Capture EOF is incomplete output after exact target exit [65.26ms]
+(pass) SPEC[supervision-004] short Capture EOF is explicit interruption after exact target exit [64.33ms]
+(pass) SPEC[supervision-004] unexpected worker death preserves unknown target exit [57.47ms]
+(pass) SPEC[supervision-004] lost private control channel is failure and never target exit zero [34.36ms]
+(pass) SPEC[supervision-004] a failed worker exit-fact write kills its live group and keeps the target status unknown [60.30ms]
+
+src/supervision/tests/005.test.mjs:
+(pass) SPEC[supervision-005] two supervisors keep separate process groups, output and waits [87.83ms]
+
+src/process/tests/001.test.mjs:
+(pass) SPEC[process-001] the native spawn observer reaches one actual validated launch [23.78ms]
+(pass) SPEC[process-001] direct argv, explicit cwd and environment reach a real process unchanged [40.54ms]
+(pass) SPEC[process-001] nonzero exit remains a real exit, not a spawn failure [23.13ms]
+(pass) SPEC[process-001] environment property names are literal data, not prototype mutation [40.44ms]
+(pass) SPEC[process-001] the actual child receives the exact environment and never inherits a host sentinel [23.24ms]
+(pass) SPEC[process-001] absent executable produces one failed start and no invented zero exit [2.38ms]
+(pass) SPEC[process-001] a partially prepared Bun output pipe fails before the target starts [1.78ms]
+(pass) SPEC[process-001] a Bun parent writer close failure preserves the actual started target [25.80ms]
+(pass) SPEC[process-001] Bun startup cleanup failures are visible without an unhandled stream error [22.16ms]
+(pass) SPEC[process-001] relative executable is refused before external effect [0.25ms]
+(pass) SPEC[process-001] relative cwd is refused before external effect [0.10ms]
+(pass) SPEC[process-001] NUL argument is refused before external effect [0.11ms]
+(pass) SPEC[process-001] bad Unicode argument is refused before external effect [0.10ms]
+(pass) SPEC[process-001] negative capacity is refused before external effect [0.09ms]
+(pass) SPEC[process-001] fractional capacity is refused before external effect [0.09ms]
+(pass) SPEC[process-001] NaN capacity is refused before external effect [0.08ms]
+(pass) SPEC[process-001] unbounded capacity is refused before external effect [0.08ms]
+(pass) SPEC[process-001] excessive capacity is refused before external effect [0.09ms]
+(pass) SPEC[process-001] zero write capacity is refused before external effect [0.09ms]
+(pass) SPEC[process-001] fractional write capacity is refused before external effect [0.09ms]
+(pass) SPEC[process-001] undefined env value is refused before external effect [0.09ms]
+(pass) SPEC[process-001] bad env key is refused before external effect [0.09ms]
+(pass) SPEC[process-001] hidden shell option is refused before external effect [0.09ms]
+(pass) SPEC[process-001] argument hole is refused before external effect [0.09ms]
+(pass) SPEC[process-001] accessors are rejected without evaluating them [0.14ms]
+
+src/process/tests/006.test.mjs:
+(pass) SPEC[process-006] capture preserves both complete byte streams with a slow consumer [254.07ms]
+(pass) SPEC[process-006] paused capture blocks the actual writer and resumes both complete channels [5314.27ms]
+(pass) SPEC[process-006] Bun idle capture reads do not occupy the filesystem I/O pool [106.89ms]
+(pass) SPEC[process-006] capture rejects overlapping readers without consuming another chunk [32.10ms]
+(pass) SPEC[process-006] discarding capture releases a pending reader without inventing process exit [24.71ms]
+(pass) SPEC[process-006] failed startup also settles capture with the original failure [1.99ms]
+(pass) SPEC[process-006] a killed capture drains accepted bytes before its closed receipt [28.54ms]
+(pass) SPEC[process-006] killing a forwarding process reaches actual pipe EOF after all captured bytes [128.60ms]
+(pass) SPEC[process-006] native output errors settle a waiting consumer without fabricating exit [25.18ms]
+
+src/process/tests/003.test.mjs:
+(pass) SPEC[process-003] unread multi-megabyte output is drained while both tails stay bounded [235.11ms]
+(pass) SPEC[process-003] a 0-byte tail preserves raw bytes and complete UTF-8 suffix [40.22ms]
+(pass) SPEC[process-003] a 1-byte tail preserves raw bytes and complete UTF-8 suffix [29.10ms]
+(pass) SPEC[process-003] a 2-byte tail preserves raw bytes and complete UTF-8 suffix [22.05ms]
+(pass) SPEC[process-003] a 3-byte tail preserves raw bytes and complete UTF-8 suffix [22.80ms]
+(pass) SPEC[process-003] a 4-byte tail preserves raw bytes and complete UTF-8 suffix [22.19ms]
+(pass) SPEC[process-003] a 5-byte tail preserves raw bytes and complete UTF-8 suffix [22.15ms]
+(pass) SPEC[process-003] a 7-byte tail preserves raw bytes and complete UTF-8 suffix [22.77ms]
+(pass) SPEC[process-003] a 10-byte tail preserves raw bytes and complete UTF-8 suffix [22.95ms]
+(pass) SPEC[process-003] a 15-byte tail preserves raw bytes and complete UTF-8 suffix [22.57ms]
+(pass) SPEC[process-003] a 64-byte tail preserves raw bytes and complete UTF-8 suffix [22.51ms]
+(pass) SPEC[process-003] incremental readers have independent cursors across ring wrap [51.80ms]
+(pass) SPEC[process-003] an incomplete UTF-8 character is withheld until later bytes arrive [38.07ms]
+(pass) SPEC[process-003] invalid UTF-8 and an incomplete final character are not silently replaced [46.34ms]
+(pass) SPEC[process-003] BOM, NUL and instruction-looking output are preserved as data [23.49ms]
+
+src/process/tests/002.test.mjs:
+(pass) SPEC[process-002] controlled Bun success notification cannot publish input success inside a native callback [26.62ms]
+(pass) SPEC[process-002] controlled Bun exit notification cannot publish input success inside a native callback [26.59ms]
+(pass) SPEC[process-002] large buffered input waits for flush and reaches the delayed reader once [288.14ms]
+(pass) SPEC[process-002] real stdin preserves binary bytes and EOF is idempotent [29.94ms]
+(pass) SPEC[process-002] pending writes own a copy and do not alias caller bytes [41.93ms]
+(pass) SPEC[process-002] excess input and overlapping writes cannot form an unbounded queue [33.46ms]
+(pass) SPEC[process-002] a broken input pipe is unknown consumption, not automatic retry [16.30ms]
+(pass) SPEC[process-002] non-byte and shared inputs are rejected without writing [22.27ms]
+
+src/process/tests/004.test.mjs:
+(pass) SPEC[process-004] wait timeout leaves the same process alive and accepts later input [22.17ms]
+(pass) SPEC[process-004] signal acknowledgement does not mean a TERM-ignoring process exited [47.29ms]
+(pass) SPEC[process-004] waiting callers are independent and their timers are cleaned [22.79ms]
+(pass) SPEC[process-004] invalid wait durations and signals do not change the process [22.46ms]
+(pass) SPEC[process-004] signals reach the owned POSIX group, including the real grandchild [61.45ms]
+(pass) SPEC[process-004] direct exit does not complete wait while inherited output is open [56.23ms]
+
+src/process/tests/005.test.mjs:
+(pass) SPEC[process-005] the generated object exposes messages, not process handles or buffers [22.47ms]
+(pass) SPEC[process-005] two actual instances do not share signals, input or output [23.84ms]
+(pass) SPEC[process-005] modifying startup options after construction cannot rewrite the child environment [23.38ms]
+
+ 94 pass
+ 0 fail
+Ran 94 tests across 11 files. [15.39s]

@@ -1,0 +1,147 @@
+{
+  "version": "0.6.12",
+  "baseCommit": "f712acf",
+  "archiveSHA256": "a039ba669299c6919776196fd9b462624bcbe515d03593804596dbc86f43ac56",
+  "productFiles": 22,
+  "differences": [],
+  "files": [
+    {
+      "path": "MIGRATION.md",
+      "sha256": "475d174889217bad9fa095bca54fa18eed5920ff0fd8cd68b585d0dd35d69fc0"
+    },
+    {
+      "path": "OWNERSHIP.md",
+      "sha256": "e4096a984ee5cefd1f58fd38b50831ecb5c090b74b8ca50c346e5180b06e8961"
+    },
+    {
+      "path": "PROCESS.md",
+      "sha256": "c27282d45512b8a97c9614b0688248ad2637709b087d0d6d8d031c37f41b0c07"
+    },
+    {
+      "path": "README.md",
+      "sha256": "6b9ae3ed0109844e46063208757d9c24d09a2037365e20e6673050ac0550e30f"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES",
+      "sha256": "dae8868fcd0322cb4d83fbc90af5e44b5f1db37388e7ade995efb24ed8d3e6f6"
+    },
+    {
+      "path": "TRACE.md",
+      "sha256": "734c3dfed1d9cfde4d273fb1e64b27da8da311d89362f2bdcdf6dd3bf97b1e64"
+    },
+    {
+      "path": "dist/assembly/DurableWork.js",
+      "sha256": "3c01493643b003dc46e68b1b95a1e56f3fa50be3a38338b05d25dee0e831a448"
+    },
+    {
+      "path": "dist/eventstore/SqliteJournal.js",
+      "sha256": "da7e11c3172322953553dd980eab2dcf18fd109319f3636730bb0926dcfb1559"
+    },
+    {
+      "path": "dist/lifecycle/Work.js",
+      "sha256": "4c16cd77986e087f94900ab6aeace37297123db56d0a8636b900113c129e7e8f"
+    },
+    {
+      "path": "dist/process/ProcessSession.js",
+      "sha256": "9a87c79153d17b6056c384fa68b6bbad2ce0ecacca1d0241adf57ef979bb9e49"
+    },
+    {
+      "path": "dist/session/Ownership.js",
+      "sha256": "3f5f0465838565020e722f3f18137007f0e3afaf64efc9d96b92b83a1e9c05df"
+    },
+    {
+      "path": "dist/supervision/SupervisedProcess.js",
+      "sha256": "72c8db02082bce7c48c5c6869a57836a12b48e4e0692f2732bfcf1267bfabdb7"
+    },
+    {
+      "path": "dist/trace/Trace.js",
+      "sha256": "584a4d4b4054b699cb4b4ea4ebd147b65edd0e96bd5184abe690161c77fff97d"
+    },
+    {
+      "path": "package.json",
+      "sha256": "8c8823318cb5323e9f998771471df2701e9c98255007fa8d136e3a652139e109"
+    },
+    {
+      "path": "src/assembly/index.d.ts",
+      "sha256": "fd28e503d74101657ec01e5536415773a49281214f5e5325ad18bf45293b8b7b"
+    },
+    {
+      "path": "src/eventstore/index.d.ts",
+      "sha256": "d34aa1259d6df0fa021ba71111279182187dc92d5055728ee742d6015e98cdb0"
+    },
+    {
+      "path": "src/lifecycle/index.d.ts",
+      "sha256": "b7f8e91c8181802b6d41a9b7d1544727e752e44cd5f3462359a2a727a97f2828"
+    },
+    {
+      "path": "src/process/index.d.ts",
+      "sha256": "6a3104eac46da34bb6dc7f568735a16a5863c408c9eb61660e23968d91d8badd"
+    },
+    {
+      "path": "src/session/index.d.ts",
+      "sha256": "23da3bc1ed38f8d94f9d42db717e63e90e68428a3ecc0842642e1a2398535482"
+    },
+    {
+      "path": "src/supervision/index.d.ts",
+      "sha256": "dd03089ef918c36627de0ace3b6308d0f830ee1079994a7c0fbdbe5e5be35279"
+    },
+    {
+      "path": "src/supervision/README.md",
+      "sha256": "0cdfe8d738568ee7a4d4708a43348a4fefbb203a61a8d272ab248535cfabc9ce"
+    },
+    {
+      "path": "src/trace/index.d.ts",
+      "sha256": "335c8d30e82eb72a06bd34367657e96e67556185d574c4263ccdb0bebe0aa7e3"
+    }
+  ],
+  "evidence": {
+    "D2-LAST17-661-RETAINED-RED.tgz": "0bdaf3c480d9afa33b732ae209d0663f99a56ca54532c7f900a9be1a9aaf63f9",
+    "D2-LAST17-662-EOF-READABLE.tgz": "e2703225a67de1e67378c3637561b60fa4cea2bb215011b8636d259814a70483",
+    "D2-LAST17-662-LOW-TRACE.tgz": "d5a56f4b09949a1f29f3f981c3355da7f0a61d83285e48e3ae7666c040c90487",
+    "D2-LIB-0612-CHECKPOINTS.tgz": "28f8b3c3e0fbc55e1d098d3d77cfd54ea84f7a90c78295e479c5b3a6b7565046",
+    "d2-eventpump-private-prototype-662-20261019.tgz": "cdfe8b0334c3a9369b72eabc3c1cba85c8d20ed156e3ed586d873de633c07195",
+    "d2-library-0611-guard-review-evidence-20261019.tgz": "16aad3527dcd348ea77825f22731a17669301d3ebf0767db2f1d28631daf6e47",
+    "d2-library-0612-build.log": "31d18b95a9ab7804540c46e04de4488fa8025193c49293d071551db85c5959dc",
+    "d2-library-0612-bun.log": "c01f662f65ca422d9984caf2a4757321d4552553259481871b0fa9b99cbccdb0",
+    "d2-library-0612-isolated.log": "4d381275584456612285296a9db79421088e81e8397374a247f49b34b8ed5cc2",
+    "d2-library-0612-node.log": "93d1c7603d38a035e7177c58e028f3a08eb976ff155cfcc6b4a45e3362c4eed3",
+    "d2-library-host-0612-acceptance-compact-20261019.tgz": "ec3bca7a5f0d7c0a4778d1280f0e1457793c8b8dbee5a31ef6101c1524109ce5",
+    "d2-native-callback-source-red.log": "ce2d39ade236229a34467aa21749974da998d18a3538186f3e46adc76ca5d9c5",
+    "d2-native-callback-source-reviewed.log": "76d7f5ca670f2dbbac59422bc5534016f81a5b9e90de1db3148708f193141911"
+  },
+  "sourceNode": {
+    "tests": 94,
+    "pass": 88,
+    "fail": 0,
+    "skip": 6,
+    "todo": 0
+  },
+  "sourceBun": {
+    "tests": 94,
+    "pass": 94,
+    "fail": 0
+  },
+  "isolatedOwners": {
+    "pass": 2,
+    "fail": 0
+  },
+  "checkpointProbes": {
+    "pass": 6,
+    "fail": 0,
+    "sourceError": "controlled event, not native OS read error"
+  },
+  "physicalPackageCases": {
+    "node": 6,
+    "bun": 6,
+    "fail": 0
+  },
+  "mainConsumer": {
+    "generation": 663,
+    "archiveSHA256": "3c0afec4f5aee947cff92a5a2e633a41d4e9728daa515f27295e634ed9b324e0",
+    "originalTests": 19,
+    "nodePass": 19,
+    "bunPass": 19
+  },
+  "scope": "Input forwarding and non-reentrant Bun write acknowledgement; no PTY, restart protocol or R12-U1 closure",
+  "publication": "not published to npm"
+}

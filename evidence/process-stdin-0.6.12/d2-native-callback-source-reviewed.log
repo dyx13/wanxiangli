@@ -1,0 +1,15 @@
+bun test v1.3.14 (d1632b29)
+
+src/process/tests/002.test.mjs:
+(pass) SPEC[process-002] controlled Bun success notification cannot publish input success inside a native callback [30.75ms]
+(pass) SPEC[process-002] controlled Bun exit notification cannot publish input success inside a native callback [28.14ms]
+(pass) SPEC[process-002] large buffered input waits for flush and reaches the delayed reader once [268.30ms]
+(pass) SPEC[process-002] real stdin preserves binary bytes and EOF is idempotent [28.73ms]
+(pass) SPEC[process-002] pending writes own a copy and do not alias caller bytes [26.77ms]
+(pass) SPEC[process-002] excess input and overlapping writes cannot form an unbounded queue [32.99ms]
+(pass) SPEC[process-002] a broken input pipe is unknown consumption, not automatic retry [10.72ms]
+(pass) SPEC[process-002] non-byte and shared inputs are rejected without writing [22.62ms]
+
+ 8 pass
+ 0 fail
+Ran 8 tests across 1 file. [480.00ms]

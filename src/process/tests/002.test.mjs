@@ -1,7 +1,18 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
+import { spawnSync } from 'node:child_process'
 import { session, ready, closed, until, output } from './support.mjs'
+
+for (const mode of ['success', 'exit']) {
+  test(`SPEC[process-002] controlled Bun ${mode} notification cannot publish input success inside a native callback`, { skip: !globalThis.Bun }, () => {
+    const fixture = new URL('./input-callback-worker.mjs', import.meta.url)
+    const result = spawnSync(process.execPath, [fixture.pathname, mode], { encoding: 'utf8', timeout: 5000 })
+    assert.ifError(result.error)
+    assert.equal(result.status, 0, result.stderr)
+    assert.deepEqual(JSON.parse(result.stdout), { mode, reentered: false, write: mode === 'exit' ? 'Unknown' : 'Written' })
+  })
+}
 
 test('SPEC[process-002] large buffered input waits for flush and reaches the delayed reader once', async t => {
   const run = session(t, 'input-digest', [], { maxWriteBytes: 16777216 })

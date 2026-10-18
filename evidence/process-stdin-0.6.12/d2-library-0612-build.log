@@ -1,0 +1,20 @@
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /Users/yuanxi/Workwork/wanxiangli/src/process/Wanxiangli.Process.fsproj, FCS time: 879 ms
+--------------------------------------------
+File: /Users/yuanxi/Workwork/wanxiangli/src/native-process/BunProcess.fs, Fable time: 17 ms
+File: /Users/yuanxi/Workwork/wanxiangli/src/process/Native.fs, Fable time: 42 ms
+File: /Users/yuanxi/Workwork/wanxiangli/src/process/OutputTail.fs, Fable time: 39 ms
+File: /Users/yuanxi/Workwork/wanxiangli/src/process/ProcessSession.fs, Fable time: 61 ms
+[build] process: 1360 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /Users/yuanxi/Workwork/wanxiangli/src/supervision/Wanxiangli.Supervision.fsproj, FCS time: 718 ms
+--------------------------------------------
+File: /Users/yuanxi/Workwork/wanxiangli/src/native-process/BunProcess.fs, Fable time: 17 ms
+File: /Users/yuanxi/Workwork/wanxiangli/src/supervision/Native.fs, Fable time: 52 ms
+File: /Users/yuanxi/Workwork/wanxiangli/src/supervision/Worker.fs, Fable time: 23 ms
+File: /Users/yuanxi/Workwork/wanxiangli/src/supervision/SupervisedProcess.fs, Fable time: 59 ms
+[build] supervision: 1057 ms

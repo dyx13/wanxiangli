@@ -1,0 +1,93 @@
+bun test v1.3.14 (d1632b29)
+
+src/process/tests/002.test.mjs:
+ 7 | for (const mode of ['success', 'exit']) {
+ 8 |   test(`SPEC[process-002] Bun input ${mode} leaves the native callback before publishing success`, { skip: !globalThis.Bun }, () => {
+ 9 |     const fixture = new URL('./input-callback-worker.mjs', import.meta.url)
+10 |     const result = spawnSync(process.execPath, [fixture.pathname, mode], { encoding: 'utf8', timeout: 5000 })
+11 |     assert.ifError(result.error)
+12 |     assert.equal(result.status, 0, result.stderr)
+                ^
+AssertionError: 48 |   release()
+49 |   drainMicrotasks()
+50 |   inNativeCallback = false
+51 |   if (mode === 'exit') reportExit()
+52 |   const result = await pending
+53 |   assert.equal(reentered, false, 'the caller resumed inside the native callback checkpoint')
+              ^
+AssertionError: the caller resumed inside the native callback checkpoint
+
+true !== false
+
+ generatedMessage: false,
+     actual: true,
+   expected: false,
+   operator: "strictEqual",
+       code: "ERR_ASSERTION"
+
+      at /Users/yuanxi/Workwork/wanxiangli/src/process/tests/input-callback-worker.mjs:53:10
+
+Bun v1.3.14 (macOS arm64)
+
+
+1 !== 0
+
+ generatedMessage: false,
+     actual: 1,
+   expected: 0,
+   operator: "strictEqual",
+       code: "ERR_ASSERTION"
+
+      at /Users/yuanxi/Workwork/wanxiangli/src/process/tests/002.test.mjs:12:12
+      at fn (node:test:215:18)
+(fail) SPEC[process-002] Bun input success leaves the native callback before publishing success [36.70ms]
+ 7 | for (const mode of ['success', 'exit']) {
+ 8 |   test(`SPEC[process-002] Bun input ${mode} leaves the native callback before publishing success`, { skip: !globalThis.Bun }, () => {
+ 9 |     const fixture = new URL('./input-callback-worker.mjs', import.meta.url)
+10 |     const result = spawnSync(process.execPath, [fixture.pathname, mode], { encoding: 'utf8', timeout: 5000 })
+11 |     assert.ifError(result.error)
+12 |     assert.equal(result.status, 0, result.stderr)
+                ^
+AssertionError: 48 |   release()
+49 |   drainMicrotasks()
+50 |   inNativeCallback = false
+51 |   if (mode === 'exit') reportExit()
+52 |   const result = await pending
+53 |   assert.equal(reentered, false, 'the caller resumed inside the native callback checkpoint')
+              ^
+AssertionError: the caller resumed inside the native callback checkpoint
+
+true !== false
+
+ generatedMessage: false,
+     actual: true,
+   expected: false,
+   operator: "strictEqual",
+       code: "ERR_ASSERTION"
+
+      at /Users/yuanxi/Workwork/wanxiangli/src/process/tests/input-callback-worker.mjs:53:10
+
+Bun v1.3.14 (macOS arm64)
+
+
+1 !== 0
+
+ generatedMessage: false,
+     actual: 1,
+   expected: 0,
+   operator: "strictEqual",
+       code: "ERR_ASSERTION"
+
+      at /Users/yuanxi/Workwork/wanxiangli/src/process/tests/002.test.mjs:12:12
+      at fn (node:test:215:18)
+(fail) SPEC[process-002] Bun input exit leaves the native callback before publishing success [26.47ms]
+(pass) SPEC[process-002] large buffered input waits for flush and reaches the delayed reader once [284.75ms]
+(pass) SPEC[process-002] real stdin preserves binary bytes and EOF is idempotent [26.20ms]
+(pass) SPEC[process-002] pending writes own a copy and do not alias caller bytes [32.51ms]
+(pass) SPEC[process-002] excess input and overlapping writes cannot form an unbounded queue [33.22ms]
+(pass) SPEC[process-002] a broken input pipe is unknown consumption, not automatic retry [10.73ms]
+(pass) SPEC[process-002] non-byte and shared inputs are rejected without writing [22.68ms]
+
+ 6 pass
+ 2 fail
+Ran 8 tests across 1 file. [513.00ms]

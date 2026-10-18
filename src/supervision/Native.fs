@@ -81,21 +81,75 @@ module internal Native =
     [<Emit("$0.on($1, $2)")>]
     let on2 (_target: obj) (_event: string) (_callback: obj -> obj -> unit): unit = jsNative
     [<Emit("""
-      (async () => {
-        try {
-          for await (const bytes of $0.iterator({ destroyOnReturn: false })) {
-            const written = await new Promise(resolve => {
-              try { $1.write(bytes, error => resolve(!error)); }
-              catch (_) { resolve(false); }
-            });
-            if (!written) return;
-          }
-        } catch (error) {
+      (() => {
+        const source = $0;
+        const target = $1;
+        let pending = false;
+        let stopped = false;
+        let ended = source.readableEnded;
+        let closed = source.closed;
+        const stop = () => {
+          stopped = true;
+          source.off('readable', pump);
+          source.off('end', onEnd);
+          source.off('close', onClose);
+          source.off('error', onError);
+        };
+        function onError(error) {
+          if (stopped) return;
+          stop();
           $2(error);
-          return;
         }
-        try { $1.end(); }
-        catch (_) {}
+        function pump() {
+          if (stopped || pending) return;
+          pending = true;
+          let bytes;
+          try { bytes = source.read(); }
+          catch (error) {
+            pending = false;
+            onError(error);
+            return;
+          }
+          if (stopped) {
+            pending = false;
+            return;
+          }
+          if (bytes !== null) {
+            try {
+              target.write(bytes, error => {
+                pending = false;
+                if (stopped) return;
+                if (error) stop();
+                else pump();
+              });
+            } catch (_) {
+              pending = false;
+              stop();
+            }
+            return;
+          }
+          pending = false;
+          if (ended || source.readableEnded) {
+            stop();
+            try { target.end(); }
+            catch (_) {}
+          } else if (closed || source.closed || source.destroyed) {
+            onError(Object.assign(new Error('Input source closed before EOF'), { code: 'ERR_STREAM_PREMATURE_CLOSE' }));
+          }
+        }
+        function onEnd() {
+          ended = true;
+          pump();
+        }
+        function onClose() {
+          closed = true;
+          pump();
+        }
+        source.on('readable', pump);
+        source.on('end', onEnd);
+        source.on('close', onClose);
+        source.on('error', onError);
+        pump();
       })()
     """)>]
     let forwardInput (_source: obj) (_target: obj) (_failed: obj -> unit): unit = jsNative

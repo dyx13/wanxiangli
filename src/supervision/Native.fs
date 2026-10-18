@@ -19,7 +19,12 @@ module internal Native =
     [<Import("ProcessSession", "wanxiangli/process")>]
     let processSession: obj = jsNative
     [<Import("spawn", "node:child_process")>]
-    let spawn (_file: string) (_arguments: string array) (_options: obj): obj = jsNative
+    let private spawnNode (_file: string) (_arguments: string array) (_options: obj): obj = jsNative
+    [<Emit("typeof globalThis.Bun !== 'undefined'")>]
+    let private isBun (): bool = jsNative
+    let spawn file arguments options =
+        if isBun () then Wanxiangli.NativeProcess.BunProcess.spawn file arguments options
+        else spawnNode file arguments options
     [<ImportDefault("node:process")>]
     let runtime: obj = jsNative
     [<ImportAll("node:fs")>]

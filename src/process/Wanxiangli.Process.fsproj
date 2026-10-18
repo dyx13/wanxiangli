@@ -3,6 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../native-process/BunProcess.fs" />
     <Compile Include="Native.fs" />
     <Compile Include="OutputTail.fs" />
     <Compile Include="ProcessSession.fs" />

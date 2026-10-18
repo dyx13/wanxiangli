@@ -1,4 +1,4 @@
-import { writeSync, writeFileSync, closeSync } from 'node:fs'
+import { writeSync, writeFileSync, readSync } from 'node:fs'
 import { spawn } from 'node:child_process'
 import { once } from 'node:events'
 import { fileURLToPath } from 'node:url'
@@ -29,11 +29,14 @@ switch (mode) {
     setInterval(() => {}, 1000)
     process.stdout.write('ready\n')
     break
-  case 'broken-input':
-    closeSync(0)
-    setInterval(() => {}, 1000)
+  case 'partial-input': {
     process.stdout.write('ready\n')
+    const first = Buffer.alloc(1)
+    if (readSync(0, first, 0, 1, null) !== 1) throw new Error('Expected one actual input byte')
+    process.stdout.write(`accepted:${first[0]}\n`)
+    setInterval(() => {}, 1000)
     break
+  }
   case 'bytes':
     process.stdout.write(Buffer.from(args[0], 'base64'))
     process.stderr.write(Buffer.from(args[1] ?? '', 'base64'))

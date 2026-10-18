@@ -27,11 +27,14 @@ test('SPEC[process-002] pending writes own a copy and do not alias caller bytes'
 })
 
 test('SPEC[process-002] excess input and overlapping writes cannot form an unbounded queue', async t => {
-  const run = session(t, 'paused', [], { maxWriteBytes: 2097152 })
+  const run = session(t, 'partial-input', [], { maxWriteBytes: 2097152 })
   await ready(run)
   await until(() => output(run).text === 'ready\n')
-  assert.throws(() => run.write(new Uint8Array(2097153)), /maxWriteBytes/)
-  const pending = run.write(new Uint8Array(2097152))
+  assert.throws(() => run.write(new Uint8Array(2097153).fill(66)), /maxWriteBytes/)
+  let acknowledged = false
+  const pending = run.write(new Uint8Array(2097152).fill(65)).then(result => { acknowledged = true; return result })
+  await until(() => output(run).text === 'ready\naccepted:65\n')
+  assert.equal(acknowledged, false, 'the target read part of this write but the complete write is still unacknowledged')
   assert.throws(() => run.write(new Uint8Array([1])), /pending/)
   assert.equal(run.signal('SIGKILL').kind, 'Requested')
   const result = await pending
@@ -40,11 +43,15 @@ test('SPEC[process-002] excess input and overlapping writes cannot form an unbou
 })
 
 test('SPEC[process-002] a broken input pipe is unknown consumption, not automatic retry', async t => {
-  const run = session(t, 'broken-input')
+  const run = session(t, 'broken-input', [], {
+    executable: '/bin/sh', args: ['-c', 'exec 0<&-; printf "ready\\n"; exec /bin/sleep 30'],
+  })
   await ready(run)
   await until(() => output(run).text === 'ready\n')
   const result = await run.write(new Uint8Array(65536).fill(65))
   assert.equal(result.kind, 'Unknown')
+  assert.equal(result.error.code, 'EPIPE')
+  assert.equal(run.inspect().phase, 'Running', 'the reader closed its pipe before the write while the target remains alive')
   assert.equal(run.inspect().stdin, 'Failed')
   result.error.message = 'mutated by caller'
   assert.notEqual(run.inspect().failure.message, 'mutated by caller')

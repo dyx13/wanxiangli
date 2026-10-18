@@ -36,7 +36,8 @@ for (const name of selected) {
   const includes = [...declaration.matchAll(/<Compile\s+Include="([^"]+)"/g)].map(match => match[1])
   if (includes.length === 0) throw new Error(`No sources declared: ${name}`)
   for (const file of includes) {
-    if (path.isAbsolute(file) || file.split(/[\\/]/).includes('..') || /[*?]/.test(file)) {
+    const sharedNative = ['process', 'supervision'].includes(name) && file === '../native-process/BunProcess.fs'
+    if (path.isAbsolute(file) || (!sharedNative && file.split(/[\\/]/).includes('..')) || /[*?]/.test(file)) {
       throw new Error(`Source must be local and explicit: ${name}/${file}`)
     }
   }
@@ -50,6 +51,7 @@ for (const name of selected) {
     if (result.error) throw result.error
     if (result.status !== 0) throw new Error(`Compilation failed: ${name}`)
     for (const file of includes.filter(file => file.endsWith('.fs'))) {
+      if (file === '../native-process/BunProcess.fs') continue
       if (!existsSync(path.join(temporary, file.replace(/\.fs$/, '.js')))) {
         throw new Error(`Compiler did not emit ${name}/${file}`)
       }

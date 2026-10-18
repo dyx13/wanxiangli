@@ -48,6 +48,18 @@ test('SPEC[supervision-001] target ENOENT is never reported as worker startup or
   assert.equal(end.state.capture, 'Discarded')
 })
 
+test('SPEC[supervision-001] the final target preserves literal environment keys through both physical launches', async t => {
+  const env = Object.fromEntries([['__proto__', 'literal'], ['constructor', 'data'], ['EMPTY', '']])
+  const session = run(t, 'facts', { env })
+  const collected = collect(session)
+  await ready(session)
+  const output = await collected
+  assert.equal(output.result.kind, 'Closed')
+  assert.deepEqual(output.result.state.exit, { code: 0, signal: null })
+  const actual = JSON.parse(output.stdout.toString())
+  for (const [key, value] of Object.entries(env)) assert.equal(actual.env[key], value, key)
+})
+
 test('SPEC[supervision-001] failed startup cleans its control directory and poll without a capture consumer', async () => {
   const marker = `startup-${process.pid}-${Date.now()}`
   const timerCount = process.getActiveResourcesInfo().filter(name => name === 'Timeout').length

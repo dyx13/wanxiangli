@@ -18,6 +18,10 @@ function fixture(t, modules) {
   // 编译器是工具链；只借用工具链，不提供任何兄弟模块或旧仓源码。
   symlinkSync(path.join(root, 'node_modules'), path.join(directory, 'node_modules'), 'junction')
   for (const name of modules) cpSync(path.join(root, 'src', name), path.join(directory, 'src', name), { recursive: true })
+  if (modules.some(name => ['process', 'supervision'].includes(name))) {
+    mkdirSync(path.join(directory, 'src/native-process'))
+    copyFileSync(path.join(root, 'src/native-process/BunProcess.fs'), path.join(directory, 'src/native-process/BunProcess.fs'))
+  }
   return directory
 }
 
@@ -32,9 +36,9 @@ function succeed(result) {
 }
 
 for (const name of ['lifecycle', 'eventstore', 'process', 'trace', 'session']) {
-  test(`SPEC[build-001] ${name} compiles and runs its own tests without any sibling source`, { timeout: 90000 }, t => {
+  test(`SPEC[build-001] ${name} compiles and runs its own tests without any sibling owner source`, { timeout: 90000 }, t => {
     const directory = fixture(t, [name])
-    assert.deepEqual(readdirSync(path.join(directory, 'src')), [name])
+    assert.deepEqual(readdirSync(path.join(directory, 'src')).sort(), name === 'process' ? ['native-process', name].sort() : [name])
     const build = run(tmpdir(), [path.join(directory, 'scripts/build.mjs'), name])
     succeed(build)
     assert.doesNotMatch(build.stdout + build.stderr, /Warning:|Error:/)
@@ -144,4 +148,29 @@ test('SPEC[build-001] composition compiles without sibling sources and runs agai
   const composition = readFileSync(path.join(directory, 'dist/assembly/DurableWork.js'), 'utf8')
   assert.match(composition, /from ["']wanxiangli\/work["']/)
   assert.doesNotMatch(composition, /WorkOpened|ConfirmationCommitted|DeliveryRequested|SELECT|PRAGMA/)
+})
+
+test('SPEC[build-001] supervision compiles with only its own owner and the one shared native adapter', { timeout: 90000 }, t => {
+  const directory = fixture(t, ['supervision'])
+  assert.deepEqual(readdirSync(path.join(directory, 'src')).sort(), ['native-process', 'supervision'])
+  assert.deepEqual(readdirSync(path.join(directory, 'src/native-process')), ['BunProcess.fs'])
+  assert.equal(existsSync(path.join(directory, 'src/process')), false)
+  cpSync(path.join(root, 'dist/process'), path.join(directory, 'dist/process'), { recursive: true })
+  const before = readFileSync(path.join(directory, 'dist/process/ProcessSession.js'), 'utf8')
+  const built = run(directory, ['scripts/build.mjs', 'supervision'])
+  succeed(built)
+  assert.doesNotMatch(built.stdout + built.stderr, /Warning:|Error:/)
+  assert.equal(readFileSync(path.join(directory, 'dist/process/ProcessSession.js'), 'utf8'), before)
+  const tests = readdirSync(path.join(directory, 'src/supervision/tests'))
+    .filter(file => file.endsWith('.test.mjs')).map(file => path.join(directory, 'src/supervision/tests', file))
+  succeed(run(directory, ['--test', ...tests]))
+})
+
+test('SPEC[build-001] a shared native path does not permit another cross-directory source', t => {
+  const directory = fixture(t, [])
+  mkdirSync(path.join(directory, 'src/process'))
+  writeFileSync(path.join(directory, 'src/process/Process.fsproj'), '<Project><ItemGroup><Compile Include="../native-process/Other.fs" /></ItemGroup></Project>')
+  const built = run(directory, ['scripts/build.mjs', 'process'])
+  assert.notEqual(built.status, 0)
+  assert.match(built.stderr, /Source must be local and explicit/)
 })

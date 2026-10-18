@@ -2,6 +2,8 @@
 
 入口 `wanxiangli/supervision`，对象 `SupervisedProcess`。这是依赖 `wanxiangli/process` 交付产物的显式组合；独立 F# 工程不读取或编译 process 源码，不依赖宿主、Work、Journal 或 Ownership。
 
+这里的process源码指ProcessSession、OutputTail及其领域适配。两工程明确共享唯一私有`src/native-process/BunProcess.fs`原生I/O实现，不编译对方的会话或监管状态；构建门禁只允许该确切路径。该适配拥有单个child的I/O事件状态，透传detached策略，不裁决目标业务完成。Worker以detached:false调用；同步spawn异常发布确切failed/spawn，不能退成worker Unknown。
+
 ## AXIOM
 
 1. [使用者] 目标命令退出后，同组后代仍可能持有输出管道；取消仍须作用于这一次执行，不能使用已失效的进程组身份。
@@ -14,6 +16,7 @@
 1. [AXIOM 1; 根 LEMMA 4, 6] 外侧使用 Capture 模式的 ProcessSession 启动真正组长；组长在自己的组内以 `detached:false` 启动目标。组长忽略 TERM、INT、HUP，直到外侧显式清组。
    - 推理：目标 exit 不结束组长身份，仍可遵守基础 ProcessSession 仅对尚未观察到退出的直接子进程发组信号的规则。
 2. [AXIOM 2; 根 LEMMA 3, 4] 组长用原生 pipe 转发双路输出；目标 close 后等待两路写入回调，再发布关闭证据。外侧看到证据后对仍存活组长发 KILL，并分别等待 ProcessSession close 与 Capture EOF。
+   - 未闭合边界：Bun1.3.14原生pipe会提前缓存输出，现有逐块交接不能证明实际背压或总内存界限；该义务仍待实现，不因完整字节转发通过而关闭。
    - 推理：pipe 提供背压，写入回调确认此前排入的字节已交给外侧管道；读取完成与原生退出不能互相代替。
 3. [AXIOM 1, 2] 每个实例使用私有目录与原子文件传递启动、退出及关闭事实。目标参数、环境不包含控制路径；公共返回值不暴露目录或原生句柄。控制失败不重试启动，也不补目标退出码。
    - 推理：实例内的事实关联不能依赖共享目录中的固定公开名称。这里的私有是实例隔离，不是防御同 UID 恶意进程的安全沙箱。

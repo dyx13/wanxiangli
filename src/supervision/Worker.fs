@@ -6,8 +6,10 @@ module internal Worker =
     let run directory =
         let mutable failed = false
         let mutable targetClosed = false
-        let mutable stdoutFlushed = false
-        let mutable stderrFlushed = false
+        let mutable stdoutForwarded = false
+        let mutable stderrForwarded = false
+        let mutable stdoutBytes = 0.
+        let mutable stderrBytes = 0.
         let mutable publishedClose = false
 
         let publish name value =
@@ -20,9 +22,9 @@ module internal Worker =
                 publish "fault" (Native.failure operation error)
 
         let finish () =
-            if not publishedClose && not failed && targetClosed && stdoutFlushed && stderrFlushed then
+            if not publishedClose && not failed && targetClosed && stdoutForwarded && stderrForwarded then
                 publishedClose <- true
-                publish "closed" (Native.objectOf [ "closed", box true ])
+                publish "closed" (Native.objectOf [ "closed", box true; "stdoutBytes", box stdoutBytes; "stderrBytes", box stderrBytes ])
 
         for signal in [ "SIGTERM"; "SIGINT"; "SIGHUP" ] do
             Native.on1 Native.runtime signal ignore
@@ -51,19 +53,20 @@ module internal Worker =
                     publish "exit" (Native.objectOf [ "code", code; "signal", signal ]))
                 Native.on2 target "close" (fun _ _ ->
                     targetClosed <- true
-                    Native.flush (Native.get Native.runtime "stdout") (fun error ->
-                        if isNullOrUndefined error then stdoutFlushed <- true else fault "stdout" error
-                        finish ())
-                    Native.flush (Native.get Native.runtime "stderr") (fun error ->
-                        if isNullOrUndefined error then stderrFlushed <- true else fault "stderr" error
-                        finish ())
                     finish ())
                 for channel in [ "stdout"; "stderr" ] do
                     let output = Native.get Native.runtime channel
                     let source = Native.get target channel
                     Native.on1 source "error" (fault channel)
                     Native.on1 output "error" (fault channel)
-                    Native.pipe source output false
+                    let count length =
+                        if channel = "stdout" then stdoutBytes <- stdoutBytes + float length
+                        else stderrBytes <- stderrBytes + float length
+                    let ended () =
+                        if channel = "stdout" then stdoutForwarded <- true
+                        else stderrForwarded <- true
+                        finish ()
+                    Native.forward source output count ended (fault channel)
                 let input = Native.get target "stdin"
                 // 目标关闭输入是独立事实，不中断仍须收齐的输出。
                 Native.on1 input "error" ignore

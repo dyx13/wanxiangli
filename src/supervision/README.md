@@ -9,7 +9,7 @@
 调用顺序：
 
 1. 等 `started()`。Started 的 PID 属于目标；Failed 不表示确定“目标从未执行”，须保留错误码。启动失败会自行清理本实例，不要求调用方另开输出消费者。
-2. Started 后持续调用单消费者 `takeOutput()`，处理双路 `Chunk`。每块至多 64 KiB；游标按各路实际字节增加。慢消费者会通过原生管道施加背压，不丢最早输出。
+2. Started后持续调用单消费者`takeOutput()`，处理双路`Chunk`。每块至多64KiB；游标按各路实际字节增加。Node已证明原生背压；Bun上游仍会提前缓存，尚无总内存上界，不能由块大小推导背压已完成。
 3. 按需要 `write`、`endInput` 或 `signal`。Written 只确认写入组长的转发输入管道，不确认目标收到或消费。信号 Requested 只确认发出请求；目标 exit 及输出收尾是后续事实。
 4. Capture 返回 Closed 时也必须检查 `state.failure`。`wait` 只有在真实组长 close 与 Capture EOF 或显式丢弃都完成后才返回 Closed。调用方不得停止消费后只等待，否则背压可让目标无法结束。
 5. 若落盘或调用方消费失败，明确 `signal('SIGKILL')`、`discardOutput()`，再等待收尾；丢弃不能算完整材料。等待超时本身不发送信号。
@@ -25,7 +25,7 @@
 | `capture` | Open、Closed、Failed 或 Discarded |
 | `failure` | 第一个监管、控制或输出失败；即使另有目标 exit，也须处理 |
 
-目标 close 后，组长先等两路转发写入回调完成，再把关闭证据交给外侧。外侧用仍存活的组长身份发 KILL，确认底层 close，并收齐 Capture EOF。因此自然完成的 `supervisor.exit.signal` 通常是 SIGKILL，而目标的 `exit` 保持其真实状态。
+目标close且两路计数流readable end后，组长发布不可变逐路最终extent。外侧实际Capture observed恰好收齐，才用仍存活的组长身份发KILL，随后确认底层close和Capture EOF。零字节回调不再作为Bun排空证明；EOF不足报告OUTPUT_INCOMPLETE，超数报告OUTPUT_COUNT_MISMATCH，主动KILL导致不足报告OUTPUT_INTERRUPTED。自然完成的`supervisor.exit.signal`通常是SIGKILL，目标`exit`保持真实状态。缺失或畸形extent明确失败，不猜零，不重发目标。
 
 `UNKNOWN_TARGET_START` 表示没有目标启动回执；`UNKNOWN_TARGET_EXIT` 表示监管器已结束但没有目标退出回执。两者都不能自动重试或补 exit 0。组长意外单独死亡时，目标可能仍活；此时 Closed 只证明本对象的组长和转发管道已关闭，不能据此结算目标资源已物理结束，也不再对旧组长 PID 发信号。
 

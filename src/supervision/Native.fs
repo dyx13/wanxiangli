@@ -20,6 +20,8 @@ module internal Native =
     let processSession: obj = jsNative
     [<Import("spawn", "node:child_process")>]
     let private spawnNode (_file: string) (_arguments: string array) (_options: obj): obj = jsNative
+    [<Import("Transform", "node:stream")>]
+    let private transform: obj = jsNative
     [<Emit("typeof globalThis.Bun !== 'undefined'")>]
     let private isBun (): bool = jsNative
     let spawn file arguments options =
@@ -77,8 +79,20 @@ module internal Native =
     let on2 (_target: obj) (_event: string) (_callback: obj -> obj -> unit): unit = jsNative
     [<Emit("$0.pipe($1, { end: $2 })")>]
     let pipe (_source: obj) (_target: obj) (_end: bool): unit = jsNative
-    [<Emit("$0.write(new Uint8Array(0), $1)")>]
-    let flush (_stream: obj) (_callback: obj -> unit): unit = jsNative
+    [<Emit("""
+      (() => {
+        const counted = new $5({ transform(bytes, _encoding, callback) {
+          try { $2(bytes.length); callback(null, bytes); }
+          catch (error) { callback(error); }
+        }});
+        counted.on('error', $4);
+        counted.once('end', $3);
+        $0.pipe(counted).pipe($1, { end: false });
+      })()
+    """)>]
+    let private forwardNative (_source: obj) (_target: obj) (_count: int -> unit) (_ended: unit -> unit) (_failed: obj -> unit) (_transform: obj): unit = jsNative
+
+    let forward source target count ended failed = forwardNative source target count ended failed transform
     [<Emit("$0.kill(-$0.pid, 'SIGKILL')")>]
     let killOwnGroup (_runtime: obj): unit = jsNative
 

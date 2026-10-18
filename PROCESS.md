@@ -10,6 +10,8 @@
 
 ## 最小用法
 
+0.6.7修复Bun监管提前清组丢字节：Worker在目标close及两路计数流readable end后发布逐路最终extent，外侧Capture实际观察恰好收齐才自然清组，随后仍等close与EOF。EOF不足或超数明确失败；主动KILL造成的不足报告OUTPUT_INTERRUPTED，不宣称完整输出。零字节写回调不再作为排空证明。这修复终结边界，没有兑现Bun原生上游背压或总内存界限；该义务继续待办。
+
 ```js
 import { ProcessSession } from 'wanxiangli/process'
 

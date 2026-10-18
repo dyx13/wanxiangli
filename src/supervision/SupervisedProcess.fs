@@ -43,7 +43,9 @@ let SupervisedProcess (input: obj): SupervisedMessages =
     let mutable failure: obj = null
     let mutable startResult: obj = null
     let mutable targetClosed = false
+    let mutable targetOutput: (float * float) option = None
     let mutable shutdownRequested = false
+    let mutable outputInterrupted = false
     let mutable controlFailed = false
     let mutable closed = false
     let mutable capture = "Open"
@@ -126,8 +128,11 @@ let SupervisedProcess (input: obj): SupervisedMessages =
                             targetExit <- receipt)
                     if not targetClosed then
                         readIfPresent "closed" (fun receipt ->
-                            Native.fields [ "closed" ] receipt
+                            Native.fields [ "closed"; "stdoutBytes"; "stderrBytes" ] receipt
                             Native.require (Native.value receipt "closed" = box true) "Invalid closed witness"
+                            let stdout = Native.value receipt "stdoutBytes" |> Native.integer 9007199254740991.
+                            let stderr = Native.value receipt "stderrBytes" |> Native.integer 9007199254740991.
+                            targetOutput <- Some(stdout, stderr)
                             targetClosed <- true)
                     readIfPresent "fault" (fun detail ->
                         remember detail
@@ -136,8 +141,18 @@ let SupervisedProcess (input: obj): SupervisedMessages =
                     controlFailed <- true
                     remember (Native.failure "control" (box error))
             let failedStart = not (isNull startResult) && unbox<string> (Native.get startResult "kind") = "Failed"
-            if targetClosed || controlFailed || failedStart then shutdown ()
             let worker = inner.inspect ()
+            let stdout: float = Native.get (Native.get worker "stdout") "observed" |> unbox
+            let stderr: float = Native.get (Native.get worker "stderr") "observed" |> unbox
+            let outputReceived =
+                match targetOutput with
+                | Some(expectedOut, expectedErr) ->
+                    if stdout > expectedOut || stderr > expectedErr then
+                        controlFailed <- true
+                        remember (Native.problem "output" "OUTPUT_COUNT_MISMATCH" "Received output exceeds the worker extent")
+                    stdout = expectedOut && stderr = expectedErr
+                | None -> false
+            if (targetClosed && (outputReceived || capture = "Discarded")) || controlFailed || failedStart then shutdown ()
             let workerPhase: string = worker?phase
             if workerPhase = "Draining" || workerPhase = "Closed" then
                 if isNull startResult then
@@ -188,6 +203,16 @@ let SupervisedProcess (input: obj): SupervisedMessages =
                 let kind: string = result?kind
                 match kind with
                 | "Closed" ->
+                    refresh ()
+                    match targetOutput with
+                    | Some(expectedOut, expectedErr) ->
+                        let worker = inner.inspect ()
+                        let stdout: float = Native.get (Native.get worker "stdout") "observed" |> unbox
+                        let stderr: float = Native.get (Native.get worker "stderr") "observed" |> unbox
+                        if stdout <> expectedOut || stderr <> expectedErr then
+                            let code = if outputInterrupted then "OUTPUT_INTERRUPTED" else "OUTPUT_INCOMPLETE"
+                            remember (Native.problem "output" code "Capture ended before the complete worker extent was received")
+                    | None -> ()
                     capture <- "Closed"
                     refresh ()
                     Native.objectOf [ "kind", box "Closed"; "state", snapshot () ]
@@ -215,7 +240,9 @@ let SupervisedProcess (input: obj): SupervisedMessages =
         member _.endInput() = guard (fun () -> inner.endInput ())
         member _.signal(name) = guard (fun () ->
             let result = inner.signal name
-            if name = "SIGKILL" && unbox<string> (Native.get result "kind") = "Requested" then shutdownRequested <- true
+            if name = "SIGKILL" && unbox<string> (Native.get result "kind") = "Requested" then
+                shutdownRequested <- true
+                outputInterrupted <- true
             result)
         member _.wait(milliseconds) = wait milliseconds
         member _.takeOutput() = takeOutput ()

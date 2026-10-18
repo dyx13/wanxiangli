@@ -15,9 +15,9 @@
 
 1. [AXIOM 1; 根 LEMMA 4, 6] 外侧使用 Capture 模式的 ProcessSession 启动真正组长；组长在自己的组内以 `detached:false` 启动目标。组长忽略 TERM、INT、HUP，直到外侧显式清组。
    - 推理：目标 exit 不结束组长身份，仍可遵守基础 ProcessSession 仅对尚未观察到退出的直接子进程发组信号的规则。
-2. [AXIOM 2; 根 LEMMA 3, 4] 组长用原生 pipe 转发双路输出；目标 close 后等待两路写入回调，再发布关闭证据。外侧看到证据后对仍存活组长发 KILL，并分别等待 ProcessSession close 与 Capture EOF。
+2. [AXIOM 2; 根 LEMMA 3, 4] 组长用原生pipe转发双路输出，逐路计数；目标close且两路计数Transform的readable end后，发布不可变最终extent。外侧实际Capture observed逐路恰等于extent，才允许自然KILL组长，并继续等待ProcessSession close与Capture EOF。零字节写回调不能证明Bun缓冲已排空。
    - 未闭合边界：Bun1.3.14原生pipe会提前缓存输出，现有逐块交接不能证明实际背压或总内存界限；该义务仍待实现，不因完整字节转发通过而关闭。
-   - 推理：pipe 提供背压，写入回调确认此前排入的字节已交给外侧管道；读取完成与原生退出不能互相代替。
+   - 推理：Worker已交给兼容写出队列，不等于外侧已收到；将确切两路extent与本次实例实际观察仲裁，才能避免清组截断尚在Worker中的字节。EOF缺数或超数明确失败；主动KILL引起的缺数单列OUTPUT_INTERRUPTED，不能冒称完整输出，也不覆盖宿主既有取消/超时结果。
 3. [AXIOM 1, 2] 每个实例使用私有目录与原子文件传递启动、退出及关闭事实。目标参数、环境不包含控制路径；公共返回值不暴露目录或原生句柄。控制失败不重试启动，也不补目标退出码。
    - 推理：实例内的事实关联不能依赖共享目录中的固定公开名称。这里的私有是实例隔离，不是防御同 UID 恶意进程的安全沙箱。
 4. [AXIOM 2; 根 LEMMA 7] 这是新增监管契约，不是完全透明的 ProcessSession 替身。`pid`、`exit` 属于目标，`supervisor` 属于组长，`stdin` 与 `write` 回执属于组长转发管道。未知退出保留 `exit:null` 和明确失败。

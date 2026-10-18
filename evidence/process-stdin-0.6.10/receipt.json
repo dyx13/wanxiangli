@@ -1,0 +1,44 @@
+{
+  "version": "0.6.10",
+  "baseCommit": "d50080c",
+  "packageSHA256": "13fbbfd5ca9b6d3542b8041373352fdb98117638bd76d52900e7fb5edf3e1725",
+  "packageFiles": 22,
+  "differencesFromWorkspace": [],
+  "archives": {
+    "D2-068-069-OBSERVABLE-COMPARISON.tgz": "5c914dfa6d6ea9bb77b3467e69765a39c3798c463c5c51316843a4eb36534c68",
+    "D2-LIB-0610-INDEPENDENT-EVIDENCE.tgz": "eba71aba4542dfbdf065d009cf1a7a8c676b1b0a7bd5853d1d9c34631b22bfd9",
+    "d2-library-input-0610-evidence-20261019.tgz": "6df05477bf88ec91daa4595f1f8c9b3a4da03a6c2889f8901a4ee75d4ec3bf9b",
+    "d2-relay-library-source-0610.tgz": "042c56abd6dfddd6a056f864b1f12d0df4db0861b6d514fec36c8e9b5edab171",
+    "d2-worker-input-bridge-evidence-20261019.tgz": "f2c327d29edda4d1497b9d466793330285e6c197c2c26e85190132d45b26f54b"
+  },
+  "sourceSuite": {
+    "node": {
+      "total": 92,
+      "pass": 88,
+      "skip": 4,
+      "fail": 0
+    },
+    "bun": {
+      "total": 92,
+      "pass": 92,
+      "fail": 0
+    }
+  },
+  "seededFinalFile": {
+    "seed": "0x6d2b79f5",
+    "nodePass": 9,
+    "bunPass": 9
+  },
+  "independent": {
+    "eachHostFailureBoundaries": 9,
+    "typesAndRemoval": 5,
+    "isolatedOwnerBuilds": 2
+  },
+  "limits": [
+    "Written confirms only the first hop",
+    "No total Worker RSS proof",
+    "No new Linux or Windows acceptance",
+    "R12-U1 deferred",
+    "No registry publication or Host deployment"
+  ]
+}

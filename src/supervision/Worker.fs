@@ -71,7 +71,7 @@ module internal Worker =
                 // 目标关闭输入是独立事实，不中断仍须收齐的输出。
                 Native.on1 input "error" ignore
                 Native.on1 (Native.get Native.runtime "stdin") "error" (fault "stdin")
-                Native.pipe (Native.get Native.runtime "stdin") input true
+                Native.forwardInput (Native.get Native.runtime "stdin") input (fault "stdin")
         with error ->
             fault "worker" (box error)
 

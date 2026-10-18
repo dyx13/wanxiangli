@@ -1,11 +1,65 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { tmpdir } from 'node:os'
-import { readdirSync, readFileSync } from 'node:fs'
+import { mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import path from 'node:path'
 import { createHash } from 'node:crypto'
+import { setTimeout as delay } from 'node:timers/promises'
 import { run, options, ready, collect, until, SupervisedProcess, workerFile } from './support.mjs'
+
+const inputBytes = size => {
+  const bytes = Buffer.alloc(size)
+  let state = 0x6d2b79f5
+  for (let index = 0; index < bytes.length; index++) {
+    state ^= state << 13
+    state ^= state >>> 17
+    state ^= state << 5
+    bytes[index] = state & 255
+  }
+  return bytes
+}
+
+test('SPEC[supervision-001] input EOF follows every target write under real output backpressure', async t => {
+  const directory = mkdtempSync(path.join(tmpdir(), 'wanxiangli-input-tee-'))
+  const witness = path.join(directory, 'target-input')
+  t.after(() => rmSync(directory, { recursive: true, force: true }))
+  const session = run(t, 'unused', { executable: '/usr/bin/tee', args: [witness], maxWriteBytes: 16777216 })
+  const collected = (async () => {
+    await delay(100)
+    return collect(session)
+  })()
+  await ready(session)
+  const bytes = inputBytes(2097169)
+  assert.deepEqual(await session.write(bytes), { kind: 'Written', bytes: bytes.length })
+  session.endInput()
+  const output = await collected
+  assert.equal(output.result.kind, 'Closed')
+  assert.equal(output.result.state.failure, null)
+  assert.deepEqual(output.result.state.exit, { code: 0, signal: null })
+  assert.deepEqual(readFileSync(witness), bytes)
+  assert.deepEqual(output.stdout, bytes)
+  assert.equal(output.stderr.length, 0)
+})
+
+test('SPEC[supervision-001] a target that closes input still owns its later output and native exit', async t => {
+  const session = run(t, 'unused', {
+    executable: '/bin/sh',
+    args: ['-c', 'exec 0<&-; printf "before\n"; sleep 0.1; printf "after\n"; printf "diagnostic\n" >&2; exit 23'],
+    maxWriteBytes: 16777216,
+  })
+  const collected = collect(session)
+  await ready(session)
+  const write = await session.write(inputBytes(2097169))
+  assert.ok(write.kind === 'Written' || write.kind === 'Unknown')
+  session.endInput()
+  const output = await collected
+  assert.equal(output.result.kind, 'Closed')
+  assert.equal(output.result.state.failure, null)
+  assert.deepEqual(output.result.state.exit, { code: 23, signal: null })
+  assert.equal(output.stdout.toString(), 'before\nafter\n')
+  assert.equal(output.stderr.toString(), 'diagnostic\n')
+})
 
 test('SPEC[supervision-001] both input pipes flush large buffered writes to the actual target', async t => {
   const session = run(t, 'input-digest', { maxWriteBytes: 16777216 })

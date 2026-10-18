@@ -80,8 +80,25 @@ module internal Native =
     let on1 (_target: obj) (_event: string) (_callback: obj -> unit): unit = jsNative
     [<Emit("$0.on($1, $2)")>]
     let on2 (_target: obj) (_event: string) (_callback: obj -> obj -> unit): unit = jsNative
-    [<Emit("$0.pipe($1, { end: $2 })")>]
-    let pipe (_source: obj) (_target: obj) (_end: bool): unit = jsNative
+    [<Emit("""
+      (async () => {
+        try {
+          for await (const bytes of $0.iterator({ destroyOnReturn: false })) {
+            const written = await new Promise(resolve => {
+              try { $1.write(bytes, error => resolve(!error)); }
+              catch (_) { resolve(false); }
+            });
+            if (!written) return;
+          }
+        } catch (error) {
+          $2(error);
+          return;
+        }
+        try { $1.end(); }
+        catch (_) {}
+      })()
+    """)>]
+    let forwardInput (_source: obj) (_target: obj) (_failed: obj -> unit): unit = jsNative
     [<Emit("""
       (() => {
         const counted = new $5({ transform(bytes, _encoding, callback) {

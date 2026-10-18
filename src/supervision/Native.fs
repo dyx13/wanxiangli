@@ -29,6 +29,9 @@ module internal Native =
         else spawnNode file arguments options
     [<ImportDefault("node:process")>]
     let runtime: obj = jsNative
+    let output channel =
+        if isBun () then Wanxiangli.NativeProcess.BunProcess.output (if channel = "stdout" then 1 else 2)
+        else runtime?(channel)
     [<ImportAll("node:fs")>]
     let files: obj = jsNative
     [<Import("tmpdir", "node:os")>]

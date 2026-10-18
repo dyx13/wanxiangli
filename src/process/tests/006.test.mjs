@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { Readable } from 'node:stream'
+import { stat, readFile } from 'node:fs/promises'
 import { setTimeout as delay } from 'node:timers/promises'
 import { ProcessSession } from 'wanxiangli/process'
 import { options, ready, closed, temporary, until } from './support.mjs'
@@ -52,6 +53,74 @@ test('SPEC[process-006] capture preserves both complete byte streams with a slow
   assert.equal(run.inspect().stderr.observed, lengths.stderr)
   assert.ok(run.inspect().stdout.retained <= 17)
   assert.deepEqual((await closed(run)).exit, { code: 0, signal: null })
+})
+
+test('SPEC[process-006] paused capture blocks the actual writer and resumes both complete channels', { timeout: 15000 }, async t => {
+  const receipt = join(temporary(t), 'pressure')
+  const size = 64 * 1024 * 1024
+  const program = `const fs = require('node:fs');
+    const bytes = Buffer.alloc(65536, 71);
+    fs.writeFileSync(process.argv[1] + '.ready', '');
+    for (let total = 0; total < ${size}; total += bytes.length) {
+      for (const channel of [1, 2]) {
+        let offset = 0;
+        while (offset < bytes.length) {
+          const count = fs.writeSync(channel, bytes, offset, bytes.length - offset);
+          if (count <= 0) throw Error('No write progress');
+          offset += count;
+        }
+      }
+    }
+    fs.writeFileSync(process.argv[1] + '.done', '');`
+  const run = capture(t, 'pressure', [], { args: ['-e', program, receipt], tailBytes: 0 })
+  await ready(run)
+  await until(() => existsSync(receipt + '.ready'), 'actual writer ready')
+  await delay(250)
+  assert.equal(existsSync(receipt + '.done'), false, 'paused Capture must block the actual writer, not cache all output')
+  const hashes = { stdout: createHash('sha256'), stderr: createHash('sha256') }
+  const lengths = { stdout: 0, stderr: 0 }
+  for (;;) {
+    const part = await run.takeOutput()
+    if (part.kind === 'Closed') break
+    assert.equal(part.kind, 'Chunk')
+    assert.equal(part.from, lengths[part.channel])
+    lengths[part.channel] += part.bytes.length
+    assert.equal(part.to, lengths[part.channel])
+    hashes[part.channel].update(part.bytes)
+  }
+  const expected = createHash('sha256')
+  for (let index = 0; index < size / 65536; index++) expected.update(Buffer.alloc(65536, 71))
+  const digest = expected.digest('hex')
+  for (const channel of ['stdout', 'stderr']) {
+    assert.equal(lengths[channel], size)
+    assert.equal(hashes[channel].digest('hex'), digest)
+  }
+  assert.equal(existsSync(receipt + '.done'), true)
+  assert.equal((await closed(run)).failure, null)
+})
+
+test('SPEC[process-006] Bun idle capture reads do not occupy the filesystem I/O pool', { skip: !globalThis.Bun, timeout: 15000 }, async t => {
+  const runs = []
+  const pending = []
+  for (let index = 0; index < 16; index++) {
+    const run = capture(t, 'idle', [], { args: ['-e', 'setInterval(() => {}, 1000)'], tailBytes: 0 })
+    runs.push(run)
+    await ready(run)
+    pending.push(run.takeOutput())
+  }
+  await delay(50)
+  const file = new URL('./006.test.mjs', import.meta.url)
+  const result = await Promise.race([
+    Promise.all([stat(file), readFile(file)]),
+    delay(1000).then(() => { throw new Error('Idle capture reads blocked independent filesystem work') }),
+  ])
+  assert.ok(result[0].size > 0)
+  assert.ok(result[1].length > 0)
+  for (const run of runs) {
+    run.discardOutput()
+    assert.equal(run.inspect().phase, 'Running')
+  }
+  for (const result of await Promise.all(pending)) assert.equal(result.kind, 'Discarded')
 })
 
 test('SPEC[process-006] capture rejects overlapping readers without consuming another chunk', async t => {

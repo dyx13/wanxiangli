@@ -16,7 +16,7 @@
 1. [AXIOM 1; 根 LEMMA 4, 6] 外侧使用 Capture 模式的 ProcessSession 启动真正组长；组长在自己的组内以 `detached:false` 启动目标。组长忽略 TERM、INT、HUP，直到外侧显式清组。
    - 推理：目标 exit 不结束组长身份，仍可遵守基础 ProcessSession 仅对尚未观察到退出的直接子进程发组信号的规则。
 2. [AXIOM 2; 根 LEMMA 3, 4] 组长用原生pipe转发双路输出，逐路计数；目标close且两路计数Transform的readable end后，发布不可变最终extent。外侧实际Capture observed逐路恰等于extent，才允许自然KILL组长，并继续等待ProcessSession close与Capture EOF。零字节写回调不能证明Bun缓冲已排空。
-   - 未闭合边界：Bun1.3.14原生pipe会提前缓存输出，现有逐块交接不能证明实际背压或总内存界限；该义务仍待实现，不因完整字节转发通过而关闭。
+   - Bun两跳分别使用私有非阻塞FIFO读端及阻塞写端，Worker出口以有界Writable等待每块实际write计数与FileSink flush，不end借用的1/2。Readable队列每路最多128KiB，另有64KiB scratch；转发的Transform/Writable各有自己的有限预取，不冒称整个运行时RSS上限。Bun依赖/usr/bin/mkfifo与临时FIFO，实际平台证据另列。
    - 推理：Worker已交给兼容写出队列，不等于外侧已收到；将确切两路extent与本次实例实际观察仲裁，才能避免清组截断尚在Worker中的字节。EOF缺数或超数明确失败；主动KILL引起的缺数单列OUTPUT_INTERRUPTED，不能冒称完整输出，也不覆盖宿主既有取消/超时结果。
 3. [AXIOM 1, 2] 每个实例使用私有目录与原子文件传递启动、退出及关闭事实。目标参数、环境不包含控制路径；公共返回值不暴露目录或原生句柄。控制失败不重试启动，也不补目标退出码。
    - 推理：实例内的事实关联不能依赖共享目录中的固定公开名称。这里的私有是实例隔离，不是防御同 UID 恶意进程的安全沙箱。
@@ -27,7 +27,7 @@
 
 1. [LEMMA 1, 3, 4] 先验证目标输入；Started 只由目标 spawn 事实产生。启动失败自动清本实例，不要求失败调用方继续消费输出。
    - 证明：`tests/001.test.mjs` 验证非法输入、访问器、显式 argv/env/cwd、目标 ENOENT、无消费者启动失败的目录与计时器清理、真实二进制输入及快照副本。
-2. [LEMMA 2] 正常完成保留全部原始双路输出；未消费时不凭转发回调自然清组，逐路收齐最终extent后再清组。不以尾部查询代替完整采集；Bun原生上游背压与内存界限尚未兑现，仍是待修义务。
+2. [LEMMA 2] 正常完成保留全部原始双路输出；未消费时不凭转发回调自然清组，逐路收齐最终extent后再清组。Bun实际写者也须在外侧暂停时被阻塞，恢复后逐字节完整；不以尾部查询、单块大小或单次RSS样本代替该证明。
    - 证明：`tests/002.test.mjs` 双路各 8 MiB 加二进制尾部、先暂停读取、连续游标、零 tail 容量及目标 exit 0 后清组。
 3. [LEMMA 1, 2] 目标先退出但后代持管道时仍能 TERM→KILL；目标自然 close 后，清理仍在同组但已关输出的后代。
    - 证明：`tests/003.test.mjs` 使用真实后代就绪 IPC 屏障，确认目标 exit 23、后代 TERM 回执、等待超时、KILL 后同组后代消失；另验证未继承输出但仍存活后代的自然收组。

@@ -9,7 +9,7 @@
 调用顺序：
 
 1. 等 `started()`。Started 的 PID 属于目标；Failed 不表示确定“目标从未执行”，须保留错误码。启动失败会自行清理本实例，不要求调用方另开输出消费者。
-2. Started后持续调用单消费者`takeOutput()`，处理双路`Chunk`。每块至多64KiB；游标按各路实际字节增加。Node已证明原生背压；Bun上游仍会提前缓存，尚无总内存上界，不能由块大小推导背压已完成。
+2. Started后持续调用单消费者`takeOutput()`，处理双路`Chunk`。每块至多64KiB；游标按各路实际字节增加。Node使用原生pipe，Bun使用私有FIFO，Worker出口等待每块实际写入与flush，外侧暂停能向目标传递背压。Bun读端每路Readable队列最多128KiB、另有64KiB scratch；这不等于总RSS上限。
 3. 按需要 `write`、`endInput` 或 `signal`。Written 只确认写入组长的转发输入管道，不确认目标收到或消费。信号 Requested 只确认发出请求；目标 exit 及输出收尾是后续事实。
 4. Capture 返回 Closed 时也必须检查 `state.failure`。`wait` 只有在真实组长 close 与 Capture EOF 或显式丢弃都完成后才返回 Closed。调用方不得停止消费后只等待，否则背压可让目标无法结束。
 5. 若落盘或调用方消费失败，明确 `signal('SIGKILL')`、`discardOutput()`，再等待收尾；丢弃不能算完整材料。等待超时本身不发送信号。
@@ -31,4 +31,4 @@
 
 这是 POSIX pipe 能力，不是 PTY 或安全沙箱。不追踪脱离进程组的后代，不支持宿主崩溃后接管、重开控制目录或证明任意进程树已结束。实例控制目录权限为 0700，事实文件为 0600，目录不传给目标；这不防御同 UID 恶意进程枚举和篡改。目标正常结束时仍在同组且已经关闭输出的后代，会一并清理。
 
-实现为本模块 F# 编译后的同一个已交付 bundle。只有 bundle 本身作为带内部参数的入口执行时才启动组长工作流，正常 import 没有启动副作用。运行时只依赖 `wanxiangli/process` 公开入口与 Node/Bun 原生模块，不查找源码或未交付 worker 文件。
+实现为本模块F#编译后的同一个已交付bundle。只有bundle本身作为带内部参数的入口执行时才启动组长，正常import没有启动副作用。不查找源码或未交付worker。Bun除原生模块与process公开产物，还显式需要可执行的`/usr/bin/mkfifo`及支持FIFO的临时文件系统；准备失败不回退旧管道。失败后也必须检查清理错误，不能仅凭Closed宣称描述符已释放。

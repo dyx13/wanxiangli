@@ -55,7 +55,7 @@ module internal Worker =
                     targetClosed <- true
                     finish ())
                 for channel in [ "stdout"; "stderr" ] do
-                    let output = Native.get Native.runtime channel
+                    let output = Native.output channel
                     let source = Native.get target channel
                     Native.on1 source "error" (fault channel)
                     Native.on1 output "error" (fault channel)

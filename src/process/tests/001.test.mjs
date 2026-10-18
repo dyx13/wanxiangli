@@ -1,11 +1,11 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { existsSync, realpathSync } from 'node:fs'
+import { existsSync, realpathSync, closeSync, readFileSync, unlinkSync } from 'node:fs'
 import path from 'node:path'
 import childProcess from 'node:child_process'
 import { syncBuiltinESMExports } from 'node:module'
 import { ProcessSession } from 'wanxiangli/process'
-import { options, session, ready, closed, output, temporary, workerFile } from './support.mjs'
+import { options, session, ready, closed, output, temporary, workerFile, until } from './support.mjs'
 
 function nativeReport(cwd, env, args = []) {
   const result = childProcess.spawnSync(process.execPath, [workerFile, 'report', ...args], { cwd, env })
@@ -94,6 +94,95 @@ test('SPEC[process-001] absent executable produces one failed start and no inven
   assert.equal(state.exit, null)
   assert.equal(state.phase, 'Closed')
   assert.equal(run.signal('SIGKILL').kind, 'NotRunning')
+})
+
+test('SPEC[process-001] a partially prepared Bun output pipe fails before the target starts', { skip: !globalThis.Bun }, async t => {
+  const effect = path.join(temporary(t), 'effect')
+  const original = globalThis.Bun.spawn
+  const originalSync = globalThis.Bun.spawnSync
+  let calls = 0
+  let directory
+  globalThis.Bun.spawn = (...args) => {
+    calls++
+    return original(...args)
+  }
+  globalThis.Bun.spawnSync = (args, options) => {
+    const result = originalSync(args, options)
+    if (args[0] === '/usr/bin/mkfifo') {
+      directory = options.cwd
+      unlinkSync(args[2])
+    }
+    return result
+  }
+  let run
+  try {
+    run = new ProcessSession(options('stamp', [effect]), 'Capture')
+  } finally {
+    globalThis.Bun.spawn = original
+    globalThis.Bun.spawnSync = originalSync
+  }
+  assert.equal((await run.started()).error.code, 'ENOENT')
+  assert.equal((await closed(run)).exit, null)
+  assert.equal(calls, 0)
+  assert.equal(existsSync(effect), false)
+  assert.ok(directory)
+  assert.equal(existsSync(directory), false)
+})
+
+test('SPEC[process-001] a Bun parent writer close failure preserves the actual started target', { skip: !globalThis.Bun }, async t => {
+  const effect = path.join(temporary(t), 'effect')
+  const original = globalThis.Bun.spawn
+  let native
+  let calls = 0
+  let run
+  t.after(async () => {
+    if (native && native.exitCode === null && native.signalCode === null) native.kill('SIGKILL')
+    if (native) await native.exited
+    if (run) {
+      run.discardOutput()
+      await closed(run)
+    }
+  })
+  globalThis.Bun.spawn = (...args) => {
+    calls++
+    native = original(...args)
+    closeSync(args[1].stdout)
+    return native
+  }
+  try {
+    run = new ProcessSession(options('stamp', [], {
+      args: ['-e', "require('node:fs').appendFileSync(process.argv[1], 'x'); setInterval(() => {}, 1000)", effect],
+    }), 'Capture')
+  } finally {
+    globalThis.Bun.spawn = original
+  }
+  const start = await run.started()
+  assert.equal(start.kind, 'Started')
+  assert.equal(start.pid, native.pid)
+  await until(() => existsSync(effect), 'exactly one target effect')
+  assert.equal(readFileSync(effect, 'utf8'), 'x')
+  assert.equal(calls, 1)
+  const captured = await run.takeOutput()
+  assert.equal(captured.kind, 'Failed')
+  assert.equal(captured.error.code, 'EBADF')
+  assert.equal((await run.wait(10)).kind, 'TimedOut')
+  assert.equal(run.inspect().exit, null)
+})
+
+test('SPEC[process-001] Bun startup cleanup failures are visible without an unhandled stream error', { skip: !globalThis.Bun }, () => {
+  const fixture = new URL('./cleanup-fault-worker.mjs', import.meta.url)
+  const result = childProcess.spawnSync(process.execPath, [fixture.pathname], { encoding: 'utf8', timeout: 5000 })
+  assert.ifError(result.error)
+  assert.equal(result.status, 0, result.stderr)
+  const observed = JSON.parse(result.stdout)
+  assert.equal(observed.started.kind, 'Failed')
+  assert.equal(observed.started.error.code, 'EIO')
+  assert.match(observed.started.error.message, /cleanup was not confirmed/)
+  assert.equal(observed.closed.kind, 'Closed')
+  assert.equal(observed.closed.state.exit, null)
+  assert.deepEqual(observed.unhandled, [])
+  assert.equal(observed.cleanupUnconfirmed, true)
+  assert.equal(observed.probeCleaned, true)
 })
 
 const invalid = [

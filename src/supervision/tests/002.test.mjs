@@ -1,10 +1,59 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, mkdtempSync, rmSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { setTimeout as delay } from 'node:timers/promises'
 import { run, ready, collect, workerFile, until } from './support.mjs'
+
+test('SPEC[supervision-002] paused supervision propagates backpressure through the real Worker to the target', { timeout: 15000 }, async t => {
+  const directory = mkdtempSync(path.join(tmpdir(), 'wanxiangli-pressure-test-'))
+  const receipt = path.join(directory, 'pressure')
+  const size = 64 * 1024 * 1024
+  const program = `const fs = require('node:fs');
+    const bytes = Buffer.alloc(65536, 71);
+    fs.writeFileSync(process.argv[1] + '.ready', '');
+    for (let total = 0; total < ${size}; total += bytes.length) {
+      for (const channel of [1, 2]) {
+        let offset = 0;
+        while (offset < bytes.length) {
+          const count = fs.writeSync(channel, bytes, offset, bytes.length - offset);
+          if (count <= 0) throw Error('No write progress');
+          offset += count;
+        }
+      }
+    }
+    fs.writeFileSync(process.argv[1] + '.done', '');`
+  const session = run(t, 'pressure', { args: ['-e', program, receipt], tailBytes: 0 })
+  t.after(() => rmSync(directory, { recursive: true, force: true }))
+  await ready(session)
+  await until(() => existsSync(receipt + '.ready'), 'actual target writer ready')
+  await delay(250)
+  assert.equal(existsSync(receipt + '.done'), false, 'all physical hops must block instead of caching the target output')
+  const hashes = { stdout: createHash('sha256'), stderr: createHash('sha256') }
+  const lengths = { stdout: 0, stderr: 0 }
+  for (;;) {
+    const part = await session.takeOutput()
+    if (part.kind === 'Closed') {
+      assert.equal(part.state.failure, null)
+      break
+    }
+    assert.equal(part.kind, 'Chunk')
+    assert.equal(part.from, lengths[part.channel])
+    lengths[part.channel] += part.bytes.length
+    assert.equal(part.to, lengths[part.channel])
+    hashes[part.channel].update(part.bytes)
+  }
+  const expected = createHash('sha256')
+  for (let index = 0; index < size / 65536; index++) expected.update(Buffer.alloc(65536, 71))
+  const digest = expected.digest('hex')
+  for (const channel of ['stdout', 'stderr']) {
+    assert.equal(lengths[channel], size)
+    assert.equal(hashes[channel].digest('hex'), digest)
+  }
+  assert.equal(existsSync(receipt + '.done'), true)
+})
 
 test('SPEC[supervision-002] a final extent cannot authorize natural group cleanup before Capture receives each channel', async t => {
   const marker = `extent-${process.pid}-${Date.now()}`

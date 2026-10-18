@@ -12,6 +12,8 @@
 
 0.6.7修复Bun监管提前清组丢字节：Worker在目标close及两路计数流readable end后发布逐路最终extent，外侧Capture实际观察恰好收齐才自然清组，随后仍等close与EOF。EOF不足或超数明确失败；主动KILL造成的不足报告OUTPUT_INTERRUPTED，不宣称完整输出。零字节写回调不再作为排空证明。这修复终结边界，没有兑现Bun原生上游背压或总内存界限；该义务继续待办。
 
+0.6.8补齐Bun输出背压：直接向目标提供阻塞FIFO写端，读端独立非阻塞，按Readable的有限需求读取；只有真实EAGAIN才重试，真实正长度read返回零才确认EOF。Worker出口逐块核对写入并等待FileSink flush，不能绕过外侧背压；逐路extent仍负责自然清组。每路Readable队列最多128KiB，另有64KiB私有scratch；这不是整个运行时RSS上限。Bun需要可执行的`/usr/bin/mkfifo`和支持FIFO的临时文件系统，准备失败在目标启动前拒绝，不回退已知无界原生pipe。实际平台与精确包证据另见施工记录，不将macOS结果外推全部POSIX。
+
 ```js
 import { ProcessSession } from 'wanxiangli/process'
 
@@ -42,7 +44,7 @@ try {
 }
 ```
 
-Node 和 Bun 使用同一入口、同一实现，走各自的 `node:child_process` 兼容接口。构建仍用现有 npm Fable 工具链，不增加依赖或构建框架。实际验证的平台与运行时见 `施工顺序.md`。
+Node和Bun使用同一公开入口。Node走原生child_process；Bun使用Bun.spawn与上述私有管道适配。构建仍用现有npm Fable工具链，不增加npm依赖或构建框架；Bun的mkfifo与临时FIFO前提须由实际运行环境提供。实际验证的平台与运行时见`施工顺序.md`。
 
 ## 完整字节采集
 
@@ -55,7 +57,9 @@ Capture 增加两个消息：
 | takeOutput() | 每次取得一个 stdout 或 stderr 原始块，最多 65,536 字节，带该通道的 `[from, to)`；同一时刻只允许一个待决读取。无数据时等待，真实关闭返回 Closed，启动或输出读取失败返回 Failed |
 | discardOutput() | 幂等放弃未交付输出并关闭本实例的两个读管道；待决与后续读取返回 Discarded。它不发信号，也不确认进程退出 |
 
-调用方处理完一块后再取下一块。未取时不从原生流读取，积压留在运行时的有界 readable 缓冲和操作系统 pipe，并向写入方传递背压。库不创建输出队列；每次只复制一个至多 64 KiB 的返回块。`tailBytes` 仍只控制每路私有尾部，Capture 的 observed/retained 统计已交付的字节，不推断尚在原生管道中的字节。返回副本和调用方保留的数据不计入私有尾部上限。
+调用方处理完一块后再取下一块。Readable可有限预取，缓冲满后停止读取并向实际写者传递背压；没有调用takeOutput不等于OS读端完全未读。Bun每路Readable软高水位64KiB、队列最多128KiB，另有64KiB私有scratch；EAGAIN退避为一次Immediate后1/2/4/5ms，收到字节后重置，不据次数或时间生成EOF。每次公开返回块仍至多64KiB。`tailBytes`只控制私有尾部；observed/retained统计已交付的字节，不推断管道积压。返回副本和调用方保留数据不计入私有尾部上限。
+
+准备失败的原生错误会保留；若关闭或删除本次资源也失败，返回明确的清理未确认错误，不自动补启动或盲重试关闭。目标spawn成功后的父写端关闭失败仍报告Started和真实pid，随后报告I/O失败，不能把已经发生的执行伪装成零启动。发生清理错误时，Closed不能单独证明失败描述符已物理释放，必须检查failure。
 
 ```js
 const run = new ProcessSession(options, 'Capture')

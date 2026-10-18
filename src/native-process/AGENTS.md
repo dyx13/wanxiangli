@@ -2,7 +2,7 @@
 
 只有`BunProcess.fs`，由Process和Supervision两个工程明确编译，没有npm入口。它转换实际Bun.spawn、FileSink、输出流及spawn/exit/close事件，拥有每个child的I/O接线状态；不保存ProcessSession状态、监管账本、业务完成或持久归属。
 
-detached由调用方明确传入：基础会话拥有独立进程组，监管目标留在Worker组内。写入须等全部字节及flush确认，部分或失败不补写；exit不代替两路输出关闭。共享只为删除真实重复I/O实现，不引入通用服务树或可配置后端框架。
+detached由调用方明确传入：基础会话拥有独立进程组，监管目标留在Worker组内。stdin等待FileSink write及flush完成，即时计数不代表尚未刷出的内部缓冲；错误或确认前exit保持Unknown，不补写。exit不代替两路输出关闭。共享只为删除真实重复I/O实现，不引入通用服务树或可配置后端框架。
 
 输出使用非阻塞FIFO读端与独立阻塞写端。每路Readable队列最多128KiB，另有64KiB私有scratch与一个重试任务；只因真实EAGAIN重调度，收到字节后重置，真实正长度read零才EOF。所有输出准备和匿名化发生在目标spawn前；Bun显式依赖/usr/bin/mkfifo及支持FIFO的临时文件系统。缺前提明确失败，不回退无界原生pipe。
 

@@ -1,6 +1,24 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
 import { session, ready, closed, until, output } from './support.mjs'
+
+test('SPEC[process-002] large buffered input waits for flush and reaches the delayed reader once', async t => {
+  const run = session(t, 'input-digest', [], { maxWriteBytes: 16777216 })
+  await ready(run)
+  const bytes = Buffer.alloc(33554449)
+  for (let index = 0; index < bytes.length; index++) bytes[index] = index % 251
+  for (let offset = 0; offset < bytes.length; offset += 16777216) {
+    const part = bytes.subarray(offset, offset + 16777216)
+    assert.deepEqual(await run.write(part), { kind: 'Written', bytes: part.length })
+  }
+  run.endInput()
+  await closed(run)
+  assert.deepEqual(JSON.parse(output(run).text), {
+    size: bytes.length,
+    hash: createHash('sha256').update(bytes).digest('hex'),
+  })
+})
 
 test('SPEC[process-002] real stdin preserves binary bytes and EOF is idempotent', async t => {
   const run = session(t, 'echo')

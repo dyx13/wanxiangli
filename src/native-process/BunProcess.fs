@@ -157,8 +157,7 @@ module internal BunProcess =
               callback(error);
             };
             pendingWrite = complete;
-            Promise.resolve().then(() => nativeProcess.stdin.write(bytes)).then(async count => {
-              if (count !== bytes.length) throw Object.assign(new Error(`Only ${count} of ${bytes.length} input bytes were acknowledged`), { code: 'ERR_STREAM_DESTROYED' });
+            Promise.resolve().then(() => nativeProcess.stdin.write(bytes)).then(async () => {
               await nativeProcess.stdin.flush();
               complete();
             }).catch(complete);

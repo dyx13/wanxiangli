@@ -1,9 +1,20 @@
 import { spawn } from 'node:child_process'
 import { once } from 'node:events'
+import { createHash } from 'node:crypto'
+import { setTimeout as delay } from 'node:timers/promises'
 
 const mode = process.argv[2]
 if (mode === 'echo') {
   process.stdin.pipe(process.stdout)
+} else if (mode === 'input-digest') {
+  await delay(200)
+  const hash = createHash('sha256')
+  let size = 0
+  for await (const bytes of process.stdin) {
+    size += bytes.length
+    hash.update(bytes)
+  }
+  process.stdout.write(JSON.stringify({ size, hash: hash.digest('hex') }))
 } else if (mode === 'facts') {
   process.stdout.write(JSON.stringify({ args: process.argv.slice(3), cwd: process.cwd(), env: process.env }))
 } else if (mode === 'flood') {

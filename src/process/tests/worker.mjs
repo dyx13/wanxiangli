@@ -2,6 +2,8 @@ import { writeSync, writeFileSync, readSync } from 'node:fs'
 import { spawn } from 'node:child_process'
 import { once } from 'node:events'
 import { fileURLToPath } from 'node:url'
+import { createHash } from 'node:crypto'
+import { setTimeout as delay } from 'node:timers/promises'
 
 const [mode, ...args] = process.argv.slice(2)
 switch (mode) {
@@ -19,6 +21,17 @@ switch (mode) {
     process.stdin.pipe(process.stdout)
     process.stderr.write('ready\n')
     break
+  case 'input-digest': {
+    await delay(200)
+    const hash = createHash('sha256')
+    let size = 0
+    for await (const bytes of process.stdin) {
+      size += bytes.length
+      hash.update(bytes)
+    }
+    process.stdout.write(JSON.stringify({ size, hash: hash.digest('hex') }))
+    break
+  }
   case 'idle':
     process.on('SIGTERM', () => process.stderr.write('term-seen\n'))
     process.stdin.resume()

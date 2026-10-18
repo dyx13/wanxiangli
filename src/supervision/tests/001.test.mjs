@@ -4,7 +4,29 @@ import { tmpdir } from 'node:os'
 import { readdirSync, readFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import path from 'node:path'
+import { createHash } from 'node:crypto'
 import { run, options, ready, collect, until, SupervisedProcess, workerFile } from './support.mjs'
+
+test('SPEC[supervision-001] both input pipes flush large buffered writes to the actual target', async t => {
+  const session = run(t, 'input-digest', { maxWriteBytes: 16777216 })
+  const collected = collect(session)
+  await ready(session)
+  const bytes = Buffer.alloc(33554449)
+  for (let index = 0; index < bytes.length; index++) bytes[index] = index % 251
+  for (let offset = 0; offset < bytes.length; offset += 16777216) {
+    const part = bytes.subarray(offset, offset + 16777216)
+    assert.deepEqual(await session.write(part), { kind: 'Written', bytes: part.length })
+  }
+  session.endInput()
+  const output = await collected
+  assert.equal(output.result.kind, 'Closed')
+  assert.equal(output.result.state.failure, null)
+  assert.deepEqual(output.result.state.exit, { code: 0, signal: null })
+  assert.deepEqual(JSON.parse(output.stdout.toString()), {
+    size: bytes.length,
+    hash: createHash('sha256').update(bytes).digest('hex'),
+  })
+})
 
 test('SPEC[supervision-001] target options are validated before a worker or target is started', () => {
   for (const change of [

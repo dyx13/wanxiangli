@@ -202,10 +202,10 @@ test('SPEC[process-006] native output errors settle a waiting consumer without f
   const run = capture(t, 'idle')
   await ready(run)
   const original = Readable.prototype.read
-  const streams = []
+  const streams = new Set()
   Readable.prototype.read = function (size) {
     const bytes = original.call(this, size)
-    if (bytes?.length) streams.push(this)
+    if (Buffer.isBuffer(bytes) && bytes.equals(Buffer.from('ready\n'))) streams.add(this)
     return bytes
   }
   let first
@@ -217,9 +217,9 @@ test('SPEC[process-006] native output errors settle a waiting consumer without f
   assert.equal(first.kind, 'Chunk')
   assert.equal(first.channel, 'stdout')
   assert.equal(Buffer.from(first.bytes).toString(), 'ready\n')
-  assert.equal(streams.length, 1, 'capture must reach the actual native stdout read')
+  assert.equal(streams.size, 1, 'capture must reach the exact ready bytes from native stdout')
   const pending = run.takeOutput()
-  const observed = streams[0].emit('error', Object.assign(new Error('capture read failed'), { code: 'EIO' }))
+  const observed = [...streams][0].emit('error', Object.assign(new Error('capture read failed'), { code: 'EIO' }))
   assert.equal(observed, true, 'the production stdout error listener must receive the injected event')
   const result = await pending
   assert.equal(result.kind, 'Failed')

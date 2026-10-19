@@ -1,0 +1,16 @@
+bun test v1.3.14 (d1632b29)
+
+src/process/tests/006.test.mjs:
+(pass) SPEC[process-006] capture preserves both complete byte streams with a slow consumer [350.24ms]
+(pass) SPEC[process-006] paused capture blocks the actual writer and resumes both complete channels [7682.14ms]
+(pass) SPEC[process-006] Bun idle capture reads do not occupy the filesystem I/O pool [176.24ms]
+(pass) SPEC[process-006] capture rejects overlapping readers without consuming another chunk [38.00ms]
+(pass) SPEC[process-006] discarding capture releases a pending reader without inventing process exit [30.95ms]
+(pass) SPEC[process-006] failed startup also settles capture with the original failure [3.15ms]
+(pass) SPEC[process-006] a killed capture drains accepted bytes before its closed receipt [35.64ms]
+(pass) SPEC[process-006] killing a forwarding process reaches actual pipe EOF after all captured bytes [283.54ms]
+(pass) SPEC[process-006] native output errors settle a waiting consumer without fabricating exit [31.10ms]
+
+ 9 pass
+ 0 fail
+Ran 9 tests across 1 file. [8.67s]

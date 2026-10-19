@@ -1,0 +1,17 @@
+✔ SPEC[process-006] capture preserves both complete byte streams with a slow consumer (145.176875ms)
+✔ SPEC[process-006] paused capture blocks the actual writer and resumes both complete channels (474.327083ms)
+﹣ SPEC[process-006] Bun idle capture reads do not occupy the filesystem I/O pool (0.127125ms) # SKIP
+✔ SPEC[process-006] capture rejects overlapping readers without consuming another chunk (72.749375ms)
+✔ SPEC[process-006] discarding capture releases a pending reader without inventing process exit (45.919125ms)
+✔ SPEC[process-006] failed startup also settles capture with the original failure (1.134042ms)
+✔ SPEC[process-006] a killed capture drains accepted bytes before its closed receipt (44.441041ms)
+✔ SPEC[process-006] killing a forwarding process reaches actual pipe EOF after all captured bytes (102.167709ms)
+✔ SPEC[process-006] native output errors settle a waiting consumer without fabricating exit (52.119209ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 1977.175167

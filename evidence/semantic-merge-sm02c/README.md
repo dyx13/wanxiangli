@@ -14,3 +14,9 @@
 库源与原始证据提交到自有fork的main后，主仓只记录确切gitlink；推送前确认origin/main的8422617是本候选祖先，使用普通快进，不强推。源码根与原运行中的修复分支不切换。
 
 当前证据来自macOS、Node26.6.0、Bun1.3.14。最低Node22.13的最终主仓验证、真实Host、状态切换和后续SM-03—SM-07尚未完成。没有registry发布、Host部署或非作者复审；不销原CUT/GAP父项。
+
+## SM-07 最低版本复验
+
+Node22.13.0最初原生选集505pass/1fail/6skip，失败来自全局Readable钩子把测试运行器的内部读取也算进子进程stdout。测试改为识别确切ready字节及唯一原生流，仍在实际stdout注入EIO、检查等待者失败且无伪造exit；没有修改运行实现。该文件Node22和Node26均8pass/1skip，Bun9pass/0skip。
+
+修正后的完整Node22选集含实际npm包、独立编译、TypeScript声明消费和Node/Bun包外导入：566项559pass/0fail/7skip/0TODO。首次完整执行因沙箱禁止npm缓存写入产生5个打包失败，原日志保留；允许正常缓存写入后的native-03退出0。计数包含脚本测试的子用例，与SM-02C原命令的563项不相加。最低主仓与切换仍由SM-07单独验收。

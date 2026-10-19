@@ -1,0 +1,12 @@
+▶ SPEC[build-009] every declared library and type is delivered unchanged without evidence archives or compiler dependencies
+  ✔ all public imports outside the workspace on node (88.64825ms)
+  ✔ all public imports outside the workspace on bun (69.635875ms)
+✔ SPEC[build-009] every declared library and type is delivered unchanged without evidence archives or compiler dependencies (945.608708ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 997.313667

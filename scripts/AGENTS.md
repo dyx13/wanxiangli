@@ -27,5 +27,5 @@
    - 证明：`tests/trace-package.test.mjs` 实际安装包、TypeScript 正反用例、Node/Bun 保持 SQLite 连接打开时强杀及重启；随后删除前两刀产物，Trace 单独捕获和恢复仍通过。`tests/build.test.mjs` 的隔离构建与产物保留检查覆盖第三刀；不改变现有构建脚本。
 6. [LEMMA 1, 2] 第四刀在前三刀缺席时保持独立，组合层另证明持久预留、物理收尾与 Work 退休的先后关系。
    - 证明：`tests/ownership-package.test.mjs` 在实际 tarball 上运行 Node/Bun 的物理进程阻塞退休、协调进程 SIGKILL 恢复，随后删除前三刀产物与类型做单独消费和 TypeScript 正反用例。`tests/ownership-composition.test.mjs` 覆盖真实提交竞争；构建脚本没有新增专用流程。
-7. [根 AXIOM 2, 3] Git 只保存源码、规则与构建描述，不保存 `.tgz` 包。旧的 tarball 例外撤销。
-   - 证明：[TODO] `tests/repository.test.mjs` 检查实际 Git 索引；本轮只写入测试，未执行。
+7. [根 AXIOM 2, 3] Git不保存源码或npm依赖tarball。根规则固定的15份历史取证归档保持原名原字节，属于证据例外，不进入生产闭包。
+   - 证明：`tests/repository.test.mjs` 检查实际Git索引、固定清单和每份SHA-256，并拒绝manifest中的归档依赖；实际pack成员边界另由安装包验收证明。

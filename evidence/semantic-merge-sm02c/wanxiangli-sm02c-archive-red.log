@@ -1,0 +1,48 @@
+✖ SPEC[build-007] source history must not add tarball dependencies (30.332917ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 95.414666
+
+✖ failing tests:
+
+test at scripts/tests/repository.test.mjs:6:1
+✖ SPEC[build-007] source history must not add tarball dependencies (30.332917ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'evidence/process-stdin-0.6.10/D2-068-069-OBSERVABLE-COMPARISON.tgz',
+  +   'evidence/process-stdin-0.6.10/D2-LIB-0610-INDEPENDENT-EVIDENCE.tgz',
+  +   'evidence/process-stdin-0.6.10/d2-library-input-0610-evidence-20261019.tgz',
+  +   'evidence/process-stdin-0.6.10/d2-relay-library-source-0610.tgz',
+  +   'evidence/process-stdin-0.6.10/d2-worker-input-bridge-evidence-20261019.tgz',
+  +   'evidence/process-stdin-0.6.12/D2-LAST17-661-RETAINED-RED.tgz',
+  +   'evidence/process-stdin-0.6.12/D2-LAST17-662-EOF-READABLE.tgz',
+  +   'evidence/process-stdin-0.6.12/D2-LAST17-662-LOW-TRACE.tgz',
+  +   'evidence/process-stdin-0.6.12/D2-LIB-0612-CHECKPOINTS.tgz',
+  +   'evidence/process-stdin-0.6.12/d2-eventpump-private-prototype-662-20261019.tgz',
+  +   'evidence/process-stdin-0.6.12/d2-library-0611-guard-review-evidence-20261019.tgz',
+  +   'evidence/process-stdin-0.6.12/d2-library-host-0612-acceptance-compact-20261019.tgz',
+  +   'evidence/process-stdin-0.6.9/binary-prototype.tgz',
+  +   'evidence/process-stdin-0.6.9/independent-review.tgz',
+  +   'evidence/process-stdin-0.6.9/source-verification.tgz'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///private/tmp/wanxiangli-semantic-merge-20261019/scripts/tests/repository.test.mjs:9:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'evidence/process-stdin-0.6.10/D2-068-069-OBSERVABLE-COMPARISON.tgz', 'evidence/process-stdin-0.6.10/D2-LIB-0610-INDEPENDENT-EVIDENCE.tgz', 'evidence/process-stdin-0.6.10/d2-library-input-0610-evidence-20261019.tgz', 'evidence/process-stdin-0.6.10/d2-relay-library-source-0610.tgz', 'evidence/process-stdin-0.6.10/d2-worker-input-bridge-evidence-20261019.tgz', 'evidence/process-stdin-0.6.12/D2-LAST17-661-RETAINED-RED.tgz', 'evidence/process-stdin-0.6.12/D2-LAST17-662-EOF-READABLE.tgz', 'evidence/process-stdin-0.6.12/D2-LAST17-662-LOW-TRACE.tgz', 'evidence/process-stdin-0.6.12/D2-LIB-0612-CHECKPOINTS.tgz', 'evidence/process-stdin-0.6.12/d2-eventpump-private-prototype-662-20261019.tgz', 'evidence/process-stdin-0.6.12/d2-library-0611-guard-review-evidence-20261019.tgz', 'evidence/process-stdin-0.6.12/d2-library-host-0612-acceptance-compact-20261019.tgz', 'evidence/process-stdin-0.6.9/binary-prototype.tgz', 'evidence/process-stdin-0.6.9/independent-review.tgz', 'evidence/process-stdin-0.6.9/source-verification.tgz' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,881 @@
+
+> wanxiangli@0.8.1 test
+> npm run build && node --test src/lifecycle/tests/*.test.mjs src/eventstore/tests/*.test.mjs src/assembly/tests/*.test.mjs src/process/tests/*.test.mjs src/supervision/tests/*.test.mjs src/trace/tests/*.test.mjs src/session/tests/*.test.mjs src/resources/tests/*.test.mjs src/identity/tests/*.test.mjs src/events/tests/*.test.mjs src/fs/tests/*.test.mjs src/grounding/tests/*.test.mjs src/time/tests/*.test.mjs src/wait/tests/*.test.mjs scripts/tests/*.test.mjs
+
+
+> wanxiangli@0.8.1 build
+> node scripts/build.mjs
+
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/assembly/Wanxiangli.Assembly.fsproj, FCS time: 760 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/assembly/DurableWork.fs, Fable time: 66 ms
+[build] assembly: 1106 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/events/Wanxiangli.Events.fsproj, FCS time: 833 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalJson.fs (47,24): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (11,27): Warning: The value 'bytes' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (14,27): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (17,24): Warning: The value 'algorithm' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (20,24): Warning: The value 'hash' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (20,36): Warning: The value 'data' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (23,21): Warning: The value 'hash' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (26,29): Warning: The value 'bytes' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (29,24): Warning: The value 'bytes' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (35,22): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (38,21): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (57,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (62,16): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (63,17): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (64,18): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (65,16): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (66,16): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (67,20): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (68,17): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (133,35): Warning: The value 'parsed' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (139,15): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (141,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (177,24): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (178,25): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (179,26): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (180,24): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (181,24): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (182,28): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (238,18): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (243,18): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalJson.fs, Fable time: 14 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/events/Envelope.fs, Fable time: 19 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs, Fable time: 174 ms
+[build] events: 1288 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/eventstore/Wanxiangli.EventStore.fsproj, FCS time: 678 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/eventstore/SqliteJournal.fs, Fable time: 71 ms
+[build] eventstore: 974 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Wanxiangli.Fs.fsproj, FCS time: 1172 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobMatch.fs (131,85): Warning: This expression implicitly converts type 'ResizeArray<int>' to type 'seq<int>'. See https://aka.ms/fsharp-implicit-convs.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (17,19): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (18,19): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (40,37): Warning: The value 'text' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (40,52): Warning: The value 're' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (40,62): Warning: The value 'occurrence' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (53,30): Warning: The value 'text' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (53,45): Warning: The value 're' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (56,28): Warning: The value 'm' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (59,28): Warning: The value 'm' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (62,26): Warning: The value 'm' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (69,19): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (79,22): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (80,31): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (94,54): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (116,14): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (117,31): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (117,50): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (117,77): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (118,29): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (118,48): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Utf8Fs.fs (11,19): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobFs.fs (40,23): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobFs.fs (101,32): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobFs.fs (148,19): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/MutationFs.fs (107,34): Warning: The value 'root' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (40,18): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (45,14): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (46,34): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (47,34): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (51,51): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (59,22): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (66,42): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (66,64): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Native.fs, Fable time: 27 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobMatch.fs, Fable time: 79 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs, Fable time: 39 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs, Fable time: 32 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Utf8Fs.fs, Fable time: 5 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobFs.fs, Fable time: 94 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/AnchorFs.fs, Fable time: 14 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/MutationFs.fs, Fable time: 24 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs, Fable time: 56 ms
+[build] fs: 1775 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/grounding.fsproj, FCS time: 834 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs (26,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs (27,12): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs (30,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs (33,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs (34,12): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs (37,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (9,24): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (12,26): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (12,40): Warning: The value 'encoding' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (15,25): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (18,22): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (21,23): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (24,26): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (27,22): Warning: The value 'a' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (27,33): Warning: The value 'b' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (30,26): Warning: The value 'fromPath' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (30,44): Warning: The value 'toPath' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (33,27): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (36,22): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (39,25): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (42,28): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (45,25): Warning: The value 'stat' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (48,20): Warning: The value 'stat' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (264,12): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (264,55): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs, Fable time: 29 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs, Fable time: 88 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Grounding.fs, Fable time: 4 ms
+[build] grounding: 1170 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/Wanxiangli.Identity.fsproj, FCS time: 924 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/identity/ExecutionBinding.fs (40,16): Warning: The value 'rawRole' is unused
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/Wire.fs, Fable time: 28 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/Roles.fs, Fable time: 17 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/PersonaCatalog.fs, Fable time: 5 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/ParticipantIdentity.fs, Fable time: 57 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/PromptOrigin.fs, Fable time: 29 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/ExecutionBinding.fs, Fable time: 20 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/Identity.fs, Fable time: 27 ms
+[build] identity: 1325 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/lifecycle/Wanxiangli.Lifecycle.fsproj, FCS time: 1030 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/lifecycle/Wire.fs, Fable time: 90 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/lifecycle/State.fs, Fable time: 193 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/lifecycle/Work.fs, Fable time: 92 ms
+[build] lifecycle: 1617 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/process/Wanxiangli.Process.fsproj, FCS time: 974 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/native-process/BunProcess.fs, Fable time: 21 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/process/Native.fs, Fable time: 68 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/process/OutputTail.fs, Fable time: 51 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/process/ProcessSession.fs, Fable time: 85 ms
+[build] process: 1439 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Wanxiangli.Resources.fsproj, FCS time: 838 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Template.fs (21,53): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Template.fs (32,44): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (17,29): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (17,43): Warning: The value 'encoding' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (20,27): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (23,25): Warning: The value 'a' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (23,36): Warning: The value 'b' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (26,24): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (29,30): Warning: The value 'url' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (91,41): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Language.fs, Fable time: 69 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Template.fs, Fable time: 16 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs, Fable time: 75 ms
+[build] resources: 1262 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/session/Wanxiangli.Session.fsproj, FCS time: 984 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/session/Wire.fs, Fable time: 70 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/session/Message.fs, Fable time: 33 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/session/Ownership.fs, Fable time: 194 ms
+[build] session: 1598 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/supervision/Wanxiangli.Supervision.fsproj, FCS time: 895 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/native-process/BunProcess.fs, Fable time: 21 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/supervision/Native.fs, Fable time: 61 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/supervision/Worker.fs, Fable time: 27 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/supervision/SupervisedProcess.fs, Fable time: 67 ms
+[build] supervision: 1296 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/Wanxiangli.Time.fsproj, FCS time: 724 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/time/Time.fs (12,25): Warning: The value 'value' is unused
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/Temporal.fs, Fable time: 3 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/Deadline.fs, Fable time: 34 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/Time.fs, Fable time: 13 ms
+[build] time: 980 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/time-node/Wanxiangli.Time.Node.fsproj, FCS time: 717 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/time-node/NodeTiming.fs (22,12): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/time-node/NodeTiming.fs (25,12): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/time-node/NodeTiming.fs (80,28): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/Temporal.fs, Fable time: 3 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time-node/NodeTiming.fs, Fable time: 36 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time-node/NodeTime.fs, Fable time: 4 ms
+[build] time-node: 963 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/time-testing/Wanxiangli.Time.Testing.fsproj, FCS time: 791 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/Temporal.fs, Fable time: 3 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time-testing/VirtualTiming.fs, Fable time: 58 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time-testing/TimeTesting.fs, Fable time: 9 ms
+[build] time-testing: 1081 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/trace/Wanxiangli.Trace.fsproj, FCS time: 1004 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/trace/Wire.fs, Fable time: 94 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/trace/Observation.fs, Fable time: 55 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/trace/Trace.fs, Fable time: 193 ms
+[build] trace: 1561 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wanxiangli.Wait.fsproj, FCS time: 1546 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Registry.fs (50,26): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Await.fs (60,27): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Await.fs (66,27): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Await.fs (113,39): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Await.fs (119,39): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (11,19): Warning: The value 'fn' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (11,29): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (14,19): Warning: The value 'fn' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (17,23): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (27,23): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (404,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (405,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (406,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (407,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (408,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (409,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (410,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (411,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (411,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (412,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (413,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (413,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (414,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (415,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (416,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (417,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (418,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (418,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (419,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (420,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (422,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (423,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (423,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (423,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (424,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (424,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (424,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (424,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (424,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/CausalWait.fs, Fable time: 286 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Registry.fs, Fable time: 37 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/CompletionMailbox.fs, Fable time: 49 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Await.fs, Fable time: 49 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs, Fable time: 107 ms
+[build] wait: 2315 ms
+✔ SPEC[build-001] time compiles with no sibling implementation and runs independently (4124.218041ms)
+✔ SPEC[build-001] time-node compiles with no sibling implementation and runs independently (1611.969958ms)
+✔ SPEC[build-001] time-testing compiles with no sibling implementation and runs independently (1165.192834ms)
+✔ SPEC[build-001] lifecycle compiles and runs its own tests without any sibling owner source (1826.00675ms)
+✔ SPEC[build-001] eventstore compiles and runs its own tests without any sibling owner source (1018.765209ms)
+✔ SPEC[build-001] process compiles and runs its own tests without any sibling owner source (1380.09275ms)
+✔ SPEC[build-001] trace compiles and runs its own tests without any sibling owner source (1595.245042ms)
+✔ SPEC[build-001] session compiles and runs its own tests without any sibling owner source (1473.085084ms)
+✔ SPEC[build-001] a selected build leaves another module output untouched (1656.72625ms)
+✔ SPEC[build-001] the second cut builds without replacing any first-cut artifact (1366.259041ms)
+✔ SPEC[build-001] a real compiler error fails without replacing a previous artifact (791.22825ms)
+✔ SPEC[build-001] the third cut leaves both earlier cuts untouched and has no sibling imports (1714.58875ms)
+✔ SPEC[build-001] cross-project references are rejected by the same build entrypoint (44.952667ms)
+✔ SPEC[build-001] ownership builds without the three earlier cuts and cannot import their services (1588.689791ms)
+✔ SPEC[build-001] composition compiles without sibling sources and runs against their artifacts (1063.652792ms)
+✔ SPEC[build-001] supervision compiles with only its own owner and the one shared native adapter (1311.338708ms)
+✔ SPEC[build-001] a shared native path does not permit another cross-directory source (42.763917ms)
+✔ SPEC[build-003] the same domain contract holds for local work (13.817333ms)
+✔ SPEC[build-003] the same domain contract holds for durable work (15.579875ms)
+✔ SPEC[ownership-006] reserve wins the durable race; the other candidate cannot bypass admission (48.876709ms)
+✔ SPEC[ownership-006] drain wins the durable race; the other candidate cannot bypass admission (12.745458ms)
+✔ SPEC[ownership-006] losing a reservation acknowledgement before commit never permits launch (12.340042ms)
+✔ SPEC[ownership-006] losing a reservation acknowledgement after commit never permits launch (5.499083ms)
+✔ SPEC[ownership-006] identical concurrent reservations produce only one fresh durable commit (9.07025ms)
+▶ SPEC[build-006] installed ownership gates real retirement, survives process death and works alone
+  ✔ actual process blocks Work retirement on node (234.585416ms)
+  ✔ unsettled ownership survives coordinator SIGKILL on node (288.166833ms)
+  ✔ actual process blocks Work retirement on bun (198.343541ms)
+  ✔ unsettled ownership survives coordinator SIGKILL on bun (238.317834ms)
+  ✔ ownership alone on node (87.348125ms)
+  ✔ ownership alone on bun (67.712084ms)
+✔ SPEC[build-006] installed ownership gates real retirement, survives process death and works alone (3925.602791ms)
+▶ SPEC[build-002] an installed tarball survives a real effect and process death without dispatching twice
+  ✔ installed journal releases native statements on node (517.133417ms)
+  ✔ installed consumer on node (241.121625ms)
+  ✔ installed journal releases native statements on bun (448.194666ms)
+  ✔ installed consumer on bun (232.751459ms)
+✔ SPEC[build-002] an installed tarball survives a real effect and process death without dispatching twice (4418.907375ms)
+﹣ SPEC[build-004] the installed second cut runs after removing every first-cut artifact (6.085458ms) # SKIP
+✔ SPEC[build-007] source dependencies exclude tarballs while fixed historical evidence keeps its bytes (172.930125ms)
+▶ SPEC[build-007] installed supervision retains output and a live group identity without sibling libraries or source
+  ✔ actual supervision consumer on node (570.648208ms)
+  ✔ actual supervision consumer on bun (1225.92875ms)
+  ✔ base process survives supervision removal on node (157.7625ms)
+  ✔ base process survives supervision removal on bun (95.758917ms)
+✔ SPEC[build-007] installed supervision retains output and a live group identity without sibling libraries or source (4838.908833ms)
+▶ SPEC[build-008] installed time and wait declarations match both runtimes and production survives virtual removal
+  ✔ actual installed time and wait consumer on node (93.857042ms)
+  ✔ actual installed time and wait consumer on bun (72.446708ms)
+✔ SPEC[build-008] installed time and wait declarations match both runtimes and production survives virtual removal (3167.219042ms)
+▶ SPEC[build-005] installed trace preserves bytes after SIGKILL and also works with all other libraries removed
+  ✔ real trace and SQLite restart on node (196.570209ms)
+  ✔ real trace and SQLite restart on bun (227.51975ms)
+  ✔ trace alone on node (93.307708ms)
+  ✔ trace alone on bun (83.28625ms)
+✔ SPEC[build-005] installed trace preserves bytes after SIGKILL and also works with all other libraries removed (3296.782417ms)
+✔ SPEC[assembly-001] a real composition commits complete domain records and restores them (109.4885ms)
+✔ SPEC[assembly-001] local-first recording and durable-first publication use unchanged Work and Journal (37.383083ms)
+✔ SPEC[assembly-001] only a fresh durable reservation can be used by an external executor (46.295209ms)
+✔ SPEC[assembly-001] malformed domain messages cause no physical append (6.386292ms)
+✔ SPEC[assembly-002] NotWritten discards the candidate without a half-retired durable work (19.861291ms)
+✔ SPEC[assembly-002] lost acknowledgement before commit freezes only the composition (113.151583ms)
+✔ SPEC[assembly-002] lost acknowledgement after commit freezes only the composition (29.72625ms)
+✔ SPEC[assembly-001] interleaved different requests have only one commit winner (18.703ms)
+✔ SPEC[assembly-001] interleaved same requests have only one commit winner (27.040708ms)
+✔ SPEC[assembly-002] malformed acknowledgement null never publishes the candidate (4.154458ms)
+✔ SPEC[assembly-002] malformed acknowledgement {} never publishes the candidate (7.224042ms)
+✔ SPEC[assembly-002] malformed acknowledgement {"status":"Committed","revision":-1,"reason":null} never publishes the candidate (5.845209ms)
+✔ SPEC[assembly-002] malformed acknowledgement {"status":12,"revision":1,"reason":null} never publishes the candidate (4.495333ms)
+✔ SPEC[assembly-002] malformed acknowledgement {"status":"Committed","revision":999,"reason":null} never publishes the candidate (3.832833ms)
+✔ SPEC[assembly-002] a false replay acknowledgement cannot substitute another record (46.194916ms)
+✔ SPEC[assembly-002] valid storage bytes with invalid domain history are rejected without repair (27.174ms)
+✔ SPEC[assembly-003] a synchronous append callback cannot reenter the same composition (5.48875ms)
+✔ SPEC[assembly-003] request mutation during a race does not change the correlated replay (15.198292ms)
+✔ WHAT[durable-events-002] envelope carries the seven fixed wire fields and no version field (1.942125ms)
+✔ WHAT[durable-events-002] decode rejects an injected version field (1.13825ms)
+✔ WHAT[durable-events-002] decode rejects a renamed wire field (0.147083ms)
+✔ WHAT[durable-events-002] vocabulary legality comes only from the explicit predicate (2.536416ms)
+✔ WHAT[durable-events-003] encode is deterministic and independent of input key order (1.242708ms)
+✔ WHAT[durable-events-003] canonical JSON sorts keys by Unicode code point, not locale (0.735541ms)
+✔ WHAT[durable-events-003] canonical JSON encodes sparse array holes as null (2.354208ms)
+✔ WHAT[durable-events-003] same id with different bytes fails checkIdentity and mergeByIdentity (1.268125ms)
+✔ WHAT[durable-events-003] identical duplicates collapse; distinct ids are all retained (3.27825ms)
+✔ WHAT[durable-events-003] encode/decode round trip preserves event semantics (2.695417ms)
+✔ WHAT[durable-events-004] encode ends with exactly one LF (1.048417ms)
+✔ WHAT[durable-events-004] decode accepts the codec output as-is (0.94825ms)
+✔ WHAT[durable-events-004] decode rejects a line missing the trailing LF (0.111084ms)
+✔ WHAT[durable-events-004] decode rejects a double trailing LF (0.089417ms)
+✔ WHAT[durable-events-004] decode rejects a CRLF terminator (0.518875ms)
+✔ WHAT[durable-events-004] tryDecodeUtf8Text rejects a UTF-8 BOM (0.481ms)
+✔ WHAT[durable-events-004] tryDecodeUtf8Text rejects invalid UTF-8 sequences (0.211709ms)
+✔ WHAT[durable-events-004] tryDecodeUtf8 decodes valid bytes and round trips (1.086417ms)
+✔ WHAT[durable-events-007] validate fails closed on a missing parent (2.290833ms)
+✔ WHAT[durable-events-007] validate fails closed on a parent cycle (6.970833ms)
+✔ WHAT[durable-events-007] validate reports the first unknown vocabulary item, not a skip (1.7135ms)
+✔ WHAT[durable-events-007] a self-parent is a cycle, not a head (13.856333ms)
+✔ WHAT[durable-events-008] a legal fork validates with two heads, not a conflict (29.007292ms)
+✔ WHAT[durable-events-008] a ruling event over all heads restores a single head (2.333959ms)
+✔ WHAT[durable-events-008] a partial ruling leaves the uncovered head open (0.830708ms)
+✔ WHAT[durable-events-008] validate output is deduplicated and sorted by id (0.732416ms)
+✔ WHAT[durable-events-012] inline payload round trip preserves the exact bytes (3.050708ms)
+✔ WHAT[durable-events-012] a declared payload ref without inline bytes fails decode (0.392959ms)
+✔ WHAT[durable-events-012] a tampered inline payload fails decode on digest mismatch (0.697916ms)
+✔ WHAT[durable-events-012] validate catches payload closure violations without I/O (0.781083ms)
+✔ WHAT[durable-events-012] an empty payload ref set needs no payloads object (0.271542ms)
+✔ WHAT[durable-events-027] each retired event type is rejected with UnknownEventType (1.382ms)
+✔ WHAT[durable-events-027] removing the retired event lets the remaining history load (4.668417ms)
+✔ WHAT[durable-events-027] a current type unknown to a narrower predicate is still rejected (0.120333ms)
+✔ SPEC[eventstore-001] durable append preserves exact UTF-8 text across close and reopen (33.839375ms)
+✔ SPEC[eventstore-001] revision comparison is per stream and request collision never overwrites (15.636709ms)
+✔ SPEC[eventstore-001] two real processes cannot both win revision zero (231.576083ms)
+✔ SPEC[eventstore-001] initialization lock contention is explicit and closes the rejected connection (3.100042ms)
+✔ SPEC[eventstore-001] SIGKILL after acknowledged commit preserves the entire transaction (71.522666ms)
+✔ SPEC[eventstore-001] SIGKILL inside production append before COMMIT exposes no half transaction (101.549333ms)
+✔ SPEC[eventstore-003] update and deletion are refused by the actual schema (25.679375ms)
+✔ SPEC[eventstore-003] checksum corruption rejects the read rather than skipping a row (3.752875ms)
+✔ SPEC[eventstore-003] a missing middle revision is not silently renumbered (7.860458ms)
+✔ SPEC[eventstore-003] invalid arguments and excessive UTF-8 bodies fail before a transaction (5.334875ms)
+✔ SPEC[eventstore-003] a native connection is explicit and close is idempotent (6.450625ms)
+✔ SPEC[eventstore-002] a failure after INSERT but before COMMIT is rolled back as NotWritten (7.746833ms)
+✔ SPEC[eventstore-002] exception at entry to COMMIT remains Unknown (13.470375ms)
+✔ SPEC[eventstore-002] exception after COMMIT remains Unknown (9.337292ms)
+✔ SPEC[eventstore-002] node releases native statements after close without garbage collection (106.445333ms)
+✔ SPEC[eventstore-002] node releases native statements after initialize without garbage collection (80.658542ms)
+✔ SPEC[eventstore-002] node releases native statements after read without garbage collection (84.95925ms)
+✔ SPEC[eventstore-002] node releases native statements after commit-before without garbage collection (106.883292ms)
+✔ SPEC[eventstore-002] node releases native statements after commit-after without garbage collection (131.58925ms)
+✔ SPEC[eventstore-002] node releases native statements after close-retry without garbage collection (90.617167ms)
+✔ SPEC[eventstore-002] node releases native statements after commit-close-retry without garbage collection (80.924917ms)
+✔ SPEC[eventstore-002] bun releases native statements after close without garbage collection (328.790667ms)
+✔ SPEC[eventstore-002] bun releases native statements after initialize without garbage collection (144.546375ms)
+✔ SPEC[eventstore-002] bun releases native statements after read without garbage collection (93.496708ms)
+✔ SPEC[eventstore-002] bun releases native statements after commit-before without garbage collection (116.914708ms)
+✔ SPEC[eventstore-002] bun releases native statements after commit-after without garbage collection (86.63875ms)
+✔ SPEC[eventstore-002] bun releases native statements after close-retry without garbage collection (76.13175ms)
+✔ SPEC[eventstore-002] bun releases native statements after commit-close-retry without garbage collection (73.071167ms)
+✔ SPEC[eventstore-005] the exported object does not expose its native connection or latches (3.860125ms)
+✔ SPEC[eventstore-005] native callbacks cannot read uncommitted rows or close an active transaction (1.311875ms)
+✔ SPEC[fs-001] strict UTF-8 read returns exact bytes including CRLF and missing final newline (5.812167ms)
+✔ SPEC[fs-001] NUL bytes are rejected as INVALID_UTF8, never silently read as text (5.14675ms)
+✔ SPEC[fs-001] invalid UTF-8 sequences are rejected as INVALID_UTF8 (4.569584ms)
+✔ SPEC[fs-001] missing file reports FILE_NOT_FOUND (0.673667ms)
+✔ SPEC[fs-001] dot-dot escape is refused by resolveBounded as PATH_DENIED (0.521ms)
+✔ SPEC[fs-001] symlink pointing outside the root is refused as PATH_DENIED (1.955875ms)
+✔ SPEC[fs-001] in-root symlink and plain paths resolve inside the boundary (1.201625ms)
+✔ SPEC[fs-001] a symlinked capability root keeps its canonical boundary and relative listing (6.388709ms)
+✔ SPEC[fs-001] existsPath observes presence and absence without throwing (0.789166ms)
+✔ SPEC[fs-002] glob respects nested .gitignore rules and negation (10.619875ms)
+✔ SPEC[fs-002] git info exclude participates at the root only (4.340917ms)
+✔ SPEC[fs-002] symlinks are not followed and .git is never entered (2.205291ms)
+✔ SPEC[fs-002] slash-less patterns match at any depth, double-star crosses directories (9.429709ms)
+✔ SPEC[fs-002] brace alternation expands top-level commas (3.784333ms)
+✔ SPEC[fs-002] directory-only ignore rules do not hide plain files of the same shape (2.639792ms)
+✔ SPEC[fs-002] empty pattern is refused with the stable invalid-pattern code (1.457875ms)
+✔ SPEC[fs-002] visibleEntries lists one directory sorted with isDir, respecting .gitignore, negation, nested rules, and .git/info/exclude (39.584375ms)
+✔ SPEC[fs-003] ordered anchors resolve duplicate text by occurrence, not by re-hitting the first (1.694791ms)
+✔ SPEC[fs-003] requireUnique refuses a needle that matches twice (1.205083ms)
+✔ SPEC[fs-004] requireUnique succeeds when the anchor matches exactly once (1.129584ms)
+✔ SPEC[fs-003] empty anchor content and invalid regex use their stable codes (0.788ms)
+✔ SPEC[fs-003] missing occurrence reports ANCHOR_NOT_FOUND with the occurrence in the reason (0.624959ms)
+✔ SPEC[fs-003] non-positive occurrence is an invalid declaration (0.88075ms)
+✔ SPEC[fs-003] zero-width regex match yields start equal to end (0.378416ms)
+✔ SPEC[fs-003] grep reports 1-based line and column and skips non-UTF-8 files (10.32675ms)
+✔ SPEC[fs-003] grep accepts a regex needle object (5.974ms)
+✔ SPEC[fs-003] grep with an empty file pattern is refused before scanning (1.052875ms)
+✔ SPEC[fs-004] the same path mutated twice is refused before any file effect (3.289333ms)
+✔ SPEC[fs-004] preflight detects an externally changed snapshot and refuses with zero writes (2.67825ms)
+✔ SPEC[fs-004] a rewrite whose original text no longer matches disk is refused, third-party bytes survive (5.216834ms)
+✔ SPEC[fs-004] create refuses when the target already exists (2.101583ms)
+✔ SPEC[fs-004] a failing second write rolls the first write back to its original bytes (2.773209ms)
+✔ SPEC[fs-004] rollback restores only content the transaction itself wrote (4.216959ms)
+✔ SPEC[fs-004] applyRollback removes created files and restores rewritten ones (1.026791ms)
+✔ SPEC[fs-004] commit and rollback plans are deterministic and path-ordered (2.379833ms)
+✔ SPEC[fs-005] matchesPathPattern keeps the git wildmatch semantics shared with requirement grounding (2.532958ms)
+✔ SPEC[fs-005] negated character class and escaped literals behave as in gitignore (3.548709ms)
+✔ SPEC[fs-005] empty pattern is refused with the stable invalid-pattern code (1.723625ms)
+✔ SPEC[fs-005] compilePattern result is consumable through testCompiled (1.591916ms)
+✔ SPEC[fs-005] every result uses the plain JS { ok, value | code, reason } shape (4.239ms)
+✔ SPEC[grounding-001] discover finds requirements packages with WHAT.md, sorted by name (6.781625ms)
+✔ SPEC[grounding-001] discover returns empty when requirements/ is missing (0.587167ms)
+✔ SPEC[grounding-001] discover loads APPLIES-TO rules and skips comments and blank lines (4.435083ms)
+✔ SPEC[grounding-001] APPLIES-TO declaring package self coverage is a configuration error (2.542958ms)
+✔ SPEC[grounding-001] every possible self descendant is rejected before it exists (49.130208ms)
+✔ SPEC[grounding-002] package self directory is always covered (2.604709ms)
+✔ SPEC[grounding-002] APPLIES-TO external rules include and later exclude, in declaration order (15.355458ms)
+✔ SPEC[grounding-002] overlapping paths return all matching packages sorted by name (27.591917ms)
+✔ SPEC[grounding-002] a path outside the workspace resolves to nothing (4.196209ms)
+✔ SPEC[grounding-003] materialize injects only direct root-level *.md files, sorted by name (6.404875ms)
+✔ SPEC[grounding-003] snapshot digest is content-anchored over path and bytes (5.154916ms)
+✔ SPEC[grounding-003] materialize of an unknown package fails explicitly (1.025458ms)
+✔ SPEC[grounding-003] sha256Hex matches the known lowercase hex vector (0.071417ms)
+✔ SPEC[grounding-003] snapshotsForPaths deduplicates packages and sorts by name (10.543625ms)
+✔ WHAT[participant-identity-001] active parsing accepts exactly the six active roles (0.756667ms)
+✔ WHAT[participant-identity-001] active parsing rejects historical, internal and malformed inputs (0.099917ms)
+✔ WHAT[participant-identity-001] historical decoding accepts all eleven roles for journal replay only (0.081833ms)
+✔ WHAT[participant-identity-001] persona catalog maps every role to its V1 persona (0.091625ms)
+✔ WHAT[participant-identity-002] root resolution yields immutable canonical evidence (1.128625ms)
+✔ WHAT[participant-identity-002] root resolution rejects legacy, malformed and unknown names without fallback (0.159916ms)
+✔ WHAT[participant-identity-002] internal slot names resolve with explicit role projection (0.07475ms)
+✔ WHAT[participant-identity-002] rehydrated evidence round-trips through the plain view (0.218458ms)
+✔ WHAT[participant-identity-002] rehydration rejects every field mismatch (0.148208ms)
+✔ WHAT[participant-identity-002] bookkeeper evidence requires a missing role field (0.548292ms)
+✔ WHAT[participant-identity-003] human-root requires an explicit participant proof (3.120375ms)
+✔ WHAT[participant-identity-003] agent-owner-root requires owner and child proof (5.113084ms)
+✔ WHAT[participant-identity-003] continuation accepts only the closed vocabulary (1.109959ms)
+✔ WHAT[participant-identity-003] host-internal is the only proof-free origin (0.128125ms)
+✔ WHAT[participant-identity-003] malformed raw input is rejected without any fallback (0.1255ms)
+✔ WHAT[participant-identity-003] no rejection path ever yields a human origin (D-01) (7.390583ms)
+✔ WHAT[participant-identity-004] binding requires every field and an active role (2.922167ms)
+✔ WHAT[participant-identity-004] binding rejects evidence whose role disagrees with the binding role (0.302416ms)
+✔ WHAT[participant-identity-004] model rebind changes only the physical target, never the identity (0.185333ms)
+✔ WHAT[participant-identity-004] tampered binding views are rejected at rebind (fail-closed) (0.123042ms)
+✔ WHAT[participant-identity-005] inherited identity carries the owner persona and catalog version (1.477167ms)
+✔ WHAT[participant-identity-005] inherited identity without an owner witness is rejected (4.632125ms)
+✔ WHAT[participant-identity-005] owner persona mismatch between witness and input is rejected (0.281292ms)
+✔ WHAT[participant-identity-005] agent-owner-root origin proof and inherited identity compose (0.314167ms)
+✔ SPEC[lifecycle-001] opening is one transaction with one first incumbent (5.931417ms)
+✔ SPEC[lifecycle-001] relay atomically retires the old incumbent and opens its successor (4.48375ms)
+✔ SPEC[lifecycle-001] an independent object restores data without any service (5.215541ms)
+✔ SPEC[lifecycle-001] separate work streams never share ownership or state (1.181542ms)
+✔ SPEC[lifecycle-001] an unopened work can be inspected but cannot be reviewed (0.429417ms)
+✔ SPEC[lifecycle-002] Plan advances through S1 S2 S3 without two-call confirmation (36.308042ms)
+✔ SPEC[lifecycle-002] a stayed Plan review does not advance or authorize delivery (3.020833ms)
+✔ SPEC[lifecycle-002] an unreviewed Plan can relay but cannot write source (1.199208ms)
+✔ SPEC[lifecycle-002] a second consecutive unreviewed Plan relay is refused without writes (4.125417ms)
+✔ SPEC[lifecycle-002] S4 requires review and two different delivery calls (2.461291ms)
+✔ SPEC[lifecycle-002] a stayed S4 review confirms and relays with auto-dispatch (1.334833ms)
+✔ SPEC[lifecycle-002] a reused tool call under another provider is not a second confirmation (1.451084ms)
+✔ SPEC[lifecycle-002] a reused one-shot retirement fence under another provider is a retirement replay conflict (1.01925ms)
+✔ SPEC[lifecycle-002] a reused delivery-operation fence under another provider is a retirement replay conflict (3.6095ms)
+✔ SPEC[lifecycle-003] request identity binds canonical input and does not append on replay (9.317333ms)
+✔ SPEC[lifecycle-003] self-review and a second distinct review are rejected without writes (0.877166ms)
+✔ SPEC[lifecycle-003] findings are returned but are not copied into the review event (1.053834ms)
+✔ SPEC[lifecycle-003] stale retirement and confirmation replays do not act on a successor (3.741583ms)
+✔ SPEC[lifecycle-003] snapshots and histories are detached views (0.647834ms)
+✔ SPEC[lifecycle-003] invalid cursor -1 causes zero appends (0.279459ms)
+✔ SPEC[lifecycle-003] invalid cursor 0.5 causes zero appends (0.213333ms)
+✔ SPEC[lifecycle-003] invalid cursor Infinity causes zero appends (0.14125ms)
+✔ SPEC[lifecycle-003] invalid cursor NaN causes zero appends (0.142958ms)
+✔ SPEC[lifecycle-003] invalid cursor 0 causes zero appends (0.284917ms)
+✔ SPEC[lifecycle-003] invalid cursor null causes zero appends (0.378875ms)
+✔ SPEC[lifecycle-003] invalid cursor 9007199254740992 causes zero appends (0.235084ms)
+✔ SPEC[lifecycle-003] unknown fields, sequence and commands do not become new facts (1.06125ms)
+✔ SPEC[lifecycle-003] identifiers cannot be changed by a native UTF-8 binding (0.295125ms)
+✔ SPEC[lifecycle-004] Work accepts records, not a storage service or callbacks (8.9795ms)
+✔ SPEC[lifecycle-004] restoring half opening rejects the complete history (7.308ms)
+✔ SPEC[lifecycle-004] restoring unknown event rejects the complete history (0.374042ms)
+✔ SPEC[lifecycle-004] restoring foreign field rejects the complete history (0.277875ms)
+✔ SPEC[lifecycle-004] restoring wrong stage rejects the complete history (0.272042ms)
+✔ SPEC[lifecycle-004] restoring wrong hash rejects the complete history (1.09ms)
+✔ SPEC[lifecycle-004] duplicate, noncanonical and foreign histories are not accepted (1.217208ms)
+✔ SPEC[lifecycle-004] a rejected successor cannot leave a half-retired object (9.984084ms)
+✔ SPEC[lifecycle-004] input, response, history and recovery views never become private aliases (3.678042ms)
+✔ SPEC[lifecycle-004] replay results cannot change the stored pending operation (5.39375ms)
+✔ SPEC[lifecycle-004] a synchronous input getter cannot reenter the object (0.56375ms)
+✔ SPEC[lifecycle-005] a new reservation is a domain fact, not a durable dispatch permit (23.197166ms)
+✔ SPEC[lifecycle-005] an unknown execution remains pending and produces no new fact (6.339042ms)
+✔ SPEC[lifecycle-005] the physical session identity is committed before prompt acceptance and survives recovery (6.021875ms)
+✔ SPEC[lifecycle-005] an accepted receipt must identify the reserved operation and draft (1.517792ms)
+✔ SPEC[lifecycle-005] pending execution does not bypass live-resource retirement blockers (1.845875ms)
+✔ SPEC[lifecycle-005] a known not-started result unlocks only an explicit new attempt (3.904334ms)
+✔ SPEC[lifecycle-005] a late accepted receipt is idempotent and cannot settle a later delivery (3.925ms)
+✔ SPEC[lifecycle-006] DevOps binding is stable across relay and cannot be replaced (9.346375ms)
+✔ SPEC[lifecycle-006] S4 binds on Resume or Horizon, not Ask (0.665625ms)
+✔ SPEC[lifecycle-006] authority advance requires review, exact previous value and a never-used next value (2.450958ms)
+✔ SPEC[lifecycle-006] reopening creates a new reviewed-by-nobody incumbency, not a resurrected owner (6.418708ms)
+✔ SPEC[lifecycle-006] a delivered S4 tenure hands off to its own next tenure (2.702167ms)
+✔ SPEC[lifecycle-006] an S4 hand-off is refused while a tenure is open, with zero writes (1.889291ms)
+✔ SPEC[lifecycle-006] retirement blockers are recorded observations, not dirty-workspace policy (0.840042ms)
+✔ SPEC[lifecycle-006] all state-changing work commands stop behind a pending delivery (1.173458ms)
+✔ SPEC[process-001] the native spawn observer reaches one actual validated launch (92.55075ms)
+✔ SPEC[process-001] direct argv, explicit cwd and environment reach a real process unchanged (146.104541ms)
+✔ SPEC[process-001] nonzero exit remains a real exit, not a spawn failure (60.641209ms)
+✔ SPEC[process-001] environment property names are literal data, not prototype mutation (151.162833ms)
+✔ SPEC[process-001] the actual child receives the exact environment and never inherits a host sentinel (106.427667ms)
+✔ SPEC[process-001] absent executable produces one failed start and no invented zero exit (3.051959ms)
+﹣ SPEC[process-001] a partially prepared Bun output pipe fails before the target starts (0.080084ms) # SKIP
+﹣ SPEC[process-001] a Bun parent writer close failure preserves the actual started target (0.025583ms) # SKIP
+﹣ SPEC[process-001] Bun startup cleanup failures are visible without an unhandled stream error (0.028ms) # SKIP
+✔ SPEC[process-001] relative executable is refused before external effect (1.461875ms)
+✔ SPEC[process-001] relative cwd is refused before external effect (1.087917ms)
+✔ SPEC[process-001] NUL argument is refused before external effect (0.922125ms)
+✔ SPEC[process-001] bad Unicode argument is refused before external effect (1.201875ms)
+✔ SPEC[process-001] negative capacity is refused before external effect (2.332792ms)
+✔ SPEC[process-001] fractional capacity is refused before external effect (0.3715ms)
+✔ SPEC[process-001] NaN capacity is refused before external effect (0.28175ms)
+✔ SPEC[process-001] unbounded capacity is refused before external effect (0.248625ms)
+✔ SPEC[process-001] excessive capacity is refused before external effect (0.85025ms)
+✔ SPEC[process-001] zero write capacity is refused before external effect (0.938416ms)
+✔ SPEC[process-001] fractional write capacity is refused before external effect (0.938ms)
+✔ SPEC[process-001] undefined env value is refused before external effect (0.451625ms)
+✔ SPEC[process-001] bad env key is refused before external effect (0.300167ms)
+✔ SPEC[process-001] hidden shell option is refused before external effect (0.263042ms)
+✔ SPEC[process-001] argument hole is refused before external effect (0.245125ms)
+✔ SPEC[process-001] accessors are rejected without evaluating them (0.330208ms)
+﹣ SPEC[process-002] controlled Bun success notification cannot publish input success inside a native callback (1.286541ms) # SKIP
+﹣ SPEC[process-002] controlled Bun exit notification cannot publish input success inside a native callback (0.225083ms) # SKIP
+✔ SPEC[process-002] large buffered input waits for flush and reaches the delayed reader once (384.848542ms)
+✔ SPEC[process-002] real stdin preserves binary bytes and EOF is idempotent (76.390375ms)
+✔ SPEC[process-002] pending writes own a copy and do not alias caller bytes (108.062166ms)
+✔ SPEC[process-002] excess input and overlapping writes cannot form an unbounded queue (92.542541ms)
+✔ SPEC[process-002] a broken input pipe is unknown consumption, not automatic retry (15.832458ms)
+✔ SPEC[process-002] non-byte and shared inputs are rejected without writing (76.773125ms)
+✔ SPEC[process-003] unread multi-megabyte output is drained while both tails stay bounded (95.518042ms)
+✔ SPEC[process-003] a 0-byte tail preserves raw bytes and complete UTF-8 suffix (69.583166ms)
+✔ SPEC[process-003] a 1-byte tail preserves raw bytes and complete UTF-8 suffix (85.783542ms)
+✔ SPEC[process-003] a 2-byte tail preserves raw bytes and complete UTF-8 suffix (61.321541ms)
+✔ SPEC[process-003] a 3-byte tail preserves raw bytes and complete UTF-8 suffix (57.237583ms)
+✔ SPEC[process-003] a 4-byte tail preserves raw bytes and complete UTF-8 suffix (71.379083ms)
+✔ SPEC[process-003] a 5-byte tail preserves raw bytes and complete UTF-8 suffix (91.3105ms)
+✔ SPEC[process-003] a 7-byte tail preserves raw bytes and complete UTF-8 suffix (94.199334ms)
+✔ SPEC[process-003] a 10-byte tail preserves raw bytes and complete UTF-8 suffix (88.594958ms)
+✔ SPEC[process-003] a 15-byte tail preserves raw bytes and complete UTF-8 suffix (92.282375ms)
+✔ SPEC[process-003] a 64-byte tail preserves raw bytes and complete UTF-8 suffix (91.238584ms)
+✔ SPEC[process-003] incremental readers have independent cursors across ring wrap (93.590541ms)
+✔ SPEC[process-003] an incomplete UTF-8 character is withheld until later bytes arrive (79.518291ms)
+✔ SPEC[process-003] invalid UTF-8 and an incomplete final character are not silently replaced (135.012875ms)
+✔ SPEC[process-003] BOM, NUL and instruction-looking output are preserved as data (81.172416ms)
+✔ SPEC[process-004] wait timeout leaves the same process alive and accepts later input (117.26125ms)
+✔ SPEC[process-004] signal acknowledgement does not mean a TERM-ignoring process exited (103.966542ms)
+✔ SPEC[process-004] waiting callers are independent and their timers are cleaned (87.806625ms)
+✔ SPEC[process-004] invalid wait durations and signals do not change the process (78.833625ms)
+✔ SPEC[process-004] signals reach the owned POSIX group, including the real grandchild (162.1775ms)
+✔ SPEC[process-004] direct exit does not complete wait while inherited output is open (157.946917ms)
+✔ SPEC[process-005] the generated object exposes messages, not process handles or buffers (85.270292ms)
+✔ SPEC[process-005] two actual instances do not share signals, input or output (108.269083ms)
+✔ SPEC[process-005] modifying startup options after construction cannot rewrite the child environment (85.692334ms)
+✔ SPEC[process-006] capture preserves both complete byte streams with a slow consumer (122.6275ms)
+✔ SPEC[process-006] paused capture blocks the actual writer and resumes both complete channels (846.249583ms)
+﹣ SPEC[process-006] Bun idle capture reads do not occupy the filesystem I/O pool (0.334667ms) # SKIP
+✔ SPEC[process-006] capture rejects overlapping readers without consuming another chunk (116.844166ms)
+✔ SPEC[process-006] discarding capture releases a pending reader without inventing process exit (69.021958ms)
+✔ SPEC[process-006] failed startup also settles capture with the original failure (3.017625ms)
+✔ SPEC[process-006] a killed capture drains accepted bytes before its closed receipt (71.24175ms)
+✔ SPEC[process-006] killing a forwarding process reaches actual pipe EOF after all captured bytes (170.50075ms)
+✔ SPEC[process-006] native output errors settle a waiting consumer without fabricating exit (83.846167ms)
+✔ SPEC[resources-001] a missing locale side fails closed for every language (4.461167ms)
+✔ SPEC[resources-002] template trimming preserves every character of injected values (6.238834ms)
+✔ SPEC[resources-002] placeholder parity and missing substitutions fail closed (3.495208ms)
+✔ SPEC[resources-003] package-internal location works from any working directory (2.535333ms)
+✔ SPEC[resources-003] a resource absent from the package fails instead of reading elsewhere (1.092958ms)
+✔ SPEC[resources-004] language parsing and the preference ladder resolve without session binding (1.714583ms)
+✔ SPEC[resources-004] the global preference switches on refresh and is not session-bound (0.167875ms)
+✔ SPEC[resources-004] protocol literals survive substitution untouched (6.532458ms)
+✔ SPEC[resources-004] semantic paths reject escapes (0.670875ms)
+✔ SPEC[ownership-001] resource reservation has one owner before any start is observed (6.227375ms)
+✔ SPEC[ownership-001] missing parents, self ownership, reparenting and reusing an owner identity fail atomically (2.247291ms)
+✔ SPEC[ownership-001] multiple roots and siblings are independent (1.31675ms)
+✔ SPEC[ownership-001] same reservation cannot be stolen by another owner or reclassified (1.599625ms)
+✔ SPEC[ownership-001] identical calls are observed or replayed, not new launch permission (1.724833ms)
+✔ SPEC[ownership-001] resource identity remains retired and cannot be resurrected by reservation replay (1.234209ms)
+✔ SPEC[ownership-001] identifier delimiters and prototype-looking names remain ordinary data (0.241792ms)
+✔ SPEC[ownership-002] unknown and cancellation leave reservations unresolved (4.820833ms)
+✔ SPEC[ownership-002] started, cancellation and terminal are different observations (1.620666ms)
+✔ SPEC[ownership-002] a lost start acknowledgement can be reconciled by an exact terminal witness (0.983375ms)
+✔ SPEC[ownership-002] a final not-started observation is idempotent but cannot become a start later (0.6395ms)
+✔ SPEC[ownership-002] one physical container cannot be concurrently claimed by two live leases (1.294875ms)
+✔ SPEC[ownership-002] a late terminal for an old container incarnation cannot release the new lease (4.721042ms)
+✔ SPEC[ownership-002] reconciling an unacknowledged old instance does not delete a newer active binding (0.680375ms)
+✔ SPEC[ownership-002] kinds have separate physical namespaces and terminal conflicts never overwrite evidence (0.425792ms)
+✔ SPEC[ownership-003] drain closes all descendant admission but leaves every unresolved resource owned (10.439209ms)
+✔ SPEC[ownership-003] a late start after drain remains accountable until actual end (0.803709ms)
+✔ SPEC[ownership-003] failed close does not partially close empty siblings or the parent (1.465792ms)
+✔ SPEC[ownership-003] close atomically seals an empty subtree without requiring manual child close steps (1.280417ms)
+✔ SPEC[ownership-003] a child tenure can close while its long-lived parent still owns DevOps (1.377833ms)
+✔ SPEC[ownership-003] child drain does not close siblings or their admission (1.556208ms)
+✔ SPEC[ownership-003] cancellation and repeated drain never decrement another lease (0.8405ms)
+✔ SPEC[ownership-003] cancelling a settled resource and draining a closed scope report the existing terminal state (0.468958ms)
+✔ SPEC[ownership-003] deep ownership uses iterative traversal rather than recursive cleanup (81.577792ms)
+✔ SPEC[ownership-004] recovery rebuilds reservations, bindings, drain and old receipt identity without effects (5.532625ms)
+✔ SPEC[ownership-004] request identity binds canonical message content, not object key order (1.292208ms)
+✔ SPEC[ownership-004] restore rejects missing row (0.555958ms)
+✔ SPEC[ownership-004] restore rejects duplicate row (0.51175ms)
+✔ SPEC[ownership-004] restore rejects reordered rows (0.243625ms)
+✔ SPEC[ownership-004] restore rejects uncommitted body alteration (1.270916ms)
+✔ SPEC[ownership-004] restore rejects unknown field (1.438625ms)
+✔ SPEC[ownership-004] restore rejects noncanonical encoding (0.629125ms)
+✔ SPEC[ownership-004] restore rejects invalid JSON (0.5835ms)
+✔ SPEC[ownership-004] a recomputed checksum cannot admit missing parent (1.020666ms)
+✔ SPEC[ownership-004] a recomputed checksum cannot admit self cycle (0.69125ms)
+✔ SPEC[ownership-004] a recomputed checksum cannot admit foreign lease (1.104833ms)
+✔ SPEC[ownership-004] a recomputed checksum cannot admit forged lease (0.916375ms)
+✔ SPEC[ownership-004] a recomputed checksum cannot admit unknown operation (0.665541ms)
+✔ SPEC[ownership-004] a recomputed checksum cannot admit duplicate request (0.249125ms)
+✔ SPEC[ownership-004] a recomputed checksum cannot admit close with unresolved work (0.287ms)
+✔ SPEC[ownership-004] a recomputed checksum cannot admit fake recorded no-op (0.968667ms)
+✔ SPEC[ownership-004] an independent trusted head exposes tail truncation, not a made-up completeness guarantee (0.36875ms)
+✔ SPEC[ownership-004] replay permutations preserve exact history and active resource conservation (16.739417ms)
+✔ SPEC[ownership-004] the constructor accepts only bounded complete records, never a storage service (0.206667ms)
+✔ SPEC[ownership-005] generated public objects expose messages, not mutable tables or physical handles (7.003292ms)
+✔ SPEC[ownership-005] input, lease, binding, receipt and views never alias internal state (2.796209ms)
+✔ SPEC[ownership-005] replayed result mutation cannot alter the saved receipt (0.276041ms)
+✔ SPEC[ownership-005] same names in separate registries have separate leases and state (14.467792ms)
+✔ SPEC[ownership-005] input accessors are rejected without being invoked (0.373833ms)
+✔ SPEC[ownership-005] synchronous proxy reentry cannot observe half-open scopes or add a competing message (0.541667ms)
+✔ SPEC[ownership-005] invalid identifier "" cannot change ownership (3.126334ms)
+✔ SPEC[ownership-005] invalid identifier null cannot change ownership (0.218958ms)
+✔ SPEC[ownership-005] invalid identifier 1 cannot change ownership (0.371667ms)
+✔ SPEC[ownership-005] invalid identifier "x\u0000suffix" cannot change ownership (0.186709ms)
+✔ SPEC[ownership-005] invalid identifier "\ud800" cannot change ownership (0.146916ms)
+✔ SPEC[ownership-005] invalid identifier "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx cannot change ownership (1.2575ms)
+✔ SPEC[ownership-005] extra protocol fields and unsupported outcomes are rejected without widening the contract (2.151708ms)
+✔ SPEC[supervision-001] input EOF follows every target write under real output backpressure (143.722209ms)
+✔ SPEC[supervision-001] a target that closes input still owns its later output and native exit (194.375917ms)
+✔ SPEC[supervision-001] both input pipes flush large buffered writes to the actual target (686.251833ms)
+✔ SPEC[supervision-001] target options are validated before a worker or target is started (0.553375ms)
+✔ SPEC[supervision-001] startup refers to the actual target and forwards explicit input unchanged (248.184541ms)
+✔ SPEC[supervision-001] target ENOENT is never reported as worker startup or exit zero (87.076875ms)
+✔ SPEC[supervision-001] the final target preserves literal environment keys through both physical launches (139.073541ms)
+✔ SPEC[supervision-001] failed startup cleans its control directory and poll without a capture consumer (61.182959ms)
+✔ SPEC[supervision-001] input uses real pipes and completed snapshots do not alias state (99.762ms)
+✔ SPEC[supervision-002] paused supervision propagates backpressure through the real Worker to the target (778.349625ms)
+✔ SPEC[supervision-002] a final extent cannot authorize natural group cleanup before Capture receives each channel (236.719959ms)
+✔ SPEC[supervision-002] zero-output and one-channel target completion do not wait for an absent channel (285.417875ms)
+✔ SPEC[supervision-002] natural exit preserves multi-MiB tails on both streams before group cleanup (225.186583ms)
+✔ SPEC[supervision-003] TERM and KILL reach the same group after target exit while a descendant holds output (251.919292ms)
+✔ SPEC[supervision-003] natural completion cleans same-group descendants without inherited output (223.415042ms)
+✔ SPEC[supervision-004] legacy output extent is control failure rather than guessed completion (97.636916ms)
+✔ SPEC[supervision-004] false output extent is control failure rather than guessed completion (118.89375ms)
+✔ SPEC[supervision-004] negative output extent is control failure rather than guessed completion (75.01075ms)
+✔ SPEC[supervision-004] fraction output extent is control failure rather than guessed completion (90.096041ms)
+✔ SPEC[supervision-004] unsafe output extent is control failure rather than guessed completion (96.951709ms)
+✔ SPEC[supervision-004] string output extent is control failure rather than guessed completion (86.418666ms)
+✔ SPEC[supervision-004] channel extents are checked separately even when their sum is correct (139.532916ms)
+✔ SPEC[supervision-004] short Capture EOF is incomplete output after exact target exit (183.795458ms)
+✔ SPEC[supervision-004] short Capture EOF is explicit interruption after exact target exit (180.75825ms)
+✔ SPEC[supervision-004] unexpected worker death preserves unknown target exit (164.906083ms)
+✔ SPEC[supervision-004] lost private control channel is failure and never target exit zero (76.410291ms)
+✔ SPEC[supervision-004] a failed worker exit-fact write kills its live group and keeps the target status unknown (160.781416ms)
+✔ SPEC[supervision-005] two supervisors keep separate process groups, output and waits (213.669167ms)
+✔ WHAT[TIME-CAPABILITY-001] timer delay resolves after the requested milliseconds (35.473542ms)
+✔ WHAT[TIME-CAPABILITY-001] cancel leaves the delay permanently pending (65.029208ms)
+✔ WHAT[TIME-CAPABILITY-001] cancel and dispose are idempotent (51.266916ms)
+✔ WHAT[TIME-CAPABILITY-001] cancelling one handle never steals another waiter (60.953042ms)
+✔ WHAT[TIME-CAPABILITY-001] virtual port: cancelled handle never fires after advancing (1.1645ms)
+✔ WHAT[TIME-CAPABILITY-002] remaining and expiry come from the typed deadline, not raw comparisons (2.923833ms)
+✔ WHAT[TIME-CAPABILITY-002] remaining never goes negative and expired deadlines wait zero (1.556ms)
+✔ WHAT[TIME-CAPABILITY-002] an extreme budget is clamped instead of overflowing (0.19575ms)
+✔ WHAT[TIME-CAPABILITY-002] next wait is capped at the JS timer ceiling (0.073459ms)
+✔ WHAT[TIME-CAPABILITY-002] a negative budget is an expired deadline, not an exception (0.074208ms)
+✔ WHAT[TIME-CAPABILITY-002] timezone representation does not change the result (0.06325ms)
+✔ WHAT[TIME-CAPABILITY-003] a virtual timer does not fire before its due time (1.642625ms)
+✔ WHAT[TIME-CAPABILITY-003] due timers fire in registration order within one advance (0.512542ms)
+✔ WHAT[TIME-CAPABILITY-003] the virtual clock advances deterministically and can be set (2.135708ms)
+✔ WHAT[TIME-CAPABILITY-003] virtual timer instances are independent (0.154584ms)
+✔ WHAT[TIME-CAPABILITY-003] a disposed virtual port no longer fires (0.110792ms)
+✔ WHAT[TIME-CAPABILITY-004] the emitted module reads no ambient wall clock (3.712542ms)
+✔ WHAT[TIME-CAPABILITY-004] deadline inputs never request the ambient time, including invalid missing inputs (1.669333ms)
+✔ WHAT[TIME-CAPABILITY-004] the virtual clock ignores real elapsed time (53.78ms)
+✔ WHAT[TIME-CAPABILITY-004] the physical clock port is the only declared ambient reader (0.758583ms)
+✔ WHAT[TIME-CAPABILITY-005] deadline computation is a pure replay of its inputs (2.806875ms)
+✔ WHAT[TIME-CAPABILITY-005] constructing and reading a deadline has no side effects (0.125375ms)
+✔ WHAT[TIME-CAPABILITY-006] an expired timer delay only settles the wait, it mints no business fact (11.597834ms)
+✔ WHAT[TIME-CAPABILITY-006] raceExit reports which side won without inventing an exit (11.710958ms)
+✔ WHAT[TIME-CAPABILITY-006] cancelling an already-settled handle is a harmless no-op (6.578625ms)
+✔ WHAT[TIME-CAPABILITY-007] a virtual clock keeps a stable origin until explicitly moved (2.557916ms)
+✔ WHAT[TIME-CAPABILITY-007] elapsed is derived from the injected clock, not from real time (21.449083ms)
+✔ WHAT[TIME-CAPABILITY-008] the pure deadline surface carries no physical or virtual factory (1.477083ms)
+✔ WHAT[TIME-CAPABILITY-008] physical and virtual clocks have independent owners (1.202208ms)
+✔ WHAT[TIME-CAPABILITY-008] deadline algebra is independent of both adapters (0.462ms)
+✔ WHAT[TIME-CAPABILITY-008] a physical port instance never observes the virtual clock (0.262959ms)
+✔ WHAT[TIME-CAPABILITY-008] the module imports no sibling library (0.633958ms)
+✔ SPEC[trace-001] first observations allocate consecutive local cursors; replay keeps the original position (8.157792ms)
+✔ SPEC[trace-001] opening cannot be added late or overwritten (0.534291ms)
+✔ SPEC[trace-001] opening binding requires complete internal material and remains unique (0.6755ms)
+✔ SPEC[trace-001] interleaved messages share a trace but not part indices or part identities (0.460583ms)
+✔ SPEC[trace-001] stable identity binds metadata, kind and every byte, not only its name (0.312292ms)
+✔ SPEC[trace-001] delimiter-like identities do not collide (0.209542ms)
+✔ SPEC[trace-002] empty is retained as exact bytes (8.130791ms)
+✔ SPEC[trace-002] BOM, NUL and CRLF is retained as exact bytes (0.5035ms)
+✔ SPEC[trace-002] combining characters is retained as exact bytes (0.303917ms)
+✔ SPEC[trace-002] invalid UTF-8 is retained as exact bytes (0.303542ms)
+✔ SPEC[trace-002] truncated UTF-8 is retained as exact bytes (0.312667ms)
+✔ SPEC[trace-002] instruction-looking data is retained as exact bytes (0.397334ms)
+✔ SPEC[trace-002] byte subviews do not capture adjacent backing bytes or later changes (0.255ms)
+✔ SPEC[trace-002] source is explicit and cannot be inferred or promoted by content (1.515417ms)
+✔ SPEC[trace-002] byte and record budgets reject oversize content without partial capture (7.449167ms)
+✔ SPEC[trace-002] opening binding joins large confirmed chunks without losing bytes or counting them twice (31.498209ms)
+✔ SPEC[trace-002] strings, ordinary arrays, shared bytes and resizable buffers are not byte observations (0.512917ms)
+✔ SPEC[trace-002] shadowed byteLength cannot admit a record that recovery would reject (4.648416ms)
+✔ SPEC[trace-002] copying bytes does not execute overridden view properties (0.259375ms)
+✔ SPEC[trace-003] a provider message needs a real observed run and a terminal needs completed messages (9.784917ms)
+✔ SPEC[trace-003] missing parts, new messages and a second terminal cannot enter a finished run (2.401833ms)
+✔ SPEC[trace-003] finished user messages are immutable, and empty confirmed messages are explicit (0.978042ms)
+✔ SPEC[trace-003] two runs are independent; completion is not inferred from prose (2.024125ms)
+✔ SPEC[trace-003] role-specific parts are not accepted as user prose (0.796709ms)
+✔ SPEC[trace-004] a frozen window never sees later parts, message completion or another human message (12.673917ms)
+✔ SPEC[trace-004] late opening binding does not rewrite old cuts or leak into an earlier window (1.510208ms)
+✔ SPEC[trace-004] late parts of a predecessor stay raw observations, not successor messages (2.115584ms)
+✔ SPEC[trace-004] last finished assistant prose excludes tools while exact observations retain them (3.218916ms)
+✔ SPEC[trace-004] boundaries reject another trace, another branch, reversal and future cursors (2.34125ms)
+✔ SPEC[trace-004] empty and exact intervals have explicit exclusive and inclusive boundaries (1.355042ms)
+✔ SPEC[trace-004] a statement can join confirmed byte boundaries without replacing invalid source bytes (0.484209ms)
+✔ SPEC[trace-005] canonical records restore the same bytes, identities and fixed cuts (5.466708ms)
+✔ SPEC[trace-005] opening binding restores through the same cuts and rejects incomplete material (5.060667ms)
+✔ SPEC[trace-005] recovery refuses missing record rather than skipping or repairing (1.018792ms)
+✔ SPEC[trace-005] recovery refuses duplicate record rather than skipping or repairing (2.333583ms)
+✔ SPEC[trace-005] recovery refuses reordered records rather than skipping or repairing (0.674167ms)
+✔ SPEC[trace-005] recovery refuses changed byte rather than skipping or repairing (0.891625ms)
+✔ SPEC[trace-005] recovery refuses extra JSON whitespace rather than skipping or repairing (0.548792ms)
+✔ SPEC[trace-005] recovery refuses invalid JSON rather than skipping or repairing (0.842167ms)
+✔ SPEC[trace-005] even a recomputed chain cannot admit unknown vocabulary (0.741584ms)
+✔ SPEC[trace-005] even a recomputed chain cannot admit extra field (1.191666ms)
+✔ SPEC[trace-005] even a recomputed chain cannot admit missing part (1.162458ms)
+✔ SPEC[trace-005] even a recomputed chain cannot admit wrong completed count (2.008875ms)
+✔ SPEC[trace-005] even a recomputed chain cannot admit noncanonical base64 (0.296334ms)
+✔ SPEC[trace-005] even a recomputed chain cannot admit late opening (0.921875ms)
+✔ SPEC[trace-005] even a recomputed chain cannot admit duplicate identity (0.415334ms)
+✔ SPEC[trace-005] a saved trusted cut detects tail loss; a valid prefix alone does not prove completeness (0.4445ms)
+✔ SPEC[trace-005] deterministic replay permutations never allocate new cursors (35.451125ms)
+✔ SPEC[trace-005] oversized or non-string recovery entries are rejected (0.669542ms)
+✔ SPEC[trace-006] the generated object contains only message methods, not maps, byte storage or services (6.222ms)
+✔ SPEC[trace-006] input and every returned view are detached from the next observation (3.559958ms)
+✔ SPEC[trace-006] identical identifiers on different instances do not share state (1.887459ms)
+✔ SPEC[trace-006] input accessors are rejected without running them (0.553ms)
+✔ SPEC[trace-006] proxy reentry cannot observe or mutate half a capture (0.201959ms)
+✔ SPEC[trace-006] malformed identifiers and numbers cannot allocate records (0.900291ms)
+✔ SPEC[trace-007] observed run and tool metadata remain opaque through replay (10.578083ms)
+✔ SPEC[trace-007] confirmed material retains missing execution evidence and exact bytes (1.043333ms)
+✔ SPEC[trace-007] chunked materials interleave without changing a published prefix (3.656417ms)
+✔ SPEC[trace-007] material identity conflict is atomic (role) (0.758459ms)
+✔ SPEC[trace-007] material identity conflict is atomic (kind) (0.53775ms)
+✔ SPEC[trace-007] material identity conflict is atomic (providerRun) (0.407625ms)
+✔ SPEC[trace-007] material identity conflict is atomic (toolName) (2.570792ms)
+✔ SPEC[trace-007] material identity conflict is atomic (chunks) (0.531875ms)
+✔ SPEC[trace-007] material identity conflict is atomic (bytes) (0.594958ms)
+✔ SPEC[trace-007] chunk gaps and metadata changes do not leave an accepted fragment (1.236417ms)
+✔ SPEC[trace-007] explicit terminal binds its actual run and frozen frontier (0.911375ms)
+✔ SPEC[trace-007] incomplete, foreign and mismatched terminal evidence is refused (0.347416ms)
+✔ SPEC[trace-007] every material and terminal view owns its byte copy (0.255ms)
+✔ WHAT[CAUSAL-WAIT-001] entering a wait makes it observable, disposing clears it (3.694208ms)
+✔ WHAT[CAUSAL-WAIT-001] observation never decides anything: snapshots are pure reads (0.510125ms)
+✔ WHAT[CAUSAL-WAIT-001] the registry holds no business authority: it is plain data in memory (0.478334ms)
+✔ WHAT[CAUSAL-WAIT-002] the five diagnostic elements survive a snapshot round trip (7.268541ms)
+✔ WHAT[CAUSAL-WAIT-002] termination records the responsible exit on the transition (0.34075ms)
+✔ WHAT[CAUSAL-WAIT-002] owner identity is order-independent in the diagnostic key (0.253875ms)
+✔ WHAT[CAUSAL-WAIT-003] the module writes nothing durable (4.187625ms)
+✔ WHAT[CAUSAL-WAIT-003] a bound diagnostic sink receives snapshots, never business authority (1.874375ms)
+✔ WHAT[CAUSAL-WAIT-003] a throwing sink cannot break waits or hide their lifecycle (0.355333ms)
+✔ WHAT[CAUSAL-WAIT-003] the diagnostic target binds once and cannot be redirected (0.074125ms)
+✔ WHAT[CAUSAL-WAIT-004] the observer capability exposes only Enter (5.211125ms)
+✔ WHAT[CAUSAL-WAIT-004] the snapshot reader capability exposes only Snapshot (7.70275ms)
+✔ WHAT[CAUSAL-WAIT-004] a wrong capability shape is rejected, not coerced (0.277541ms)
+✔ WHAT[CAUSAL-WAIT-005] a waiter stays suspended until a real event wakes it (36.84775ms)
+✔ WHAT[CAUSAL-WAIT-005] both channels wake waiters and keep their payloads drainable (1.759209ms)
+✔ WHAT[CAUSAL-WAIT-005] a queued signal is visible without waiting first (0.217833ms)
+✔ WHAT[CAUSAL-WAIT-005] drain is bounded and leaves the remainder queued (0.492875ms)
+✔ WHAT[CAUSAL-WAIT-006] deadline expiry returns WaitTimedOut and leaves no active wait (3.316375ms)
+✔ WHAT[CAUSAL-WAIT-006] a signal win cancels the deadline and no timer survives (1.680042ms)
+✔ WHAT[CAUSAL-WAIT-006] an immediate read resolves without ever suspending (0.264625ms)
+✔ WHAT[CAUSAL-WAIT-006] lease release is idempotent and does not revive (0.824542ms)
+✔ WHAT[CAUSAL-WAIT-006] disposing one wait leaves the others active (0.184708ms)
+✔ WHAT[CAUSAL-WAIT-006] task waiting needs only the observer and rejects a registry as that capability (0.454416ms)
+✔ WHAT[CAUSAL-WAIT-007] a two-owner cycle is diagnosed as CausalWaitCycle (6.585042ms)
+✔ WHAT[CAUSAL-WAIT-007] waiting for an inactive owner is a BrokenCausalEdge (3.864125ms)
+✔ WHAT[CAUSAL-WAIT-007] an external producer surfaces as ExternalProducerFrontier (0.715583ms)
+✔ WHAT[CAUSAL-WAIT-007] a chained wait walks to the deepest unsatisfied frontier (0.58325ms)
+✔ WHAT[CAUSAL-WAIT-007] no active waits yields the Empty frontier (0.166ms)
+✔ WHAT[CAUSAL-WAIT-007] the same algorithm runs on a snapshot object (1.236875ms)
+✔ WHAT[CAUSAL-WAIT-008] registries are process-local and mutually invisible (7.328667ms)
+✔ WHAT[CAUSAL-WAIT-008] a fresh registry starts empty: old observations do not survive (0.505417ms)
+✔ WHAT[CAUSAL-WAIT-008] history is bounded by the declared capacity (2.371916ms)
+✔ WHAT[CAUSAL-WAIT-009] a completion mailbox works without any registry (1.195833ms)
+✔ WHAT[CAUSAL-WAIT-009] cancelling wakes every waiter exactly once (0.583375ms)
+✔ WHAT[CAUSAL-WAIT-009] one waiter resolving does not consume another waiter (0.910792ms)
+✔ WHAT[CAUSAL-WAIT-009] a local interrupt competes with the mailbox wake (1.395916ms)
+✔ WHAT[CAUSAL-WAIT-009] the join batch bound is exported as contract vocabulary (0.167041ms)
+✔ WHAT[CAUSAL-WAIT-009] the wait module imports no sibling library and no runtime service (4.306584ms)
+ℹ tests 563
+ℹ suites 0
+ℹ pass 556
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 7
+ℹ todo 0
+ℹ duration_ms 23905.834417

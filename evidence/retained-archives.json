@@ -1,0 +1,20 @@
+{
+  "baseline": "8bb1021fc3519b0846e70af3319be9822d4b6b80",
+  "archives": {
+    "evidence/process-stdin-0.6.9/binary-prototype.tgz": "e3830322fbb250ec9606184f104dd241929ee9b5d7ad58f452993f250fd5ccde",
+    "evidence/process-stdin-0.6.9/independent-review.tgz": "3522d6bffc6e6db603cdcbc10bfb395918444045c942719da2da7e63f5deb2af",
+    "evidence/process-stdin-0.6.9/source-verification.tgz": "ff1df8a20c02a0d7a1d9bd9b7d44fb0f3fa9fb3cad681c4648ebf0489b17c275",
+    "evidence/process-stdin-0.6.10/D2-068-069-OBSERVABLE-COMPARISON.tgz": "5c914dfa6d6ea9bb77b3467e69765a39c3798c463c5c51316843a4eb36534c68",
+    "evidence/process-stdin-0.6.10/D2-LIB-0610-INDEPENDENT-EVIDENCE.tgz": "eba71aba4542dfbdf065d009cf1a7a8c676b1b0a7bd5853d1d9c34631b22bfd9",
+    "evidence/process-stdin-0.6.10/d2-library-input-0610-evidence-20261019.tgz": "6df05477bf88ec91daa4595f1f8c9b3a4da03a6c2889f8901a4ee75d4ec3bf9b",
+    "evidence/process-stdin-0.6.10/d2-relay-library-source-0610.tgz": "042c56abd6dfddd6a056f864b1f12d0df4db0861b6d514fec36c8e9b5edab171",
+    "evidence/process-stdin-0.6.10/d2-worker-input-bridge-evidence-20261019.tgz": "f2c327d29edda4d1497b9d466793330285e6c197c2c26e85190132d45b26f54b",
+    "evidence/process-stdin-0.6.12/D2-LAST17-661-RETAINED-RED.tgz": "0bdaf3c480d9afa33b732ae209d0663f99a56ca54532c7f900a9be1a9aaf63f9",
+    "evidence/process-stdin-0.6.12/D2-LAST17-662-EOF-READABLE.tgz": "e2703225a67de1e67378c3637561b60fa4cea2bb215011b8636d259814a70483",
+    "evidence/process-stdin-0.6.12/D2-LAST17-662-LOW-TRACE.tgz": "d5a56f4b09949a1f29f3f981c3355da7f0a61d83285e48e3ae7666c040c90487",
+    "evidence/process-stdin-0.6.12/D2-LIB-0612-CHECKPOINTS.tgz": "28f8b3c3e0fbc55e1d098d3d77cfd54ea84f7a90c78295e479c5b3a6b7565046",
+    "evidence/process-stdin-0.6.12/d2-eventpump-private-prototype-662-20261019.tgz": "cdfe8b0334c3a9369b72eabc3c1cba85c8d20ed156e3ed586d873de633c07195",
+    "evidence/process-stdin-0.6.12/d2-library-0611-guard-review-evidence-20261019.tgz": "16aad3527dcd348ea77825f22731a17669301d3ebf0767db2f1d28631daf6e47",
+    "evidence/process-stdin-0.6.12/d2-library-host-0612-acceptance-compact-20261019.tgz": "ec3bca7a5f0d7c0a4778d1280f0e1457793c8b8dbee5a31ef6101c1524109ce5"
+  }
+}

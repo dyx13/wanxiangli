@@ -43,7 +43,10 @@ module private Commands =
         | "Review" ->
             exact [ "incumbencyId"; "reviewerId"; "findings" ] []
             let findings = strings (get command "findings")
-            Write [ Fact.Reviewed(id "incumbencyId", { Stage = state.Stage; Promoted = Array.isEmpty findings; Reviewer = id "reviewerId" }) ]
+            let tenure = state.RequireTenure(id "incumbencyId")
+            require tenure.Review.IsNone "Incumbency already reviewed"
+            require (id "reviewerId" <> tenure.Owner) "An owner cannot review its own incumbency"
+            Write [ Fact.Reviewed(tenure.Id, { Stage = state.Stage; Promoted = Array.isEmpty findings }) ]
         | "BindDevOps" ->
             exact [ "incumbencyId"; "trigger"; "devopsId"; "target" ] []
             state.RequireTenure(id "incumbencyId") |> ignore
@@ -93,6 +96,10 @@ module private Commands =
                     Write [ Fact.DeliveryRequested
                                 { Id = identity "delivery-operation-v1" [ workId; tenureId; state.Authority; requestId ]
                                   Tenure = tenureId; Fence = fence; Cursor = observedCursor; Draft = selected } ]
+                elif state.Sequence = WorkSequence.Plan
+                     && tenure.Review.IsNone
+                     && state.LastRoundWasUnreviewedRelay then
+                    Observe(Vocabulary.result "ReviewRequired" [])
                 else
                     let delivered = state.Sequence = WorkSequence.Execution && tenure.Review.Value.Promoted
                     let retirementCursor = if state.Sequence = WorkSequence.Plan then Some observedCursor else None

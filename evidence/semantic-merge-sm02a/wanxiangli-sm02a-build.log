@@ -1,0 +1,278 @@
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/assembly/Wanxiangli.Assembly.fsproj, FCS time: 741 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/assembly/DurableWork.fs, Fable time: 71 ms
+[build] assembly: 1140 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/events/Wanxiangli.Events.fsproj, FCS time: 1127 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalJson.fs (47,24): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (11,27): Warning: The value 'bytes' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (14,27): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (17,24): Warning: The value 'algorithm' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (20,24): Warning: The value 'hash' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (20,36): Warning: The value 'data' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (23,21): Warning: The value 'hash' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (26,29): Warning: The value 'bytes' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (29,24): Warning: The value 'bytes' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (35,22): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (38,21): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (57,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (62,16): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (63,17): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (64,18): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (65,16): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (66,16): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (67,20): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (68,17): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (133,35): Warning: The value 'parsed' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (139,15): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (141,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (177,24): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (178,25): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (179,26): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (180,24): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (181,24): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (182,28): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (238,18): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs (243,18): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalJson.fs, Fable time: 14 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/events/Envelope.fs, Fable time: 19 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/events/CanonicalEventCodec.fs, Fable time: 146 ms
+[build] events: 1554 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/eventstore/Wanxiangli.EventStore.fsproj, FCS time: 677 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/eventstore/SqliteJournal.fs, Fable time: 63 ms
+[build] eventstore: 961 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Wanxiangli.Fs.fsproj, FCS time: 1372 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (17,19): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (18,19): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (40,37): Warning: The value 'text' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (40,52): Warning: The value 're' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (40,62): Warning: The value 'occurrence' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (53,30): Warning: The value 'text' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (53,45): Warning: The value 're' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (56,28): Warning: The value 'm' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (59,28): Warning: The value 'm' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (62,26): Warning: The value 'm' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (69,19): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (79,22): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (80,31): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs (94,54): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (116,14): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (117,31): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (117,50): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (117,77): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (118,29): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs (118,48): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Utf8Fs.fs (11,19): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobFs.fs (40,23): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobFs.fs (101,32): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobFs.fs (148,19): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/MutationFs.fs (106,34): Warning: The value 'root' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (39,18): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (44,14): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (45,34): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (46,34): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (50,51): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (58,22): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (65,42): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs (65,64): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Native.fs, Fable time: 41 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobMatch.fs, Fable time: 47 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Anchor.fs, Fable time: 52 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Transaction.fs, Fable time: 41 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Utf8Fs.fs, Fable time: 7 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/GlobFs.fs, Fable time: 109 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/AnchorFs.fs, Fable time: 26 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/MutationFs.fs, Fable time: 28 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/fs/Filesystem.fs, Fable time: 56 ms
+[build] fs: 2020 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/grounding.fsproj, FCS time: 1241 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs (26,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs (27,12): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs (30,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (9,24): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (12,26): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (12,40): Warning: The value 'encoding' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (15,25): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (18,22): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (21,23): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (24,26): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (27,22): Warning: The value 'a' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (27,33): Warning: The value 'b' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (30,26): Warning: The value 'fromPath' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (30,44): Warning: The value 'toPath' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (33,27): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (36,22): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (39,25): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (42,28): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (45,25): Warning: The value 'stat' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (48,20): Warning: The value 'stat' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (267,12): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs (267,55): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Wire.fs, Fable time: 136 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Catalog.fs, Fable time: 122 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/Grounding.fs, Fable time: 4 ms
+[build] grounding: 1766 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/Wanxiangli.Identity.fsproj, FCS time: 1086 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/identity/ExecutionBinding.fs (40,16): Warning: The value 'rawRole' is unused
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/Wire.fs, Fable time: 30 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/Roles.fs, Fable time: 18 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/PersonaCatalog.fs, Fable time: 6 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/ParticipantIdentity.fs, Fable time: 73 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/PromptOrigin.fs, Fable time: 17 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/ExecutionBinding.fs, Fable time: 20 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/identity/Identity.fs, Fable time: 24 ms
+[build] identity: 1504 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/lifecycle/Wanxiangli.Lifecycle.fsproj, FCS time: 1075 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/lifecycle/Wire.fs, Fable time: 87 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/lifecycle/State.fs, Fable time: 189 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/lifecycle/Work.fs, Fable time: 95 ms
+[build] lifecycle: 1675 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/process/Wanxiangli.Process.fsproj, FCS time: 917 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/native-process/BunProcess.fs, Fable time: 19 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/process/Native.fs, Fable time: 51 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/process/OutputTail.fs, Fable time: 48 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/process/ProcessSession.fs, Fable time: 74 ms
+[build] process: 1444 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Wanxiangli.Resources.fsproj, FCS time: 1309 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Template.fs (21,53): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Template.fs (32,44): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (17,29): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (17,43): Warning: The value 'encoding' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (20,27): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (23,25): Warning: The value 'a' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (23,36): Warning: The value 'b' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (26,24): Warning: The value 'path' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (29,30): Warning: The value 'url' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs (91,41): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Language.fs, Fable time: 65 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Template.fs, Fable time: 12 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/resources/Resources.fs, Fable time: 54 ms
+[build] resources: 1680 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/session/Wanxiangli.Session.fsproj, FCS time: 933 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/session/Wire.fs, Fable time: 81 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/session/Message.fs, Fable time: 41 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/session/Ownership.fs, Fable time: 287 ms
+[build] session: 1553 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/supervision/Wanxiangli.Supervision.fsproj, FCS time: 858 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/native-process/BunProcess.fs, Fable time: 23 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/supervision/Native.fs, Fable time: 59 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/supervision/Worker.fs, Fable time: 28 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/supervision/SupervisedProcess.fs, Fable time: 67 ms
+[build] supervision: 1259 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/Wanxiangli.Time.fsproj, FCS time: 907 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/time/NodeTiming.fs (22,12): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/time/NodeTiming.fs (25,12): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/time/NodeTiming.fs (80,28): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/Temporal.fs, Fable time: 3 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/Deadline.fs, Fable time: 35 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/NodeTiming.fs, Fable time: 40 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/VirtualTiming.fs, Fable time: 356 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/time/Time.fs, Fable time: 132 ms
+[build] time: 1712 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/trace/Wanxiangli.Trace.fsproj, FCS time: 1734 ms
+--------------------------------------------
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/trace/Wire.fs, Fable time: 82 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/trace/Observation.fs, Fable time: 100 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/trace/Trace.fs, Fable time: 195 ms
+[build] trace: 2363 ms
+fable-compiler-js v3.8.1
+--------------------------------------------
+InteractiveChecker created in 0 ms
+Project: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wanxiangli.Wait.fsproj, FCS time: 1530 ms
+--------------------------------------------
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Registry.fs (50,26): Warning: The syntax 'arr.[idx]' is now revised to 'arr[idx]'. Please update your code.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Await.fs (60,27): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Await.fs (66,27): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Await.fs (113,39): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Await.fs (119,39): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (11,19): Warning: The value 'fn' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (11,29): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (14,19): Warning: The value 'fn' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (17,23): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (27,23): Warning: The value 'value' is unused
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (322,4): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (330,16): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (415,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (416,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (417,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (418,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (419,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (420,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (421,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (422,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (422,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (423,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (424,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (424,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (425,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (426,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (427,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (428,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (429,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (429,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (430,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (431,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (433,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (434,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (434,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (434,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (435,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (435,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (435,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (435,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+/private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs (435,8): Warning: A type has been implicitly inferred as 'obj', which may be unintended. Consider adding explicit type annotations. You can disable this warning by using '#nowarn "3559"' or '--nowarn:3559'.
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/CausalWait.fs, Fable time: 91 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Registry.fs, Fable time: 33 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/CompletionMailbox.fs, Fable time: 48 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Await.fs, Fable time: 44 ms
+File: /private/tmp/wanxiangli-semantic-merge-20261019/src/wait/Wait.fs, Fable time: 100 ms
+[build] wait: 2088 ms

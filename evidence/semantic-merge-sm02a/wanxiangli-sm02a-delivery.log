@@ -1,0 +1,55 @@
+✔ SPEC[build-001] lifecycle compiles and runs its own tests without any sibling owner source (3851.378541ms)
+✔ SPEC[build-001] eventstore compiles and runs its own tests without any sibling owner source (1238.648208ms)
+✔ SPEC[build-001] process compiles and runs its own tests without any sibling owner source (1799.894834ms)
+✔ SPEC[build-001] trace compiles and runs its own tests without any sibling owner source (1684.564ms)
+✔ SPEC[build-001] session compiles and runs its own tests without any sibling owner source (1466.837208ms)
+✔ SPEC[build-001] a selected build leaves another module output untouched (1727.35225ms)
+✔ SPEC[build-001] the second cut builds without replacing any first-cut artifact (1315.52125ms)
+✔ SPEC[build-001] a real compiler error fails without replacing a previous artifact (793.903417ms)
+✔ SPEC[build-001] the third cut leaves both earlier cuts untouched and has no sibling imports (2128.459208ms)
+✔ SPEC[build-001] cross-project references are rejected by the same build entrypoint (77.507625ms)
+✔ SPEC[build-001] ownership builds without the three earlier cuts and cannot import their services (2376.57225ms)
+✔ SPEC[build-001] composition compiles without sibling sources and runs against their artifacts (1227.748666ms)
+✔ SPEC[build-001] supervision compiles with only its own owner and the one shared native adapter (1413.045334ms)
+✔ SPEC[build-001] a shared native path does not permit another cross-directory source (46.691583ms)
+✔ SPEC[build-003] the same domain contract holds for local work (8.824ms)
+✔ SPEC[build-003] the same domain contract holds for durable work (5.896875ms)
+✔ SPEC[ownership-006] reserve wins the durable race; the other candidate cannot bypass admission (14.694916ms)
+✔ SPEC[ownership-006] drain wins the durable race; the other candidate cannot bypass admission (8.563458ms)
+✔ SPEC[ownership-006] losing a reservation acknowledgement before commit never permits launch (3.820541ms)
+✔ SPEC[ownership-006] losing a reservation acknowledgement after commit never permits launch (4.637875ms)
+✔ SPEC[ownership-006] identical concurrent reservations produce only one fresh durable commit (4.407791ms)
+▶ SPEC[build-006] installed ownership gates real retirement, survives process death and works alone
+  ✔ actual process blocks Work retirement on node (181.808875ms)
+  ✔ unsettled ownership survives coordinator SIGKILL on node (334.642792ms)
+  ✔ actual process blocks Work retirement on bun (178.629375ms)
+  ✔ unsettled ownership survives coordinator SIGKILL on bun (161.148916ms)
+  ✔ ownership alone on node (50.913125ms)
+  ✔ ownership alone on bun (43.639375ms)
+✔ SPEC[build-006] installed ownership gates real retirement, survives process death and works alone (3434.622166ms)
+▶ SPEC[build-002] an installed tarball survives a real effect and process death without dispatching twice
+  ✔ installed journal releases native statements on node (440.616458ms)
+  ✔ installed consumer on node (182.313459ms)
+  ✔ installed journal releases native statements on bun (270.182417ms)
+  ✔ installed consumer on bun (112.804708ms)
+✔ SPEC[build-002] an installed tarball survives a real effect and process death without dispatching twice (3780.996666ms)
+▶ SPEC[build-007] installed supervision retains output and a live group identity without sibling libraries or source
+  ✔ actual supervision consumer on node (471.3485ms)
+  ✔ actual supervision consumer on bun (532.650167ms)
+  ✔ base process survives supervision removal on node (81.789583ms)
+  ✔ base process survives supervision removal on bun (58.206875ms)
+✔ SPEC[build-007] installed supervision retains output and a live group identity without sibling libraries or source (3921.11075ms)
+▶ SPEC[build-005] installed trace preserves bytes after SIGKILL and also works with all other libraries removed
+  ✔ real trace and SQLite restart on node (234.018833ms)
+  ✔ real trace and SQLite restart on bun (207.63925ms)
+  ✔ trace alone on node (56.211541ms)
+  ✔ trace alone on bun (42.084666ms)
+✔ SPEC[build-005] installed trace preserves bytes after SIGKILL and also works with all other libraries removed (3143.946583ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21213.357791

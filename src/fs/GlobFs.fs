@@ -155,8 +155,8 @@ module GlobFs =
             if pathIsAbsolute path then pathResolve path
             else pathResolve (pathJoin root path)
 
-        let inside (candidate: string): bool =
-            candidate = resolvedRoot || candidate.StartsWith(resolvedRoot + "/")
+        let inside (canonicalRoot: string) (candidate: string): bool =
+            candidate = canonicalRoot || candidate.StartsWith(canonicalRoot + "/")
 
         let rec firstExisting (candidate: string): string =
             let present =
@@ -171,16 +171,12 @@ module GlobFs =
         let denied = failure "PATH_DENIED" ("path outside capability boundary: " + path)
 
         try
+            let canonicalRoot = realpathSync resolvedRoot
             let existing = firstExisting resolved
             let real = realpathSync existing
             let suffix = resolved.Substring(existing.Length)
-            if inside real && inside (real + suffix) then
-                let rel =
-                    if resolved = resolvedRoot then ""
-                    elif resolved.StartsWith(resolvedRoot + "/") then
-                        resolved.Substring(resolvedRoot.Length + 1).Replace('\\', '/')
-                    else
-                        path.Replace('\\', '/').Trim('/')
+            if inside canonicalRoot real && inside canonicalRoot (real + suffix) then
+                let rel = (pathRelative canonicalRoot (real + suffix)).Replace('\\', '/')
                 Ok(resolved, rel)
             else
                 Error denied

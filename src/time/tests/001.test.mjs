@@ -1,16 +1,17 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { Time } from '../../../dist/time/Time.js'
+import { NodeTime } from '../../../dist/time-node/NodeTime.js'
+import { TimeTesting } from '../../../dist/time-testing/TimeTesting.js'
 
 test('WHAT[TIME-CAPABILITY-001] timer delay resolves after the requested milliseconds', async () => {
-  const timer = Time.timerTask(30)
+  const timer = NodeTime.timerTask(30)
   const started = Date.now()
   await timer
   assert.ok(Date.now() - started >= 25)
 })
 
 test('WHAT[TIME-CAPABILITY-001] cancel leaves the delay permanently pending', async () => {
-  const port = Time.nodeTimerPort()
+  const port = NodeTime.nodeTimerPort()
   const handle = port.Delay(20)
   handle.Cancel()
   let fired = false
@@ -20,7 +21,7 @@ test('WHAT[TIME-CAPABILITY-001] cancel leaves the delay permanently pending', as
 })
 
 test('WHAT[TIME-CAPABILITY-001] cancel and dispose are idempotent', async () => {
-  const port = Time.nodeTimerPort()
+  const port = NodeTime.nodeTimerPort()
   const handle = port.Delay(20)
   handle.Cancel()
   handle.Cancel()
@@ -30,7 +31,7 @@ test('WHAT[TIME-CAPABILITY-001] cancel and dispose are idempotent', async () => 
 })
 
 test('WHAT[TIME-CAPABILITY-001] cancelling one handle never steals another waiter', async () => {
-  const port = Time.nodeTimerPort()
+  const port = NodeTime.nodeTimerPort()
   const a = port.Delay(20)
   const b = port.Delay(20)
   a.Cancel()
@@ -41,7 +42,7 @@ test('WHAT[TIME-CAPABILITY-001] cancelling one handle never steals another waite
 })
 
 test('WHAT[TIME-CAPABILITY-001] virtual port: cancelled handle never fires after advancing', async () => {
-  const virtual = Time.virtualTimerPort()
+  const virtual = TimeTesting.virtualTimerPort()
   const a = virtual.port.Delay(50)
   const b = virtual.port.Delay(50)
   a.Cancel()

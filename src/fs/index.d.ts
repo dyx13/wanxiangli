@@ -50,6 +50,7 @@ export interface Filesystem {
   existsPath(path: string): boolean;
   undoIfMatches(path: string, expectedCurrent: string, restoreTo: string | null): void;
   matchesPathPattern(pattern: string, path: string): Result<boolean>;
+  mayMatchSubtree(pattern: string, directory: string): Result<boolean>;
   compilePattern(pattern: string): Result<RegExp>;
   testCompiled(regex: RegExp, text: string): boolean;
 }

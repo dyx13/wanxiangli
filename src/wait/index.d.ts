@@ -53,28 +53,33 @@ export interface IDeadlineHandle {
   Cancel(): void
 }
 
-/** 不透明租约：markExit 记录诊断退出原因；dispose 清除活跃等待。两者幂等。 */
-export interface WaitLease {
-  markExit(exit: WaitExitName): void
-  dispose(): void
-}
+/** 不透明租约，只通过 Wait.markExit 和 Wait.dispose 操作。 */
+export type WaitLease = object
+
+/** 只允许登记等待，不携带注册表读取和诊断绑定能力。 */
+export type WaitObserver = object
+
+export type JoinInterruptReason = 'OperatorAbort' | 'UserMessageArrived' | 'DeadlineExpired'
+export type MailboxWake = 'CompletionMayBeAvailable' | 'MailboxCancelled' | { LocalInterrupt: JoinInterruptReason }
 
 export interface CompletionMailbox {
   pulseAgent(agent: unknown): void
   publishPty(pty: unknown): void
   pulseWake(): void
-  waitForWake(): Promise<'CompletionMayBeAvailable' | 'MailboxCancelled' | { LocalInterrupt: unknown }>
+  waitForWake(): Promise<MailboxWake>
+  waitForSignal(interrupt: Promise<JoinInterruptReason>): Promise<MailboxWake>
   drainAgents(maxCount: number): unknown[]
   drainPtys(maxCount: number): unknown[]
   cancel(): boolean
   pendingCount(): number
   pendingPtyCount(): number
+  pendingAgentWakeCount(): number
   isCancelled(): boolean
 }
 
 export interface JoinInterruptSource {
-  readonly wait: Promise<'OperatorAbort' | 'UserMessageArrived' | 'DeadlineExpired'>
-  signal(reason: 'OperatorAbort' | 'UserMessageArrived' | 'DeadlineExpired'): void
+  readonly wait: Promise<JoinInterruptReason>
+  signal(reason: JoinInterruptReason): void
 }
 
 export const Wait: {
@@ -86,14 +91,14 @@ export const Wait: {
   workflowProducer(owner: OwnerRef): ProducerRef
   escape(kind: 'deadlineAt', at: string): { kind: 'deadlineAt'; at: string }
   escape(kind: 'cancelledBy', owner: OwnerRef): { kind: 'cancelledBy'; owner: OwnerRef }
-  escape(kind: 'processLifetime' | 'sessionLifetime' | 'openEndedExternal' | string, value?: unknown): { kind: string }
-  observerCapability(registry: unknown): unknown
+  escape(kind: 'processLifetime' | 'sessionLifetime' | 'openEndedExternal'): { kind: 'processLifetime' | 'sessionLifetime' | 'openEndedExternal' }
+  observerCapability(registry: unknown): WaitObserver
   snapshotReaderCapability(registry: unknown): unknown
-  observerEnter(observer: unknown, descriptor: WaitDescriptor): WaitLease
+  observerEnter(observer: WaitObserver, descriptor: WaitDescriptor): WaitLease
   readerSnapshot(reader: unknown): WaitSnapshot
   enter(registry: unknown, descriptor: WaitDescriptor): WaitLease
-  markExit(lease: unknown, exit: WaitExitName): void
-  dispose(lease: unknown): void
+  markExit(lease: WaitLease, exit: WaitExitName): void
+  dispose(lease: WaitLease): void
   snapshot(registry: unknown): WaitSnapshot
   historyCapacity(registry: unknown): number
   /** 绑定诊断 sink（{ Publish(snapshot) }）；首绑唯一，返回是否绑定成功。 */
@@ -102,10 +107,10 @@ export const Wait: {
   producerKey(producer: ProducerRef): string
   frontiers(active: readonly WaitDescriptor[]): Frontier[]
   frontiersOfSnapshot(snapshot: { active: readonly WaitDescriptor[] }): Frontier[]
-  awaitTask(registry: unknown, descriptor: WaitDescriptor, pending: Promise<unknown>): Promise<unknown>
+  awaitTask<T>(observer: WaitObserver, descriptor: WaitDescriptor, pending: Promise<T>): Promise<T>
   /** 信号与截止时间竞争的复合等待；返回 { ok: true, value } 或 { ok: false, reason }。 */
   untilSignalOrDeadline(
-    registry: unknown,
+    observer: WaitObserver,
     descriptor: WaitDescriptor,
     deadline: IDeadlineHandle,
     tryRead: () => unknown,

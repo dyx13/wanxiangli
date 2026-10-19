@@ -125,17 +125,14 @@ let private ruleBody (raw: string) =
         Some(includeRule, pattern)
 
 let private validateRule packageName includeRule pattern =
-    let selfProbe = "requirements/" + packageName + "/WHAT.md"
-
-    if String.IsNullOrWhiteSpace pattern then
-        None
-    elif matches pattern selfProbe then
+    if mayMatchSubtree pattern ("requirements/" + packageName) then
         failwith ("APPLIES-TO must not declare package self coverage: " + packageName)
     else
         Some(includeRule, pattern)
 
 let private parseRule (packageName: string) (raw: string) =
     ruleBody raw
+    |> Option.filter (fun (_, pattern) -> not (String.IsNullOrWhiteSpace pattern))
     |> Option.bind (fun (includeRule, pattern) -> validateRule packageName includeRule pattern)
 
 let private directoryExists path =

@@ -1,6 +1,6 @@
 # time — 显式时间与因果等待（时基部分）
 
-层：内核。入口 `wanxiangli/time`，导出对象 `Time`。承接主仓 `Foundation/Temporal`、`Process/{Deadline,DeadlineSurface,NodeTiming,VirtualTiming}` 的显式时间职责（CUT-21）。不依赖本仓任何其他模块。
+层：内核。入口 `wanxiangli/time` 的 `Time` 只拥有 Deadline 纯计算；`wanxiangli/time-node` 的 `NodeTime` 拥有物理时基，`wanxiangli/time-testing` 的 `TimeTesting` 拥有验证时基。三个编译单元仅共用纯接口 Temporal.fs，不共享状态或实现。承接主仓 CUT-21；不依赖宿主或业务模块。
 
 ## 草稿重判
 
@@ -40,7 +40,7 @@
 
 ## 边界
 
-- **分居降级（明示范围缩减）**：主仓 time-capability-008 的物理/虚拟/契约 fsproj 级分居，在本仓单 bundle 形态下降级为导出面对分组——`nodeTimerPort` / `nodeClockPort` / `timerTask` / `raceExit` 为生产构造器，`virtualTimerPort` / `virtualClockPort` 标注验证专用（见 `index.d.ts`）。编译级分居由主仓切换时保留主仓分片结构承担。此项缩减已登记在主仓 `proposals/extraction-kanban/evidence/CUT-21/README.md`，升级方案（拆独立验证模块）需协调者另行授权。
+- SM-02B 按已授权整合计划解除旧单 bundle 分居降级：纯计算、物理、虚拟分别由独立 fsproj 和 npm 入口交付。`UtcNow()` 返回 Date；纯计算只接受显式非空时间字符串，不以缺失输入读取当前时间。拆除虚拟产物后生产入口仍须实际消费，移走物理源码后纯 Deadline 仍须独立编译。
 - `SessionStartedAt` 单次采样与持久化属主仓会话层（CUT-21 卡 C 项）；本库只提供稳定时基（`tests/007.test.mjs` 覆盖纯时基语义）。
 - 硬期限的执行语义（分段等待、超时强杀）归主仓进程面（CUT-02 已释放面）；本库只提供 `Deadline` 纯计算与 `MaxTimerWaitMs` 上界。
 - `ITimerPort.Delay` 毫秒为 JS 安全整数域内非负值；非法预算的拒绝归调用方（进程面）所有，不在本层发明。

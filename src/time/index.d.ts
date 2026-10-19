@@ -14,19 +14,7 @@ export interface ITimerPort {
 }
 
 export interface IClockPort {
-  UtcNow(): string
-}
-
-export interface VirtualTimerPort {
-  readonly port: ITimerPort
-  advance(milliseconds: number): void
-  nowMs(): number
-}
-
-export interface VirtualClockPort {
-  readonly port: IClockPort
-  advanceMs(milliseconds: number): void
-  set(value: string): void
+  UtcNow(): Date
 }
 
 export const Time: {
@@ -37,16 +25,4 @@ export const Time: {
   deadlineRemainingMs(nowIso: string, deadline: Deadline): number
   deadlineIsExpired(nowIso: string, deadline: Deadline): boolean
   deadlineNextWaitMs(nowIso: string, deadline: Deadline): number
-  /** 物理定时器端口（唯一封装 setTimeout/clearTimeout 的实例）。 */
-  nodeTimerPort(): ITimerPort
-  /** 物理墙钟端口（唯一读取系统 UtcNow 的实例）。 */
-  nodeClockPort(): IClockPort
-  /** 单次延迟任务；≥1000ms unref。 */
-  timerTask(milliseconds: number): Promise<void>
-  /** 竞争退出任务与延迟：退出先到 true，延迟先到 false。 */
-  raceExit(exitTask: Promise<unknown>, milliseconds: number): Promise<boolean>
-  /** 验证专用：确定性虚拟时基。生产组合层不得注入。 */
-  virtualTimerPort(): VirtualTimerPort
-  /** 验证专用：确定性虚拟墙钟。 */
-  virtualClockPort(): VirtualClockPort
 }

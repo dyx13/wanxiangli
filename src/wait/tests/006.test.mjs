@@ -1,18 +1,32 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { Time } from '../../../dist/time/Time.js'
+import { TimeTesting } from '../../../dist/time-testing/TimeTesting.js'
 import { Wait } from '../../../dist/wait/Wait.js'
 import { describe, registry } from './support.mjs'
+
+const observedDeadline = handle => {
+  let cancellations = 0
+  return {
+    deadline: Object.freeze({
+      Delay: handle.Delay,
+      Cancel() {
+        cancellations += 1
+        handle.Cancel()
+      },
+    }),
+    cancellations: () => cancellations,
+  }
+}
 
 // 卡内红反例 3：等待超时不得伪造业务成功，也不得残留活跃租约或悬空定时器。
 
 test('WHAT[CAUSAL-WAIT-006] deadline expiry returns WaitTimedOut and leaves no active wait', async () => {
   const runtime = registry()
-  const virtual = Time.virtualTimerPort()
+  const virtual = TimeTesting.virtualTimerPort()
   const deadline = virtual.port.Delay(50)
 
   const outcome = Wait.untilSignalOrDeadline(
-    runtime,
+    Wait.observerCapability(runtime),
     describe({ ownerId: 'expiry' }),
     deadline,
     () => null,
@@ -30,12 +44,13 @@ test('WHAT[CAUSAL-WAIT-006] deadline expiry returns WaitTimedOut and leaves no a
 
 test('WHAT[CAUSAL-WAIT-006] a signal win cancels the deadline and no timer survives', async () => {
   const runtime = registry()
-  const virtual = Time.virtualTimerPort()
-  const deadline = virtual.port.Delay(50)
+  const virtual = TimeTesting.virtualTimerPort()
+  const observed = observedDeadline(virtual.port.Delay(50))
+  const { deadline } = observed
 
   let reads = 0
   const outcome = Wait.untilSignalOrDeadline(
-    runtime,
+    Wait.observerCapability(runtime),
     describe({ ownerId: 'signal' }),
     deadline,
     () => (reads === 0 ? null : { value: 'delivered' }),
@@ -50,7 +65,7 @@ test('WHAT[CAUSAL-WAIT-006] a signal win cancels the deadline and no timer survi
 
   assert.deepEqual(result, { ok: true, value: { value: 'delivered' } })
   // 信号胜出必须立即取消截止句柄。
-  assert.equal(deadline.cancelCount, 1)
+  assert.equal(observed.cancellations(), 1)
 
   // 推进虚拟时钟越过原定截止点：已取消的定时器不得触发过期回调。
   let expired = false
@@ -64,11 +79,12 @@ test('WHAT[CAUSAL-WAIT-006] a signal win cancels the deadline and no timer survi
 
 test('WHAT[CAUSAL-WAIT-006] an immediate read resolves without ever suspending', async () => {
   const runtime = registry()
-  const virtual = Time.virtualTimerPort()
-  const deadline = virtual.port.Delay(50)
+  const virtual = TimeTesting.virtualTimerPort()
+  const observed = observedDeadline(virtual.port.Delay(50))
+  const { deadline } = observed
 
   const result = await Wait.untilSignalOrDeadline(
-    runtime,
+    Wait.observerCapability(runtime),
     describe({ ownerId: 'immediate' }),
     deadline,
     () => 'already-there',
@@ -76,7 +92,7 @@ test('WHAT[CAUSAL-WAIT-006] an immediate read resolves without ever suspending',
   )
 
   assert.deepEqual(result, { ok: true, value: 'already-there' })
-  assert.equal(deadline.cancelCount, 1)
+  assert.equal(observed.cancellations(), 1)
   assert.equal(Wait.snapshot(runtime).history[1].exit, 'WaitResolved')
   virtual.advance(50)
 })
@@ -105,4 +121,13 @@ test('WHAT[CAUSAL-WAIT-006] disposing one wait leaves the others active', () => 
   assert.equal(active.length, 1)
   assert.equal(active[0].owner.identity.id, 'two')
   Wait.dispose(two)
+})
+
+test('WHAT[CAUSAL-WAIT-006] task waiting needs only the observer and rejects a registry as that capability', async () => {
+  const runtime = registry()
+  assert.throws(() => Wait.awaitTask(runtime, describe(), Promise.resolve('wrong capability')), /observer capability required/)
+  const value = await Wait.awaitTask(Wait.observerCapability(runtime), describe(), Promise.resolve('observed'))
+  assert.equal(value, 'observed')
+  assert.equal(Wait.snapshot(runtime).active.length, 0)
+  assert.equal(Wait.snapshot(runtime).history[1].exit, 'WaitResolved')
 })

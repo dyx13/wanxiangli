@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../time/Temporal.fs" />
+    <Compile Include="NodeTiming.fs" />
+    <Compile Include="NodeTime.fs" />
+  </ItemGroup>
+</Project>

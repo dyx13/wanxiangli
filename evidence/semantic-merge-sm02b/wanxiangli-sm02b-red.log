@@ -1,0 +1,103 @@
+✖ SPEC[resources-002] template trimming preserves every character of injected values (4.882333ms)
+✔ SPEC[resources-002] placeholder parity and missing substitutions fail closed (3.605708ms)
+✖ WHAT[TIME-CAPABILITY-008] the pure deadline surface carries no physical or virtual factory (1.893ms)
+✔ WHAT[TIME-CAPABILITY-008] the export surface separates production and verification constructors (0.140583ms)
+✔ WHAT[TIME-CAPABILITY-008] deadline algebra is independent of both adapters (1.500625ms)
+✔ WHAT[TIME-CAPABILITY-008] a physical port instance never observes the virtual clock (2.37625ms)
+✖ WHAT[TIME-CAPABILITY-008] the module imports no sibling library (1.203917ms)
+✔ WHAT[CAUSAL-WAIT-006] deadline expiry returns WaitTimedOut and leaves no active wait (4.602667ms)
+✖ WHAT[CAUSAL-WAIT-006] a signal win cancels the deadline and no timer survives (0.62825ms)
+✖ WHAT[CAUSAL-WAIT-006] an immediate read resolves without ever suspending (0.315125ms)
+✔ WHAT[CAUSAL-WAIT-006] lease release is idempotent and does not revive (0.578625ms)
+✔ WHAT[CAUSAL-WAIT-006] disposing one wait leaves the others active (0.968084ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 7
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 93.033584
+
+✖ failing tests:
+
+test at src/resources/tests/002.test.mjs:6:1
+✖ SPEC[resources-002] template trimming preserves every character of injected values (4.882333ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'token'
+  - '  token\n'
+  
+      at TestContext.<anonymous> (file:///private/tmp/wanxiangli-semantic-merge-20261019/src/resources/tests/002.test.mjs:14:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'token',
+    expected: '  token\n',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/time/tests/008.test.mjs:5:1
+✖ WHAT[TIME-CAPABILITY-008] the pure deadline surface carries no physical or virtual factory (1.893ms)
+  AssertionError [ERR_ASSERTION]: nodeTimerPort
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///private/tmp/wanxiangli-semantic-merge-20261019/src/time/tests/008.test.mjs:7:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/time/tests/008.test.mjs:36:1
+✖ WHAT[TIME-CAPABILITY-008] the module imports no sibling library (1.203917ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///private/tmp/wanxiangli-semantic-merge-20261019/src/time/tests/008.test.mjs:38:10)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/wait/tests/006.test.mjs:45:1
+✖ WHAT[CAUSAL-WAIT-006] a signal win cancels the deadline and no timer survives (0.62825ms)
+  TypeError: Cannot add property cancelCount, object is not extensible
+      at Object.untilSignalOrDeadline2 [as untilSignalOrDeadline] (file:///private/tmp/wanxiangli-semantic-merge-20261019/dist/wait/Wait.js:6050:24)
+      at TestContext.<anonymous> (file:///private/tmp/wanxiangli-semantic-merge-20261019/src/wait/tests/006.test.mjs:52:24)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at src/wait/tests/006.test.mjs:80:1
+✖ WHAT[CAUSAL-WAIT-006] an immediate read resolves without ever suspending (0.315125ms)
+  TypeError: Cannot add property cancelCount, object is not extensible
+      at Object.untilSignalOrDeadline2 [as untilSignalOrDeadline] (file:///private/tmp/wanxiangli-semantic-merge-20261019/dist/wait/Wait.js:6050:24)
+      at TestContext.<anonymous> (file:///private/tmp/wanxiangli-semantic-merge-20261019/src/wait/tests/006.test.mjs:86:29)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)

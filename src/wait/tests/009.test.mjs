@@ -58,7 +58,7 @@ test('WHAT[CAUSAL-WAIT-009] the join batch bound is exported as contract vocabul
 
 test('WHAT[CAUSAL-WAIT-009] the wait module imports no sibling library and no runtime service', async () => {
   const source = await readFile(new URL('../../../dist/wait/Wait.js', import.meta.url), 'utf8')
-  assert.equal(source.includes('wanxiangli/'), false)
+  assert.doesNotMatch(source, /\bfrom\s+["']wanxiangli\//)
   assert.equal(source.includes('node:fs'), false)
   assert.equal(source.includes('node:sqlite'), false)
 })

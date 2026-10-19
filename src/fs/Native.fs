@@ -40,6 +40,9 @@ module Native =
     [<Import("resolve", "node:path")>]
     let pathResolve (_path: string): string = jsNative
 
+    [<Import("relative", "node:path")>]
+    let pathRelative (_root: string) (_path: string): string = jsNative
+
     [<Import("isAbsolute", "node:path")>]
     let pathIsAbsolute (_path: string): bool = jsNative
 

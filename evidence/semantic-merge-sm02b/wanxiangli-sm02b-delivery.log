@@ -1,0 +1,29 @@
+✔ SPEC[build-001] time compiles with no sibling implementation and runs independently (1133.022625ms)
+✔ SPEC[build-001] time-node compiles with no sibling implementation and runs independently (964.17975ms)
+✔ SPEC[build-001] time-testing compiles with no sibling implementation and runs independently (1034.277709ms)
+✔ SPEC[build-001] lifecycle compiles and runs its own tests without any sibling owner source (1547.232583ms)
+✔ SPEC[build-001] eventstore compiles and runs its own tests without any sibling owner source (1080.537167ms)
+✔ SPEC[build-001] process compiles and runs its own tests without any sibling owner source (1244.944125ms)
+✔ SPEC[build-001] trace compiles and runs its own tests without any sibling owner source (1440.246458ms)
+✔ SPEC[build-001] session compiles and runs its own tests without any sibling owner source (1308.725541ms)
+✔ SPEC[build-001] a selected build leaves another module output untouched (1507.880541ms)
+✔ SPEC[build-001] the second cut builds without replacing any first-cut artifact (1188.020084ms)
+✔ SPEC[build-001] a real compiler error fails without replacing a previous artifact (726.9015ms)
+✔ SPEC[build-001] the third cut leaves both earlier cuts untouched and has no sibling imports (1432.789416ms)
+✔ SPEC[build-001] cross-project references are rejected by the same build entrypoint (42.531209ms)
+✔ SPEC[build-001] ownership builds without the three earlier cuts and cannot import their services (1339.295083ms)
+✔ SPEC[build-001] composition compiles without sibling sources and runs against their artifacts (959.990042ms)
+✔ SPEC[build-001] supervision compiles with only its own owner and the one shared native adapter (1199.919291ms)
+✔ SPEC[build-001] a shared native path does not permit another cross-directory source (40.584417ms)
+▶ SPEC[build-008] installed time and wait declarations match both runtimes and production survives virtual removal
+  ✔ actual installed time and wait consumer on node (46.193333ms)
+  ✔ actual installed time and wait consumer on bun (107.818ms)
+✔ SPEC[build-008] installed time and wait declarations match both runtimes and production survives virtual removal (1269.677375ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18244.042959

@@ -27,6 +27,7 @@ type FilesystemMessages =
     abstract existsPath: path: string -> bool
     abstract undoIfMatches: path: string * expectedCurrent: string * restoreTo: obj -> unit
     abstract matchesPathPattern: pattern: string * path: string -> obj
+    abstract mayMatchSubtree: pattern: string * directory: string -> obj
     abstract compilePattern: pattern: string -> obj
     abstract testCompiled: regex: obj * text: string -> bool
 
@@ -227,6 +228,11 @@ let Filesystem (input: obj): FilesystemMessages =
         member _.compilePattern pattern =
             match GlobMatch.compilePattern pattern with
             | Ok regex -> okResult regex
+            | Error _ -> failureResult (failure "INVALID_ANCHOR_PATTERN" "anchor RegExp is invalid")
+
+        member _.mayMatchSubtree (pattern, directory) =
+            match GlobMatch.mayMatchSubtree pattern directory with
+            | Ok value -> okResult (box value)
             | Error _ -> failureResult (failure "INVALID_ANCHOR_PATTERN" "anchor RegExp is invalid")
 
         member _.testCompiled (regex, content) = GlobMatch.testCompiled regex content }

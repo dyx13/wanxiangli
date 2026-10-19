@@ -1,0 +1,12 @@
+▶ SPEC[build-008] installed time and wait declarations match both runtimes and production survives virtual removal
+  ✔ actual installed time and wait consumer on node (37.922916ms)
+  ✔ actual installed time and wait consumer on bun (32.808916ms)
+✔ SPEC[build-008] installed time and wait declarations match both runtimes and production survives virtual removal (1052.3895ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1102.287

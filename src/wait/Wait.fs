@@ -168,7 +168,8 @@ module private Handles =
 
     [<AttachMembers>]
     type ObserverHandle(observer: IWaitObserver) =
-        member _.Enter(wait: DiagnosticWait) = observer.Enter wait
+        interface IWaitObserver with
+            member _.Enter(wait: DiagnosticWait) = observer.Enter wait
 
     [<AttachMembers>]
     type SnapshotReaderHandle(reader: IWaitSnapshotReader) =
@@ -239,7 +240,7 @@ let snapshotReaderCapability (registry: obj) : obj =
 
 let private requireObserver (value: obj) =
     match value with
-    | :? Handles.ObserverHandle as handle -> handle
+    | :? Handles.ObserverHandle as handle -> handle :> IWaitObserver
     | _ -> invalidArg "observer" "observer capability required"
 
 let private requireSnapshotReader (value: obj) =
@@ -302,33 +303,21 @@ let frontiersOfSnapshot (snapshotValue: obj) : obj array =
 
     CausalFrontier.ofSnapshot typed |> List.map frontierObject |> List.toArray
 
-let awaitTask (registry: obj) (descriptor: obj) (pending: obj) : Task<obj> =
+let awaitTask (observer: obj) (descriptor: obj) (pending: obj) : Task<obj> =
     let task: Task<obj> = unbox (asPromise pending)
-    CausalAwait.awaitTask (runtimeOf registry).Observer (waitOf descriptor) task
+    CausalAwait.awaitTask (requireObserver observer) (waitOf descriptor) task
 
 /// 信号与截止时间竞争的复合等待。deadline 为 { Delay: Promise, Cancel(): void }。
 /// tryRead / awaitSignal 为无参函数；tryRead 返回 null 表示未就绪。
 /// 返回 Promise<{ ok, value | reason }>。
 let untilSignalOrDeadline
-    (registry: obj)
+    (observer: obj)
     (descriptor: obj)
     (deadline: obj)
     (tryRead: obj)
     (awaitSignal: obj)
     : Task<obj> =
-    let inner = unbox<IDeadlineHandle> deadline
-
-    let cancellations = List<int>()
-    emitJsExpr (deadline, 0) "$0.cancelCount = $1" |> ignore
-
-    let deadlineHandle =
-        { new IDeadlineHandle with
-            member _.Delay = inner.Delay
-
-            member _.Cancel() =
-                cancellations.Add 1
-                emitJsExpr (deadline, cancellations.Count) "$0.cancelCount = $1" |> ignore
-                inner.Cancel() }
+    let deadlineHandle = unbox<IDeadlineHandle> deadline
 
     let read () =
         let value = call0 tryRead
@@ -338,7 +327,7 @@ let untilSignalOrDeadline
 
     task {
         let! result =
-            CausalAwait.untilSignalOrDeadline (runtimeOf registry).Observer (waitOf descriptor) deadlineHandle read signal
+            CausalAwait.untilSignalOrDeadline (requireObserver observer) (waitOf descriptor) deadlineHandle read signal
 
         match result with
         | Ok value -> return box {| ok = true; value = value |}

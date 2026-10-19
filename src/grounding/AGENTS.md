@@ -13,7 +13,7 @@
 
 ## LEMMA
 
-1. [AXIOM 1] `discover` 只扫 `requirements/` 一层子目录；APPLIES-TO 逐行解析（空行与 `#` 忽略，`!` 前缀为排除规则），声明包自覆盖是配置错误，直接抛错；结果按包名升序。
+1. [AXIOM 1] `discover` 只扫 `requirements/` 一层子目录；APPLIES-TO 逐行解析（空行与 `#` 忽略，`!` 前缀为排除规则），任意规则能匹配包自身目录或任一未来子路径即配置错误；include/exclude 分别校验，不能用后续排除取消非法声明。校验复用 fs 的 mayMatchSubtree，不枚举现存文件；结果按包名升序。
 2. [AXIOM 1, 3] 路径匹配：包自身目录天然覆盖；外部路径按规则声明顺序求值（include 起步 false，命中即取该规则 include）；`resolve` 返回全部命中包名升序。工作区外路径解析为无命中。
 3. [AXIOM 2] `materialize` 只注入包根直接存在的 `*.md`（文件名升序），tests 与 APPLIES-TO 不进入材料；digest = SHA-256(每材料 `path + NUL + resultBytes + NUL` 串联)；未知包名抛错。`snapshotsForPaths` 对命中包去重后按包名升序物化。
 4. [AXIOM 3] JS 边界形状：`{name, root, rules: [{include, pattern}]}`、`{workspace, packageName, digest, materials: [{path, resultBytes}]}`，全部 JS 原生值；非法 pattern 抛错，不静默 false。

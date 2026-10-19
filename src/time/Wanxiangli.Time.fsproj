@@ -7,8 +7,6 @@
   <ItemGroup>
     <Compile Include="Temporal.fs" />
     <Compile Include="Deadline.fs" />
-    <Compile Include="NodeTiming.fs" />
-    <Compile Include="VirtualTiming.fs" />
     <Compile Include="Time.fs" />
   </ItemGroup>
 </Project>

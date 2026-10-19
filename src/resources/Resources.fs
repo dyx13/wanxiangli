@@ -165,9 +165,7 @@ type Resources(?rootDir: string) =
             | ProviderLanguage.English -> english
             | ProviderLanguage.SimplifiedChinese -> chinese
 
-        // 与 readText 一致：主仓旧链路 readText 先 Trim 再替换，
-        // 渲染结果不得携带资源尾换行（嵌入 JS 字符串字面量会断行）。
-        ProseTemplate.substitute template (substitutionsOf substitutions) |> fun text -> text.Trim()
+        ProseTemplate.substitute (template.Trim()) (substitutionsOf substitutions)
 
     /// Substitute `{{name}}` on a raw template with no resource involvement.
     /// Missing keys and leftover placeholders fail closed.

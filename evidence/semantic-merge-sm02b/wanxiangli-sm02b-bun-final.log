@@ -1,0 +1,278 @@
+bun test v1.3.14 (d1632b29)
+
+src/wait/tests/001.test.mjs:
+(pass) WHAT[CAUSAL-WAIT-001] entering a wait makes it observable, disposing clears it [3.19ms]
+(pass) WHAT[CAUSAL-WAIT-001] observation never decides anything: snapshots are pure reads [0.21ms]
+(pass) WHAT[CAUSAL-WAIT-001] the registry holds no business authority: it is plain data in memory [0.20ms]
+
+src/wait/tests/007.test.mjs:
+(pass) WHAT[CAUSAL-WAIT-007] a two-owner cycle is diagnosed as CausalWaitCycle [1.98ms]
+(pass) WHAT[CAUSAL-WAIT-007] waiting for an inactive owner is a BrokenCausalEdge [0.31ms]
+(pass) WHAT[CAUSAL-WAIT-007] an external producer surfaces as ExternalProducerFrontier [0.17ms]
+(pass) WHAT[CAUSAL-WAIT-007] a chained wait walks to the deepest unsatisfied frontier [0.24ms]
+(pass) WHAT[CAUSAL-WAIT-007] no active waits yields the Empty frontier [0.02ms]
+(pass) WHAT[CAUSAL-WAIT-007] the same algorithm runs on a snapshot object [0.25ms]
+
+src/wait/tests/006.test.mjs:
+(pass) WHAT[CAUSAL-WAIT-006] deadline expiry returns WaitTimedOut and leaves no active wait [1.27ms]
+(pass) WHAT[CAUSAL-WAIT-006] a signal win cancels the deadline and no timer survives [0.24ms]
+(pass) WHAT[CAUSAL-WAIT-006] an immediate read resolves without ever suspending [0.13ms]
+(pass) WHAT[CAUSAL-WAIT-006] lease release is idempotent and does not revive [0.08ms]
+(pass) WHAT[CAUSAL-WAIT-006] disposing one wait leaves the others active [0.09ms]
+(pass) WHAT[CAUSAL-WAIT-006] task waiting needs only the observer and rejects a registry as that capability [1.07ms]
+
+src/wait/tests/003.test.mjs:
+(pass) WHAT[CAUSAL-WAIT-003] the module writes nothing durable [1.39ms]
+(pass) WHAT[CAUSAL-WAIT-003] a bound diagnostic sink receives snapshots, never business authority [0.14ms]
+(pass) WHAT[CAUSAL-WAIT-003] a throwing sink cannot break waits or hide their lifecycle [0.12ms]
+(pass) WHAT[CAUSAL-WAIT-003] the diagnostic target binds once and cannot be redirected [0.02ms]
+
+src/wait/tests/002.test.mjs:
+(pass) WHAT[CAUSAL-WAIT-002] the five diagnostic elements survive a snapshot round trip [0.68ms]
+(pass) WHAT[CAUSAL-WAIT-002] termination records the responsible exit on the transition [0.07ms]
+(pass) WHAT[CAUSAL-WAIT-002] owner identity is order-independent in the diagnostic key [0.24ms]
+
+src/wait/tests/009.test.mjs:
+(pass) WHAT[CAUSAL-WAIT-009] a completion mailbox works without any registry [0.32ms]
+(pass) WHAT[CAUSAL-WAIT-009] cancelling wakes every waiter exactly once [0.10ms]
+(pass) WHAT[CAUSAL-WAIT-009] one waiter resolving does not consume another waiter [0.09ms]
+(pass) WHAT[CAUSAL-WAIT-009] a local interrupt competes with the mailbox wake [0.12ms]
+(pass) WHAT[CAUSAL-WAIT-009] the join batch bound is exported as contract vocabulary
+(pass) WHAT[CAUSAL-WAIT-009] the wait module imports no sibling library and no runtime service [0.52ms]
+
+src/wait/tests/008.test.mjs:
+(pass) WHAT[CAUSAL-WAIT-008] registries are process-local and mutually invisible [0.12ms]
+(pass) WHAT[CAUSAL-WAIT-008] a fresh registry starts empty: old observations do not survive [0.05ms]
+(pass) WHAT[CAUSAL-WAIT-008] history is bounded by the declared capacity [0.55ms]
+
+src/wait/tests/004.test.mjs:
+(pass) WHAT[CAUSAL-WAIT-004] the observer capability exposes only Enter [0.06ms]
+(pass) WHAT[CAUSAL-WAIT-004] the snapshot reader capability exposes only Snapshot [0.07ms]
+(pass) WHAT[CAUSAL-WAIT-004] a wrong capability shape is rejected, not coerced [0.04ms]
+
+src/wait/tests/005.test.mjs:
+(pass) WHAT[CAUSAL-WAIT-005] a waiter stays suspended until a real event wakes it [35.15ms]
+(pass) WHAT[CAUSAL-WAIT-005] both channels wake waiters and keep their payloads drainable [0.27ms]
+(pass) WHAT[CAUSAL-WAIT-005] a queued signal is visible without waiting first [0.05ms]
+(pass) WHAT[CAUSAL-WAIT-005] drain is bounded and leaves the remainder queued [0.03ms]
+
+src/grounding/tests/001.test.mjs:
+(pass) SPEC[grounding-001] discover finds requirements packages with WHAT.md, sorted by name [3.03ms]
+(pass) SPEC[grounding-001] discover returns empty when requirements/ is missing [0.13ms]
+(pass) SPEC[grounding-001] discover loads APPLIES-TO rules and skips comments and blank lines [2.63ms]
+(pass) SPEC[grounding-001] APPLIES-TO declaring package self coverage is a configuration error [1.00ms]
+(pass) SPEC[grounding-001] every possible self descendant is rejected before it exists [7.81ms]
+
+src/grounding/tests/003.test.mjs:
+(pass) SPEC[grounding-003] materialize injects only direct root-level *.md files, sorted by name [2.30ms]
+(pass) SPEC[grounding-003] snapshot digest is content-anchored over path and bytes [1.31ms]
+(pass) SPEC[grounding-003] materialize of an unknown package fails explicitly [0.50ms]
+(pass) SPEC[grounding-003] sha256Hex matches the known lowercase hex vector [0.01ms]
+(pass) SPEC[grounding-003] snapshotsForPaths deduplicates packages and sorts by name [2.00ms]
+
+src/grounding/tests/002.test.mjs:
+(pass) SPEC[grounding-002] package self directory is always covered [0.73ms]
+(pass) SPEC[grounding-002] APPLIES-TO external rules include and later exclude, in declaration order [1.15ms]
+(pass) SPEC[grounding-002] overlapping paths return all matching packages sorted by name [1.00ms]
+(pass) SPEC[grounding-002] a path outside the workspace resolves to nothing [0.52ms]
+
+src/identity/tests/001.test.mjs:
+(pass) WHAT[participant-identity-001] active parsing accepts exactly the six active roles [0.10ms]
+(pass) WHAT[participant-identity-001] active parsing rejects historical, internal and malformed inputs [0.04ms]
+(pass) WHAT[participant-identity-001] historical decoding accepts all eleven roles for journal replay only [0.03ms]
+(pass) WHAT[participant-identity-001] persona catalog maps every role to its V1 persona [0.05ms]
+
+src/identity/tests/003.test.mjs:
+(pass) WHAT[participant-identity-003] human-root requires an explicit participant proof [0.26ms]
+(pass) WHAT[participant-identity-003] agent-owner-root requires owner and child proof [0.06ms]
+(pass) WHAT[participant-identity-003] continuation accepts only the closed vocabulary [0.07ms]
+(pass) WHAT[participant-identity-003] host-internal is the only proof-free origin [0.02ms]
+(pass) WHAT[participant-identity-003] malformed raw input is rejected without any fallback [0.33ms]
+(pass) WHAT[participant-identity-003] no rejection path ever yields a human origin (D-01) [0.03ms]
+
+src/identity/tests/002.test.mjs:
+(pass) WHAT[participant-identity-002] root resolution yields immutable canonical evidence [0.19ms]
+(pass) WHAT[participant-identity-002] root resolution rejects legacy, malformed and unknown names without fallback [0.06ms]
+(pass) WHAT[participant-identity-002] internal slot names resolve with explicit role projection [0.02ms]
+(pass) WHAT[participant-identity-002] rehydrated evidence round-trips through the plain view [0.16ms]
+(pass) WHAT[participant-identity-002] rehydration rejects every field mismatch [0.08ms]
+(pass) WHAT[participant-identity-002] bookkeeper evidence requires a missing role field [0.03ms]
+
+src/identity/tests/004.test.mjs:
+(pass) WHAT[participant-identity-004] binding requires every field and an active role [0.30ms]
+(pass) WHAT[participant-identity-004] binding rejects evidence whose role disagrees with the binding role [0.06ms]
+(pass) WHAT[participant-identity-004] model rebind changes only the physical target, never the identity [0.08ms]
+(pass) WHAT[participant-identity-004] tampered binding views are rejected at rebind (fail-closed) [0.07ms]
+
+src/identity/tests/005.test.mjs:
+(pass) WHAT[participant-identity-005] inherited identity carries the owner persona and catalog version [0.10ms]
+(pass) WHAT[participant-identity-005] inherited identity without an owner witness is rejected [0.04ms]
+(pass) WHAT[participant-identity-005] owner persona mismatch between witness and input is rejected [0.06ms]
+(pass) WHAT[participant-identity-005] agent-owner-root origin proof and inherited identity compose [0.03ms]
+
+src/resources/tests/001.test.mjs:
+(pass) SPEC[resources-001] a missing locale side fails closed for every language [2.80ms]
+
+src/resources/tests/002.test.mjs:
+(pass) SPEC[resources-002] template trimming preserves every character of injected values [2.56ms]
+(pass) SPEC[resources-002] placeholder parity and missing substitutions fail closed [3.26ms]
+
+src/resources/tests/004.test.mjs:
+(pass) SPEC[resources-003] package-internal location works from any working directory [0.78ms]
+(pass) SPEC[resources-003] a resource absent from the package fails instead of reading elsewhere [0.05ms]
+
+src/resources/tests/005.test.mjs:
+(pass) SPEC[resources-004] language parsing and the preference ladder resolve without session binding [0.26ms]
+(pass) SPEC[resources-004] the global preference switches on refresh and is not session-bound [0.06ms]
+(pass) SPEC[resources-004] protocol literals survive substitution untouched [0.80ms]
+(pass) SPEC[resources-004] semantic paths reject escapes [0.09ms]
+
+src/time/tests/001.test.mjs:
+(pass) WHAT[TIME-CAPABILITY-001] timer delay resolves after the requested milliseconds [32.41ms]
+(pass) WHAT[TIME-CAPABILITY-001] cancel leaves the delay permanently pending [62.41ms]
+(pass) WHAT[TIME-CAPABILITY-001] cancel and dispose are idempotent [51.77ms]
+(pass) WHAT[TIME-CAPABILITY-001] cancelling one handle never steals another waiter [62.08ms]
+(pass) WHAT[TIME-CAPABILITY-001] virtual port: cancelled handle never fires after advancing [0.84ms]
+
+src/time/tests/007.test.mjs:
+(pass) WHAT[TIME-CAPABILITY-007] a virtual clock keeps a stable origin until explicitly moved [0.93ms]
+(pass) WHAT[TIME-CAPABILITY-007] elapsed is derived from the injected clock, not from real time [20.69ms]
+
+src/time/tests/006.test.mjs:
+(pass) WHAT[TIME-CAPABILITY-006] an expired timer delay only settles the wait, it mints no business fact [11.44ms]
+(pass) WHAT[TIME-CAPABILITY-006] raceExit reports which side won without inventing an exit [10.87ms]
+(pass) WHAT[TIME-CAPABILITY-006] cancelling an already-settled handle is a harmless no-op [6.41ms]
+
+src/time/tests/003.test.mjs:
+(pass) WHAT[TIME-CAPABILITY-003] a virtual timer does not fire before its due time [0.23ms]
+(pass) WHAT[TIME-CAPABILITY-003] due timers fire in registration order within one advance [0.16ms]
+(pass) WHAT[TIME-CAPABILITY-003] the virtual clock advances deterministically and can be set [0.09ms]
+(pass) WHAT[TIME-CAPABILITY-003] virtual timer instances are independent [0.07ms]
+(pass) WHAT[TIME-CAPABILITY-003] a disposed virtual port no longer fires [0.12ms]
+
+src/time/tests/002.test.mjs:
+(pass) WHAT[TIME-CAPABILITY-002] remaining and expiry come from the typed deadline, not raw comparisons [0.70ms]
+(pass) WHAT[TIME-CAPABILITY-002] remaining never goes negative and expired deadlines wait zero [0.06ms]
+(pass) WHAT[TIME-CAPABILITY-002] an extreme budget is clamped instead of overflowing [0.06ms]
+(pass) WHAT[TIME-CAPABILITY-002] next wait is capped at the JS timer ceiling [0.03ms]
+(pass) WHAT[TIME-CAPABILITY-002] a negative budget is an expired deadline, not an exception [0.05ms]
+(pass) WHAT[TIME-CAPABILITY-002] timezone representation does not change the result [0.07ms]
+
+src/time/tests/008.test.mjs:
+(pass) WHAT[TIME-CAPABILITY-008] the pure deadline surface carries no physical or virtual factory [0.06ms]
+(pass) WHAT[TIME-CAPABILITY-008] physical and virtual clocks have independent owners [0.12ms]
+(pass) WHAT[TIME-CAPABILITY-008] deadline algebra is independent of both adapters [0.07ms]
+(pass) WHAT[TIME-CAPABILITY-008] a physical port instance never observes the virtual clock [1.37ms]
+(pass) WHAT[TIME-CAPABILITY-008] the module imports no sibling library [0.27ms]
+
+src/time/tests/004.test.mjs:
+(pass) WHAT[TIME-CAPABILITY-004] the emitted module reads no ambient wall clock [0.22ms]
+(pass) WHAT[TIME-CAPABILITY-004] deadline inputs never request the ambient time, including invalid missing inputs [0.35ms]
+(pass) WHAT[TIME-CAPABILITY-004] the virtual clock ignores real elapsed time [53.53ms]
+(pass) WHAT[TIME-CAPABILITY-004] the physical clock port is the only declared ambient reader [0.14ms]
+
+src/time/tests/005.test.mjs:
+(pass) WHAT[TIME-CAPABILITY-005] deadline computation is a pure replay of its inputs [0.27ms]
+(pass) WHAT[TIME-CAPABILITY-005] constructing and reading a deadline has no side effects [0.17ms]
+
+src/events/tests/007.test.mjs:
+(pass) WHAT[durable-events-007] validate fails closed on a missing parent [4.94ms]
+(pass) WHAT[durable-events-007] validate fails closed on a parent cycle [0.87ms]
+(pass) WHAT[durable-events-007] validate reports the first unknown vocabulary item, not a skip [0.08ms]
+(pass) WHAT[durable-events-007] a self-parent is a cycle, not a head [0.28ms]
+
+src/events/tests/003.test.mjs:
+(pass) WHAT[durable-events-003] encode is deterministic and independent of input key order [0.39ms]
+(pass) WHAT[durable-events-003] canonical JSON sorts keys by Unicode code point, not locale [0.37ms]
+(pass) WHAT[durable-events-003] canonical JSON encodes sparse array holes as null [0.05ms]
+(pass) WHAT[durable-events-003] same id with different bytes fails checkIdentity and mergeByIdentity [0.42ms]
+(pass) WHAT[durable-events-003] identical duplicates collapse; distinct ids are all retained [0.91ms]
+(pass) WHAT[durable-events-003] encode/decode round trip preserves event semantics [1.09ms]
+
+src/events/tests/002.test.mjs:
+(pass) WHAT[durable-events-002] envelope carries the seven fixed wire fields and no version field [0.26ms]
+(pass) WHAT[durable-events-002] decode rejects an injected version field [0.16ms]
+(pass) WHAT[durable-events-002] decode rejects a renamed wire field [0.10ms]
+(pass) WHAT[durable-events-002] vocabulary legality comes only from the explicit predicate [0.37ms]
+
+src/events/tests/008.test.mjs:
+(pass) WHAT[durable-events-008] a legal fork validates with two heads, not a conflict [0.56ms]
+(pass) WHAT[durable-events-008] a ruling event over all heads restores a single head [0.44ms]
+(pass) WHAT[durable-events-008] a partial ruling leaves the uncovered head open [0.41ms]
+(pass) WHAT[durable-events-008] validate output is deduplicated and sorted by id [0.48ms]
+
+src/events/tests/012.test.mjs:
+(pass) WHAT[durable-events-012] inline payload round trip preserves the exact bytes [1.18ms]
+(pass) WHAT[durable-events-012] a declared payload ref without inline bytes fails decode [0.22ms]
+(pass) WHAT[durable-events-012] a tampered inline payload fails decode on digest mismatch [0.18ms]
+(pass) WHAT[durable-events-012] validate catches payload closure violations without I/O [0.13ms]
+(pass) WHAT[durable-events-012] an empty payload ref set needs no payloads object [0.08ms]
+
+src/events/tests/027.test.mjs:
+(pass) WHAT[durable-events-027] each retired event type is rejected with UnknownEventType [0.15ms]
+(pass) WHAT[durable-events-027] removing the retired event lets the remaining history load [0.21ms]
+(pass) WHAT[durable-events-027] a current type unknown to a narrower predicate is still rejected [0.04ms]
+
+src/events/tests/004.test.mjs:
+(pass) WHAT[durable-events-004] encode ends with exactly one LF [0.09ms]
+(pass) WHAT[durable-events-004] decode accepts the codec output as-is [0.08ms]
+(pass) WHAT[durable-events-004] decode rejects a line missing the trailing LF [0.05ms]
+(pass) WHAT[durable-events-004] decode rejects a double trailing LF [0.04ms]
+(pass) WHAT[durable-events-004] decode rejects a CRLF terminator [0.08ms]
+(pass) WHAT[durable-events-004] tryDecodeUtf8Text rejects a UTF-8 BOM [0.78ms]
+(pass) WHAT[durable-events-004] tryDecodeUtf8Text rejects invalid UTF-8 sequences [1.59ms]
+(pass) WHAT[durable-events-004] tryDecodeUtf8 decodes valid bytes and round trips [0.16ms]
+
+src/fs/tests/001.test.mjs:
+(pass) SPEC[fs-001] strict UTF-8 read returns exact bytes including CRLF and missing final newline [0.72ms]
+(pass) SPEC[fs-001] NUL bytes are rejected as INVALID_UTF8, never silently read as text [0.43ms]
+(pass) SPEC[fs-001] invalid UTF-8 sequences are rejected as INVALID_UTF8 [0.42ms]
+(pass) SPEC[fs-001] missing file reports FILE_NOT_FOUND [0.26ms]
+(pass) SPEC[fs-001] dot-dot escape is refused by resolveBounded as PATH_DENIED [0.31ms]
+(pass) SPEC[fs-001] symlink pointing outside the root is refused as PATH_DENIED [0.85ms]
+(pass) SPEC[fs-001] in-root symlink and plain paths resolve inside the boundary [0.24ms]
+(pass) SPEC[fs-001] a symlinked capability root keeps its canonical boundary and relative listing [1.69ms]
+(pass) SPEC[fs-001] existsPath observes presence and absence without throwing [0.34ms]
+
+src/fs/tests/003.test.mjs:
+(pass) SPEC[fs-003] ordered anchors resolve duplicate text by occurrence, not by re-hitting the first [0.35ms]
+(pass) SPEC[fs-003] requireUnique refuses a needle that matches twice [0.22ms]
+(pass) SPEC[fs-004] requireUnique succeeds when the anchor matches exactly once [0.16ms]
+(pass) SPEC[fs-003] empty anchor content and invalid regex use their stable codes [0.23ms]
+(pass) SPEC[fs-003] missing occurrence reports ANCHOR_NOT_FOUND with the occurrence in the reason [0.16ms]
+(pass) SPEC[fs-003] non-positive occurrence is an invalid declaration [0.17ms]
+(pass) SPEC[fs-003] zero-width regex match yields start equal to end [0.24ms]
+(pass) SPEC[fs-003] grep reports 1-based line and column and skips non-UTF-8 files [1.91ms]
+(pass) SPEC[fs-003] grep accepts a regex needle object [0.55ms]
+(pass) SPEC[fs-003] grep with an empty file pattern is refused before scanning [0.18ms]
+
+src/fs/tests/002.test.mjs:
+(pass) SPEC[fs-002] glob respects nested .gitignore rules and negation [1.83ms]
+(pass) SPEC[fs-002] git info exclude participates at the root only [0.93ms]
+(pass) SPEC[fs-002] symlinks are not followed and .git is never entered [0.94ms]
+(pass) SPEC[fs-002] slash-less patterns match at any depth, double-star crosses directories [1.51ms]
+(pass) SPEC[fs-002] brace alternation expands top-level commas [0.81ms]
+(pass) SPEC[fs-002] directory-only ignore rules do not hide plain files of the same shape [0.91ms]
+(pass) SPEC[fs-002] empty pattern is refused with the stable invalid-pattern code [0.35ms]
+(pass) SPEC[fs-002] visibleEntries lists one directory sorted with isDir, respecting .gitignore, negation, nested rules, and .git/info/exclude [3.13ms]
+
+src/fs/tests/004.test.mjs:
+(pass) SPEC[fs-004] the same path mutated twice is refused before any file effect [0.92ms]
+(pass) SPEC[fs-004] preflight detects an externally changed snapshot and refuses with zero writes [0.57ms]
+(pass) SPEC[fs-004] a rewrite whose original text no longer matches disk is refused, third-party bytes survive [0.55ms]
+(pass) SPEC[fs-004] create refuses when the target already exists [0.30ms]
+(pass) SPEC[fs-004] a failing second write rolls the first write back to its original bytes [0.99ms]
+(pass) SPEC[fs-004] rollback restores only content the transaction itself wrote [0.49ms]
+(pass) SPEC[fs-004] applyRollback removes created files and restores rewritten ones [0.83ms]
+(pass) SPEC[fs-004] commit and rollback plans are deterministic and path-ordered [0.28ms]
+
+src/fs/tests/005.test.mjs:
+(pass) SPEC[fs-005] matchesPathPattern keeps the git wildmatch semantics shared with requirement grounding [0.31ms]
+(pass) SPEC[fs-005] negated character class and escaped literals behave as in gitignore [0.17ms]
+(pass) SPEC[fs-005] empty pattern is refused with the stable invalid-pattern code [0.12ms]
+(pass) SPEC[fs-005] compilePattern result is consumable through testCompiled [0.16ms]
+(pass) SPEC[fs-005] every result uses the plain JS { ok, value | code, reason } shape [0.20ms]
+
+ 191 pass
+ 0 fail
+Ran 191 tests across 41 files. [558.00ms]

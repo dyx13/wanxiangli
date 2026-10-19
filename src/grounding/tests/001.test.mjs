@@ -38,3 +38,27 @@ test('SPEC[grounding-001] APPLIES-TO declaring package self coverage is a config
   write(root, 'requirements/alpha/APPLIES-TO', 'requirements/alpha/WHAT.md')
   assert.throws(() => Grounding.discover(root), /self coverage/)
 })
+
+test('SPEC[grounding-001] every possible self descendant is rejected before it exists', t => {
+  const root = workspace(t)
+  write(root, 'requirements/alpha/WHAT.md', '# alpha')
+  const patterns = [
+    '/requirements/alpha',
+    '/requirements/alpha/tests/**',
+    '/requirements/**/future?.fs',
+    '/requirements/[a-c]lpha/tests/**',
+    '/requirements/alpha/[]|a]',
+    '/requirements/alpha/tests/雪.md',
+    '/requirements/al**/a/**',
+  ]
+  for (const pattern of patterns) {
+    for (const prefix of ['', '!']) {
+      write(root, 'requirements/alpha/APPLIES-TO', prefix + pattern)
+      assert.throws(() => Grounding.discover(root), /self coverage/, prefix + pattern)
+    }
+  }
+  for (const pattern of ['/requirements/alpha-old/**', '/requirements/[b-z]lpha/**', '/src/**']) {
+    write(root, 'requirements/alpha/APPLIES-TO', pattern)
+    assert.deepEqual(Grounding.discover(root).map(entry => entry.name), ['alpha'])
+  }
+})

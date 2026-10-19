@@ -1,9 +1,9 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { Time } from '../../../dist/time/Time.js'
+import { TimeTesting } from '../../../dist/time-testing/TimeTesting.js'
 
 test('WHAT[TIME-CAPABILITY-003] a virtual timer does not fire before its due time', async () => {
-  const virtual = Time.virtualTimerPort()
+  const virtual = TimeTesting.virtualTimerPort()
   const handle = virtual.port.Delay(100)
   let fired = false
   handle.Delay.then(() => { fired = true })
@@ -18,7 +18,7 @@ test('WHAT[TIME-CAPABILITY-003] a virtual timer does not fire before its due tim
 })
 
 test('WHAT[TIME-CAPABILITY-003] due timers fire in registration order within one advance', async () => {
-  const virtual = Time.virtualTimerPort()
+  const virtual = TimeTesting.virtualTimerPort()
   const order = []
   const first = virtual.port.Delay(50)
   const second = virtual.port.Delay(50)
@@ -31,7 +31,7 @@ test('WHAT[TIME-CAPABILITY-003] due timers fire in registration order within one
 })
 
 test('WHAT[TIME-CAPABILITY-003] the virtual clock advances deterministically and can be set', () => {
-  const virtual = Time.virtualClockPort()
+  const virtual = TimeTesting.virtualClockPort()
   const before = Number(virtual.port.UtcNow())
   virtual.advanceMs(1500)
   const after = Number(virtual.port.UtcNow())
@@ -42,15 +42,15 @@ test('WHAT[TIME-CAPABILITY-003] the virtual clock advances deterministically and
 })
 
 test('WHAT[TIME-CAPABILITY-003] virtual timer instances are independent', () => {
-  const one = Time.virtualTimerPort()
-  const two = Time.virtualTimerPort()
+  const one = TimeTesting.virtualTimerPort()
+  const two = TimeTesting.virtualTimerPort()
   one.advance(100)
   assert.equal(one.nowMs(), 100)
   assert.equal(two.nowMs(), 0)
 })
 
 test('WHAT[TIME-CAPABILITY-003] a disposed virtual port no longer fires', async () => {
-  const virtual = Time.virtualTimerPort()
+  const virtual = TimeTesting.virtualTimerPort()
   const handle = virtual.port.Delay(10)
   virtual.port.Dispose()
   virtual.advance(10)

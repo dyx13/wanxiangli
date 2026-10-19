@@ -22,7 +22,31 @@ function fixture(t, modules) {
     mkdirSync(path.join(directory, 'src/native-process'))
     copyFileSync(path.join(root, 'src/native-process/BunProcess.fs'), path.join(directory, 'src/native-process/BunProcess.fs'))
   }
+  if (modules.some(name => ['time-node', 'time-testing'].includes(name))) {
+    mkdirSync(path.join(directory, 'src/time'), { recursive: true })
+    copyFileSync(path.join(root, 'src/time/Temporal.fs'), path.join(directory, 'src/time/Temporal.fs'))
+  }
   return directory
+}
+
+for (const [name, probe] of [
+  ['time', `import { Time } from './dist/time/Time.js'
+    if (Time.deadlineNextWaitMs('2026-10-19T00:00:00Z', Time.deadlineCreate('2026-10-19T00:00:00Z', 100)) !== 100) throw Error('deadline')`],
+  ['time-node', `import { NodeTime } from './dist/time-node/NodeTime.js'
+    if (!(NodeTime.nodeClockPort().UtcNow() instanceof Date)) throw Error('clock')`],
+  ['time-testing', `import { TimeTesting } from './dist/time-testing/TimeTesting.js'
+    const clock = TimeTesting.virtualClockPort()
+    const before = Number(clock.port.UtcNow())
+    clock.advanceMs(42)
+    if (Number(clock.port.UtcNow()) - before !== 42) throw Error('clock')`],
+]) {
+  test(`SPEC[build-001] ${name} compiles with no sibling implementation and runs independently`, { timeout: 60000 }, t => {
+    const directory = fixture(t, [name])
+    if (name !== 'time') assert.deepEqual(readdirSync(path.join(directory, 'src/time')), ['Temporal.fs'])
+    succeed(run(directory, [path.join(directory, 'scripts/build.mjs'), name]))
+    assert.deepEqual(readdirSync(path.join(directory, 'dist')), [name])
+    succeed(run(directory, ['--input-type=module', '--eval', probe]))
+  })
 }
 
 function run(directory, args) {

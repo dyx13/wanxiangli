@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, symlinkSync } from 'node:fs'
 import path from 'node:path'
 import { workspace, fs, write, linkOutside } from './support.mjs'
 
@@ -59,6 +59,20 @@ test('SPEC[fs-001] in-root symlink and plain paths resolve inside the boundary',
   const resolved = fs(root).resolveBounded('nested/file.txt')
   assert.equal(resolved.ok, true)
   assert.ok(resolved.value.startsWith(path.resolve(root)))
+})
+
+test('SPEC[fs-001] a symlinked capability root keeps its canonical boundary and relative listing', t => {
+  const root = workspace(t)
+  const actual = path.join(root, 'actual')
+  const alias = path.join(root, 'alias')
+  write(root, 'actual/nested/file.txt', 'x')
+  symlinkSync(actual, alias, 'dir')
+  const api = fs(alias)
+  assert.equal(api.resolveBounded('nested/future.txt').ok, true)
+  assert.equal(api.resolveBounded('../outside.txt').ok, false)
+  const listing = api.visibleEntries(alias, path.join(actual, 'nested'))
+  assert.equal(listing.ok, true)
+  assert.deepEqual(listing.entries, [{ name: 'file.txt', isDir: false }])
 })
 
 test('SPEC[fs-001] existsPath observes presence and absence without throwing', t => {

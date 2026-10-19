@@ -33,6 +33,7 @@
     - 证明：[TODO] `tests/001.test.mjs` 已落盘（两个方向的单语残缺反例），待 DevOps 运行。
 
 4. [本模块 LEMMA 2, 4] 解析、阶梯与全局偏好切换不绑定会话；协议字面量替换后逐字符保留。
+    模板格式的首尾空白先裁剪，注入值之后不再裁剪；用户原文、记录的 BOM、CRLF 与尾换行均保留。`tests/002.test.mjs` 的安装包同形反例验证该边界。
     - 证明：[TODO] `tests/005.test.mjs` 已落盘，待 DevOps 运行。
 
 5. [总规则 SPEC 1] 单模块独立编译：`npm run build -- resources` 不编译其他子模块。

@@ -28,3 +28,10 @@ let matchesPathPattern (pattern: string) (path: string) : bool =
         failwith ("invalid APPLIES-TO pattern: " + pattern)
     else
         unbox<bool> (result?value)
+
+let mayMatchSubtree (pattern: string) (directory: string) : bool =
+    let result = api?mayMatchSubtree(pattern, directory)
+    if not (unbox<bool> (result?ok)) then
+        failwith ("invalid APPLIES-TO pattern: " + pattern)
+    else
+        unbox<bool> (result?value)

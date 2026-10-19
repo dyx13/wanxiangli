@@ -3,6 +3,22 @@ import assert from 'node:assert/strict'
 import { Resources } from '../../../dist/resources/Resources.js'
 import { Fixture } from './support/fixture.mjs'
 
+test('SPEC[resources-002] template trimming preserves every character of injected values', () => {
+  const fixture = new Fixture()
+  try {
+    fixture.write('tool/record', 'en.md', '\n{{record}}\n')
+    fixture.write('tool/record', 'zh-CN.md', '\n{{record}}\n')
+    const resources = new Resources(fixture.root)
+    for (const language of ['English', 'SimplifiedChinese']) {
+      for (const record of ['  token\n', '\ufefffirst\r\n\r\n', '  path/$value`literal`  ']) {
+        assert.equal(resources.render(language, 'tool/record', { record }), record)
+      }
+    }
+  } finally {
+    fixture.dispose()
+  }
+})
+
 test('SPEC[resources-002] placeholder parity and missing substitutions fail closed', () => {
   const fixture = new Fixture()
   try {

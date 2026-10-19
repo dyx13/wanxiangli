@@ -19,8 +19,8 @@ module MutationFs =
         let resolvedRoot = pathResolve root
         let resolved = resolveToolPath root path
 
-        let inside (candidate: string): bool =
-            candidate = resolvedRoot || candidate.StartsWith(resolvedRoot + "/")
+        let inside (canonicalRoot: string) (candidate: string): bool =
+            candidate = canonicalRoot || candidate.StartsWith(canonicalRoot + "/")
 
         let rec firstExisting (candidate: string): string =
             let present =
@@ -35,10 +35,11 @@ module MutationFs =
         let denied = failure "PATH_DENIED" ("path outside capability boundary: " + path)
 
         try
+            let canonicalRoot = realpathSync resolvedRoot
             let existing = firstExisting resolved
             let real = realpathSync existing
             let suffix = resolved.Substring(existing.Length)
-            if inside real && inside (real + suffix) then Ok resolved
+            if inside canonicalRoot real && inside canonicalRoot (real + suffix) then Ok resolved
             else Error denied
         with _ ->
             Error denied

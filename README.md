@@ -4,6 +4,8 @@
 
 当前不是完整新宿主。第一刀是 **工作开立 → 评审 → 接力或交付 → 持久恢复**；第二刀是独立的真实进程会话；第三刀是确认轨迹、字节原件和固定取材区间；0.5.0 第四刀是资源归属与收尾。0.6.0 补完整采集、监管组合和追加 Opening 绑定。主仓已消费库，完整职责迁移仍以主仓验收为准；原 `src/` 中只有说明、没有 fsproj 的目录仍是草稿。
 
+0.8.1整合候选保留本地已验核心并接收上游新增模块。时间能力通过 `wanxiangli/time`（Time纯计算）、`wanxiangli/time-node`（NodeTime物理时基）、`wanxiangli/time-testing`（TimeTesting验证时基）分别交付；UtcNow返回Date。Wait的等待入口只需observer capability，冻结deadline可直接消费。迁移与验收边界见[MIGRATION](MIGRATION.md)和[施工记录](施工顺序.md)。
+
 进程入口是 `wanxiangli/process` / `ProcessSession`：真实启动、有界 stdin、双路原始输出尾部或显式 Capture、独立等待和 POSIX 进程组信号。它不导入下面三个入口，下面三个入口也不导入它。完整用法、字节游标和监管边界见 `PROCESS.md`。
 
 监管入口是 `wanxiangli/supervision` / `SupervisedProcess`：使用基础 ProcessSession 的显式组合，保留真实组长到目标输出收尾。目标已退出而同组后代持管道时仍能请求终止；它不是基础对象的透明替身，也不承诺脱组后代或宿主崩溃恢复。用法见 [监管说明](src/supervision/README.md)。

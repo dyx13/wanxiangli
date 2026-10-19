@@ -1,0 +1,33 @@
+✔ SPEC[grounding-001] discover finds requirements packages with WHAT.md, sorted by name (3.245125ms)
+✔ SPEC[grounding-001] discover returns empty when requirements/ is missing (0.331084ms)
+✔ SPEC[grounding-001] discover loads APPLIES-TO rules and skips comments and blank lines (2.544916ms)
+✔ SPEC[grounding-001] APPLIES-TO declaring package self coverage is a configuration error (1.328041ms)
+✖ SPEC[grounding-001] every possible self descendant is rejected before it exists (1.332917ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 82.623542
+
+✖ failing tests:
+
+test at src/grounding/tests/001.test.mjs:42:1
+✖ SPEC[grounding-001] every possible self descendant is rejected before it exists (1.332917ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception: /requirements/alpha
+      at TestContext.<anonymous> (file:///private/tmp/wanxiangli-semantic-merge-20261019/src/grounding/tests/001.test.mjs:57:14)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /self coverage/,
+    operator: 'throws',
+    diff: 'simple'
+  }

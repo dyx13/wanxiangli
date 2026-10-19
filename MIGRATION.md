@@ -1,5 +1,15 @@
 # 渐进抽取与旧仓接线边界
 
+## 0.8.1 上游整合候选
+
+本地0.6.12的Journal释放、完整采集、监督增强、Bun输入输出和Trace原件保证，与固定上游71c155f的Work规则及新增模块合并。独立库限定验收见施工记录，主仓接线另验。
+
+时间入口变更：`wanxiangli/time`的Time只提供Deadline纯计算；物理构造器迁到`wanxiangli/time-node`的NodeTime，虚拟构造器迁到`wanxiangli/time-testing`的TimeTesting。UtcNow返回Date；调用方显式转成ISO字符串再传Deadline。三个编译单元仅共享Temporal纯接口，生产产物不带虚拟实现。
+
+Wait.awaitTask/untilSignalOrDeadline改接observerCapability结果；WaitLease只通过Wait.markExit/Wait.dispose操作。Deadline保持调用方所有且可冻结，不再被写入测试计数。CompletionMailbox.waitForSignal和pendingAgentWakeCount的声明与产物一致。
+
+宿主源码依赖切换为固定gitlink及`file:wanxiangli`，仍只经npm公开入口消费。发行验收仍安装真实临时tarball；后文各版本的tarball接线要求保留为历史，当前不把包归档作为源码依赖。旧Work四字段Reviewed记录不能静默翻译成三字段；旧状态根由宿主按新合同退役，活动资源先收尾，不清空历史证据。
+
 ## 0.6.3：确认材料与明确终结绑定
 
 Trace 新增 `MaterialConfirmed`、`TerminalBound` 和 `material(identity, through)`。不补造缺失的消息、运行完成或来源；原协议、已确认字节和 cut 校验保持。大材料使用连续分片；Terminal 绑定真实 ProviderRun 和固定前沿。类型正反例与真实 SQLite 强杀、恢复、拆除消费包含新观察。旧描述符轨迹不能只换入口继续当原件，主仓接管使用新的 trace identity，既有持久事实及 payload 原样校验重放。

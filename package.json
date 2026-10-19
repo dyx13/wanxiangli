@@ -60,6 +60,14 @@
       "types": "./src/time/index.d.ts",
       "import": "./dist/time/Time.js"
     },
+    "./time-node": {
+      "types": "./src/time-node/index.d.ts",
+      "import": "./dist/time-node/NodeTime.js"
+    },
+    "./time-testing": {
+      "types": "./src/time-testing/index.d.ts",
+      "import": "./dist/time-testing/TimeTesting.js"
+    },
     "./wait": {
       "types": "./src/wait/index.d.ts",
       "import": "./dist/wait/Wait.js"
@@ -82,6 +90,8 @@
     "src/fs/index.d.ts",
     "src/grounding/index.d.ts",
     "src/time/index.d.ts",
+    "src/time-node/index.d.ts",
+    "src/time-testing/index.d.ts",
     "src/wait/index.d.ts",
     "README.md",
     "PROCESS.md",

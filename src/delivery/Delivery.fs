@@ -105,9 +105,23 @@ let private pieceValue (piece: Piece) : obj =
 let private stored (view: obj) : obj = if isAbsent view then null else view
 
 let private materialOf (value: obj) : obj =
-    if isAbsent value then null
-    elif jsTypeof value = "string" then value
-    else fail "material must be a string or null"
+    if isAbsent value then
+        null
+    elif
+        jsTypeof value = "string"
+        && not (String.IsNullOrWhiteSpace(unbox<string> value))
+    then
+        value
+    else
+        fail "material must be a non-blank string or null"
+
+let private arrayValues (name: string) (value: obj) : obj array =
+    let isArray: bool = emitJsExpr value "Array.isArray($0)"
+
+    if not isArray then
+        fail (name + " must be an array")
+
+    Array.init (unbox<int> value?length) (fun index -> ownField value (string index))
 
 let private cellValue (cell: Cell) =
     if cell.Sealed then cell.Material else cell.View
@@ -232,10 +246,8 @@ let Delivery () : DeliveryMessages =
 
             [||]
         else
-            if isNull candidates then
-                fail "candidates must be an array"
-
-            let pieces = candidates |> Array.map pieceOf |> Array.toList
+            let pieces =
+                arrayValues "candidates" (box candidates) |> Array.map pieceOf |> Array.toList
 
             let assistant =
                 if isAbsent assistant then
@@ -282,7 +294,10 @@ let Delivery () : DeliveryMessages =
             guard (fun () ->
                 let sessionId = text "sessionId" sessionId
                 let fence = fenceOf fence
-                cells[sessionId] <- openCell view (Some fence))
+
+                match tryCell sessionId with
+                | Some cell when cell.Sealed && cell.Fence = Some fence -> ()
+                | _ -> cells[sessionId] <- openCell view (Some fence))
 
         member _.seal(sessionId, fence, material, keys) =
             guard (fun () ->
@@ -290,10 +305,10 @@ let Delivery () : DeliveryMessages =
                 let fence = fenceOf fence
                 let material = materialOf material
 
-                if isNull keys then
-                    fail "keys must be an array"
+                let keys = arrayValues "keys" (box keys) |> Array.map (text "key")
 
-                let keys = keys |> Array.map (box >> text "key")
+                if isAbsent material && keys.Length > 0 then
+                    fail "keys require sealed material"
 
                 match tryCell sessionId with
                 | Some cell when cell.Fence = Some fence && not cell.Sealed ->
@@ -311,13 +326,16 @@ let Delivery () : DeliveryMessages =
             guard (fun () ->
                 let sessionId = text "sessionId" sessionId
                 let fence = if isAbsent fence then None else Some(fenceOf fence)
-                let material = text "material" (box material)
+                let material = materialOf (box material)
+
+                if isAbsent material then
+                    fail "restore requires material"
 
                 cells[sessionId] <-
                     { View = null
                       Fence = fence
                       Sealed = true
-                      Material = box material
+                      Material = material
                       Keys = [||] })
 
         member _.take(sessionId) =

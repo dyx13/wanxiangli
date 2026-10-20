@@ -35,6 +35,8 @@ test('SPEC[delivery-005] sealing requires the exact call fence and cannot replac
   assert.deepEqual(delivery.peek('s'), { prefixUntil: 3 })
   assert.equal(delivery.seal('s', fence('run-2', 'call-2'), 'first', ['first']), true)
   assert.equal(delivery.seal('s', fence('run-2', 'call-2'), 'later', ['later']), false)
+  delivery.deliver('s', fence('run-2', 'call-2'), { prefixUntil: 99 })
+  assert.equal(delivery.seal('s', fence('run-2', 'call-2'), 'replayed', ['replayed']), false)
   assert.equal(delivery.peek('s'), 'first')
   assert.equal(delivery.seal('none', fence(), 'missing', []), false)
 })
@@ -70,6 +72,26 @@ test('SPEC[delivery-005] bad sealing input leaves the delivery and its cursor un
   delivery.deliver('s', fence(), { prefixUntil: 1 })
   assert.throws(() => delivery.seal('s', fence(), 42, ['key']), /material/)
   assert.throws(() => delivery.seal('s', fence(), 'bytes', [42]), /key/)
+  assert.throws(() => delivery.seal('s', fence(), null, ['uncaptured']), /keys require/)
+  for (const empty of ['', ' \n']) {
+    assert.throws(() => delivery.seal('s', fence(), empty, []), /material/)
+    assert.throws(() => delivery.restore('s', fence(), empty), /material/)
+  }
   assert.deepEqual(delivery.peek('s'), { prefixUntil: 1 })
+  assert.deepEqual(delivery.returned('s'), [])
+})
+
+test('SPEC[delivery-005] array accessors are rejected without running caller code', () => {
+  const delivery = Delivery()
+  delivery.deliver('s', fence(), {})
+  let reads = 0
+  const keys = []
+  Object.defineProperty(keys, 0, { get() { reads += 1; return 'key' } })
+  assert.throws(() => delivery.seal('s', fence(), 'bytes', keys), /accessor/)
+  const pieces = []
+  Object.defineProperty(pieces, 0, { get() { reads += 1; return piece('key') } })
+  assert.throws(() => delivery.handOff(delivery.claim('s', { mode: 'peek' }), pieces, null), /accessor/)
+  assert.equal(reads, 0)
+  assert.deepEqual(delivery.peek('s'), {})
   assert.deepEqual(delivery.returned('s'), [])
 })

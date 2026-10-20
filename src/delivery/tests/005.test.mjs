@@ -1,0 +1,75 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { Delivery, fence, piece } from './support.mjs'
+
+test('SPEC[delivery-005] sealed material survives later selection and only captured keys advance', () => {
+  const delivery = Delivery()
+  delivery.deliver('s', fence(), { prefixUntil: 2 })
+  const captured = ['anchor:1:original', 'prose:s:7:summary']
+  assert.equal(delivery.seal('s', fence(), 'original material', captured), true)
+  captured.push('caller mutation')
+  const peek = delivery.claim('s', { mode: 'peek' })
+  assert.equal(peek.sealed, true)
+  assert.equal(peek.material, 'original material')
+  assert.equal(peek.view, null)
+  assert.deepEqual(delivery.handOff(peek, [piece('late')], 'later prose'), [])
+  assert.deepEqual(delivery.returned('s'), [])
+  const take = delivery.claim('s', { mode: 'run', providerRun: 'run-1' })
+  assert.deepEqual(delivery.handOff(take, [piece('late')], 'later prose'), [])
+  assert.equal(take.material, 'original material')
+  assert.deepEqual(delivery.returned('s'), ['anchor:1:original', 'prose:s:7:summary'])
+  assert.throws(() => delivery.handOff(take, [], null), /already spent/)
+})
+
+test('SPEC[delivery-005] sealing requires the exact call fence and cannot replace sealed material', () => {
+  const delivery = Delivery()
+  delivery.deliver('s', fence('run-2', 'call-2'), { prefixUntil: 3 })
+  assert.equal(delivery.claim('s', { mode: 'fence', ...fence('run-1', 'call-2') }), null)
+  assert.equal(delivery.claim('s', { mode: 'fence', ...fence('run-2', 'call-1') }), null)
+  const exact = delivery.claim('s', { mode: 'fence', ...fence('run-2', 'call-2') })
+  assert.deepEqual(exact.view, { prefixUntil: 3 })
+  delivery.handOff(exact, [piece('presented')], null)
+  assert.deepEqual(delivery.returned('s'), [], 'exact inspection does not advance the cursor')
+  assert.equal(delivery.seal('s', fence('run-1', 'call-2'), 'wrong run', ['wrong']), false)
+  assert.equal(delivery.seal('s', fence('run-2', 'call-1'), 'wrong call', ['wrong']), false)
+  assert.deepEqual(delivery.peek('s'), { prefixUntil: 3 })
+  assert.equal(delivery.seal('s', fence('run-2', 'call-2'), 'first', ['first']), true)
+  assert.equal(delivery.seal('s', fence('run-2', 'call-2'), 'later', ['later']), false)
+  assert.equal(delivery.peek('s'), 'first')
+  assert.equal(delivery.seal('none', fence(), 'missing', []), false)
+})
+
+test('SPEC[delivery-005] restored material is opaque and advances no invented keys', () => {
+  const delivery = Delivery()
+  delivery.restore('s', fence(), 'durable witness bytes')
+  assert.equal(delivery.peek('s'), 'durable witness bytes')
+  assert.equal(delivery.claim('s', { mode: 'run', providerRun: 'other' }), null)
+  const ticket = delivery.claim('s', { mode: 'run', providerRun: 'run-1' })
+  assert.equal(ticket.material, 'durable witness bytes')
+  assert.deepEqual(delivery.handOff(ticket, [piece('invented')], 'late'), [])
+  assert.deepEqual(delivery.returned('s'), [])
+  delivery.restore('cache', null, 'cached witness bytes')
+  assert.equal(delivery.peek('cache'), null)
+  assert.equal(delivery.peekCached('cache'), 'cached witness bytes')
+  assert.equal(delivery.claim('cache', { mode: 'cache' }).material, 'cached witness bytes')
+})
+
+test('SPEC[delivery-005] an empty sealed selection cannot be filled by late prose', () => {
+  const delivery = Delivery()
+  delivery.deliver('s', fence(), { prefixUntil: 0 })
+  assert.equal(delivery.seal('s', fence(), null, []), true)
+  const ticket = delivery.claim('s', { mode: 'run', providerRun: 'run-1' })
+  assert.equal(ticket.sealed, true)
+  assert.equal(ticket.material, null)
+  assert.deepEqual(delivery.handOff(ticket, [piece('late')], 'late'), [])
+  assert.deepEqual(delivery.returned('s'), [])
+})
+
+test('SPEC[delivery-005] bad sealing input leaves the delivery and its cursor unchanged', () => {
+  const delivery = Delivery()
+  delivery.deliver('s', fence(), { prefixUntil: 1 })
+  assert.throws(() => delivery.seal('s', fence(), 42, ['key']), /material/)
+  assert.throws(() => delivery.seal('s', fence(), 'bytes', [42]), /key/)
+  assert.deepEqual(delivery.peek('s'), { prefixUntil: 1 })
+  assert.deepEqual(delivery.returned('s'), [])
+})

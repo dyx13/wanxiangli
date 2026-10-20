@@ -110,7 +110,7 @@ test('SPEC[prefix-3] exact epoch strings accept int64 boundaries without truncat
 })
 
 test('SPEC[prefix-3] epoch encoding is canonical and cannot mix within a commit', () => {
-  for (const epoch of ['01', '-0', '+1', '1.0', '1e3', ' 1', '', '-1']) {
+  for (const epoch of ['01', '-0', '+1', '1.0', '1e3', ' 1', '1\n', '1\r\n', '', '-1']) {
     assert.throws(() => prefix.normalize({ epoch, compactionRuns: [], tenures: [] }), TypeError)
   }
   const state = prefix.normalize({ epoch: '0', compactionRuns: [], tenures: [] })

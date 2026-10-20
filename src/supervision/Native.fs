@@ -173,6 +173,8 @@ module internal Native =
     let require condition message = if not condition then invalidOp message
     let get (value: obj) (name: string): obj = value?(name)
     let objectOf fields = createObj fields
+    let workerEnvironment () =
+        objectOf (if isBun () then [ "BUN_BE_BUN", box "1" ] else [])
     let value source name =
         let property = descriptor source name
         require (isValue property) ("Expected an own data field: " + name)

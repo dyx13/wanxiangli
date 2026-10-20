@@ -31,7 +31,7 @@ let SupervisedProcess (input: obj): SupervisedMessages =
             let workerOptions =
                 Native.objectOf [ "executable", Native.get Native.runtime "execPath"
                                   "args", box [| Native.filePath Native.moduleUrl; "--wanxiangli-supervisor"; directory |]
-                                  "cwd", box (Native.temporaryDirectory ()); "env", Native.objectOf []
+                                  "cwd", box (Native.temporaryDirectory ()); "env", Native.workerEnvironment ()
                                   "tailBytes", Native.get options "tailBytes"; "maxWriteBytes", Native.get options "maxWriteBytes" ]
             createNew Native.processSession (workerOptions, "Capture") |> unbox
         with _ ->

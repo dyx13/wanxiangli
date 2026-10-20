@@ -14,6 +14,7 @@
 ## LEMMA
 
 1. [AXIOM 1; 根 LEMMA 4, 6] 外侧使用 Capture 模式的 ProcessSession 启动真正组长；组长在自己的组内以 `detached:false` 启动目标。组长忽略 TERM、INT、HUP，直到外侧显式清组。
+   - Bun 组长的私有环境设置 `BUN_BE_BUN=1`，让编译成单文件的宿主也执行磁盘上的 Worker，而非再次运行宿主入口；目标环境仍完全取自调用者的 options.env。依据为 [Bun standalone CLI 合同](https://bun.sh/docs/bundler/executables#act-as-the-bun-cli)。宿主 `process-execution/tests/010.test.mjs` 使用实际 OpenCode 二进制验证双路输出、非零退出与模式变量隔离；结果随宿主复核收据记录。
    - 推理：目标 exit 不结束组长身份，仍可遵守基础 ProcessSession 仅对尚未观察到退出的直接子进程发组信号的规则。
 2. [AXIOM 2; 根 LEMMA 3, 4] 组长用原生pipe转发双路输出，逐路计数；目标close且两路计数Transform的readable end后，发布不可变最终extent。外侧实际Capture observed逐路恰等于extent，才允许自然KILL组长，并继续等待ProcessSession close与Capture EOF。零字节写回调不能证明Bun缓冲已排空。
    - Bun两跳分别使用私有非阻塞FIFO读端及阻塞写端，Worker出口以有界Writable等待每块实际write计数与FileSink flush，不end借用的1/2。Readable队列每路最多128KiB，另有64KiB scratch；转发的Transform/Writable各有自己的有限预取，不冒称整个运行时RSS上限。Bun依赖/usr/bin/mkfifo与临时FIFO，实际平台证据另列。

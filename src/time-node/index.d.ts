@@ -5,4 +5,5 @@ export const NodeTime: {
   nodeClockPort(): IClockPort
   timerTask(milliseconds: number): Promise<void>
   raceExit(exitTask: Promise<unknown>, milliseconds: number): Promise<boolean>
+  raceExitKeepingAlive(exitTask: Promise<unknown>, milliseconds: number): Promise<boolean>
 }

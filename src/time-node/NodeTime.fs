@@ -9,4 +9,5 @@ let NodeTime: obj =
         "nodeClockPort" ==> NodeTiming.nodeClockPort
         "timerTask" ==> NodeTiming.timerTask
         "raceExit" ==> NodeTiming.raceExit
+        "raceExitKeepingAlive" ==> NodeTiming.raceExitKeepingAlive
     ]

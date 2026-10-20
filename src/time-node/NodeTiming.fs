@@ -27,9 +27,9 @@ module NodeTiming =
 
         completion.Task
 
-    let raceExit (exitTask: Task) (milliseconds: int) : Task<bool> =
+    let private raceExitWithReference keepAlive (exitTask: Task) (milliseconds: int) : Task<bool> =
         emitJsExpr
-            (exitTask, milliseconds)
+            (exitTask, milliseconds, keepAlive)
             """
             new Promise((resolve, reject) => {
                 let timer = null;
@@ -47,11 +47,17 @@ module NodeTiming =
                     timer = null;
                     resolve(false);
                 }, $1);
-                if ($1 >= 1000 && timer !== null && typeof timer.unref === 'function') {
+                if (!$2 && $1 >= 1000 && timer !== null && typeof timer.unref === 'function') {
                     timer.unref();
                 }
             })
             """
+
+    let raceExit (exitTask: Task) (milliseconds: int) : Task<bool> =
+        raceExitWithReference false exitTask milliseconds
+
+    let raceExitKeepingAlive (exitTask: Task) (milliseconds: int) : Task<bool> =
+        raceExitWithReference true exitTask milliseconds
 
     let nodeTimerPort () : ITimerPort =
         let mutable disposed = false

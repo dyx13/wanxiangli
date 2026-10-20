@@ -1,5 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { spawnSync } from 'node:child_process'
 import { NodeTime } from '../../../dist/time-node/NodeTime.js'
 
 test('WHAT[TIME-CAPABILITY-006] an expired timer delay only settles the wait, it mints no business fact', async () => {
@@ -21,4 +22,29 @@ test('WHAT[TIME-CAPABILITY-006] cancelling an already-settled handle is a harmle
   const handle = { Delay: NodeTime.timerTask(5), Cancel: () => {} }
   await handle.Delay
   handle.Cancel()
+})
+
+test('WHAT[TIME-CAPABILITY-006] an owned drain keeps Node alive until its long deadline returns false', () => {
+  const entry = new URL('../../../dist/time-node/NodeTime.js', import.meta.url).href
+  const child = spawnSync(process.execPath, ['--input-type=module', '-e', `
+    import { NodeTime } from ${JSON.stringify(entry)};
+    console.log(await NodeTime.raceExitKeepingAlive(new Promise(() => {}), 1000));
+  `], { encoding: 'utf8', timeout: 5000 })
+  assert.equal(child.error, undefined)
+  assert.equal(child.status, 0, child.stderr)
+  assert.equal(child.stdout.trim(), 'false')
+})
+
+test('WHAT[TIME-CAPABILITY-006] an owned drain releases its referenced timer on success and rejection', () => {
+  const entry = new URL('../../../dist/time-node/NodeTime.js', import.meta.url).href
+  const child = spawnSync(process.execPath, ['--input-type=module', '-e', `
+    import { NodeTime } from ${JSON.stringify(entry)};
+    console.log(await NodeTime.raceExitKeepingAlive(Promise.resolve(), 60000));
+    const cause = new Error('original rejection');
+    try { await NodeTime.raceExitKeepingAlive(Promise.reject(cause), 60000); }
+    catch (error) { console.log(error === cause); }
+  `], { encoding: 'utf8', timeout: 5000 })
+  assert.equal(child.error, undefined)
+  assert.equal(child.status, 0, child.stderr)
+  assert.deepEqual(child.stdout.trim().split('\n'), ['true', 'true'])
 })

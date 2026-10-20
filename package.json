@@ -1,6 +1,6 @@
 {
   "name": "wanxiangli",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "private": true,
   "description": "Independent work, journal, process, trace and resource ownership libraries, written in F#.",
   "type": "module",
@@ -79,6 +79,10 @@
     "./delivery": {
       "types": "./src/delivery/index.d.ts",
       "import": "./dist/delivery/Delivery.js"
+    },
+    "./casebook": {
+      "types": "./src/casebook/index.d.ts",
+      "import": "./dist/casebook/CasebookIndexLaw.js"
     }
   },
   "files": [
@@ -103,6 +107,7 @@
     "src/prefix/index.d.ts",
     "src/compression/index.d.ts",
     "src/delivery/index.d.ts",
+    "src/casebook/index.d.ts",
     "README.md",
     "PROCESS.md",
     "TRACE.md",
@@ -112,7 +117,7 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "npm run build && node --test src/lifecycle/tests/*.test.mjs src/eventstore/tests/*.test.mjs src/assembly/tests/*.test.mjs src/process/tests/*.test.mjs src/supervision/tests/*.test.mjs src/trace/tests/*.test.mjs src/session/tests/*.test.mjs src/resources/tests/*.test.mjs src/identity/tests/*.test.mjs src/events/tests/*.test.mjs src/fs/tests/*.test.mjs src/time/tests/*.test.mjs src/wait/tests/*.test.mjs src/prefix/tests/*.test.mjs src/compression/tests/*.test.mjs src/delivery/tests/*.test.mjs scripts/tests/*.test.mjs",
+    "test": "npm run build && node --test src/lifecycle/tests/*.test.mjs src/eventstore/tests/*.test.mjs src/assembly/tests/*.test.mjs src/process/tests/*.test.mjs src/supervision/tests/*.test.mjs src/trace/tests/*.test.mjs src/session/tests/*.test.mjs src/resources/tests/*.test.mjs src/identity/tests/*.test.mjs src/events/tests/*.test.mjs src/fs/tests/*.test.mjs src/time/tests/*.test.mjs src/wait/tests/*.test.mjs src/prefix/tests/*.test.mjs src/compression/tests/*.test.mjs src/delivery/tests/*.test.mjs src/casebook/tests/*.test.mjs scripts/tests/*.test.mjs",
     "prepack": "npm run build"
   },
   "devDependencies": {

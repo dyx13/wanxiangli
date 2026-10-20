@@ -12,19 +12,19 @@ module Generation =
         | Tenure of incumbencyId: string
 
     type State =
-        { Epoch: float
+        { Epoch: bigint
           CompactionRuns: Set<string>
           Tenures: Set<string> }
 
     /// 一条待写入的推进行。PreviousEpoch 是写入时认定的现行世代。
     type Candidate =
-        { PreviousEpoch: float
-          NextEpoch: float
+        { PreviousEpoch: bigint
+          NextEpoch: bigint
           Evidence: Evidence }
 
     type Rejection =
         /// 行写于另一个世代（崩溃后重放的同一行即落在这里）。
-        | StaleEpoch of expected: float * actual: float
+        | StaleEpoch of expected: bigint * actual: bigint
         /// NextEpoch 不是 PreviousEpoch 的后继。
         | NonSequentialEpoch
         /// 同一证据已经推进过一次。与 StaleEpoch 分开：世代因别的证据
@@ -32,7 +32,7 @@ module Generation =
         | AlreadyReanchored of Evidence
 
     let empty =
-        { Epoch = 0.0
+        { Epoch = 0I
           CompactionRuns = Set.empty
           Tenures = Set.empty }
 
@@ -48,7 +48,7 @@ module Generation =
         else
             Some
                 { PreviousEpoch = state.Epoch
-                  NextEpoch = state.Epoch + 1.0
+                  NextEpoch = state.Epoch + 1I
                   Evidence = evidence }
 
     /// 观察到的压缩伪 run（旧到新）中，最新一个尚未推进过的成为候选。
@@ -65,7 +65,7 @@ module Generation =
             Error(AlreadyReanchored candidate.Evidence)
         elif candidate.PreviousEpoch <> state.Epoch then
             Error(StaleEpoch(state.Epoch, candidate.PreviousEpoch))
-        elif candidate.NextEpoch <> candidate.PreviousEpoch + 1.0 then
+        elif candidate.NextEpoch <> candidate.PreviousEpoch + 1I then
             Error NonSequentialEpoch
         else
             match candidate.Evidence with

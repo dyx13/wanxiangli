@@ -52,7 +52,7 @@ test('SPEC[prefix-3] a genuinely new compaction reanchors again and both stay re
 
 test('SPEC[prefix-3] malformed state is refused, not defaulted', () => {
   for (const bad of [null, {}, { epoch: -1, compactionRuns: [], tenures: [] }, { epoch: 1.5, compactionRuns: [], tenures: [] },
-    { epoch: 0, compactionRuns: [1], tenures: [] }, { epoch: '0', compactionRuns: [], tenures: [] }]) {
+    { epoch: 0, compactionRuns: [1], tenures: [] }, { epoch: 'zero', compactionRuns: [], tenures: [] }]) {
     assert.throws(() => prefix.propose(bad, compaction('c1')), TypeError, JSON.stringify(bad))
   }
   assert.deepEqual(prefix.normalize({ epoch: 3, compactionRuns: ['b', 'a', 'b'], tenures: [] }),
@@ -79,4 +79,48 @@ test('SPEC[prefix-3] candidates and committed states never retain mutable caller
   assert.deepEqual(committed.state, { epoch: 1, compactionRuns: [], tenures: ['inc-1'] })
   assert.throws(() => { committed.state.tenures.push('mutated') }, TypeError)
   assert.throws(() => { committed.state.epoch = 9 }, TypeError)
+})
+
+test('SPEC[prefix-3] decimal string epochs stay exact beyond the safe number range', () => {
+  const state = prefix.normalize({ epoch: '9007199254740993', compactionRuns: [], tenures: [] })
+  const candidate = prefix.propose(state, tenure('inc-exact'))
+  assert.deepEqual(candidate, { previousEpoch: '9007199254740993', nextEpoch: '9007199254740994', evidence: tenure('inc-exact') })
+  const committed = prefix.commit(state, candidate)
+  assert.equal(committed.ok, true)
+  assert.equal(committed.state.epoch, '9007199254740994')
+  assert.equal(prefix.propose(committed.state, tenure('inc-exact')), null)
+  assert.deepEqual(prefix.commit(committed.state, candidate), {
+    ok: false, absorbed: true, error: 'AlreadyReanchored', evidence: tenure('inc-exact'),
+  })
+  assert.deepEqual(prefix.commit(committed.state, { ...candidate, evidence: compaction('new') }), {
+    ok: false, absorbed: true, error: 'StaleEpoch', expected: '9007199254740994', actual: '9007199254740993',
+  })
+})
+
+test('SPEC[prefix-3] exact epoch strings accept int64 boundaries without truncation', () => {
+  const state = prefix.normalize({ epoch: '9223372036854775807', compactionRuns: [], tenures: [] })
+  const candidate = prefix.proposeCompaction(state, ['max-compaction'])
+  assert.equal(candidate.previousEpoch, '9223372036854775807')
+  assert.equal(candidate.nextEpoch, '9223372036854775808')
+  assert.equal(prefix.commit(state, candidate).state.epoch, '9223372036854775808')
+  const zero = prefix.normalize({ epoch: '0', compactionRuns: [], tenures: [] })
+  assert.deepEqual(prefix.commit(zero, { previousEpoch: '-9223372036854775808', nextEpoch: '-9223372036854775807', evidence: compaction('old') }), {
+    ok: false, absorbed: true, error: 'StaleEpoch', expected: '0', actual: '-9223372036854775808',
+  })
+})
+
+test('SPEC[prefix-3] epoch encoding is canonical and cannot mix within a commit', () => {
+  for (const epoch of ['01', '-0', '+1', '1.0', '1e3', ' 1', '', '-1']) {
+    assert.throws(() => prefix.normalize({ epoch, compactionRuns: [], tenures: [] }), TypeError)
+  }
+  const state = prefix.normalize({ epoch: '0', compactionRuns: [], tenures: [] })
+  for (const candidate of [
+    { previousEpoch: 0, nextEpoch: 1, evidence: compaction('c') },
+    { previousEpoch: '0', nextEpoch: 1, evidence: compaction('c') },
+    { previousEpoch: '0', nextEpoch: '01', evidence: compaction('c') },
+  ]) assert.throws(() => prefix.commit(state, candidate), TypeError)
+  assert.throws(() => prefix.commit(prefix.empty(), { previousEpoch: '0', nextEpoch: '1', evidence: compaction('c') }), TypeError)
+  assert.deepEqual(prefix.commit(state, { previousEpoch: '0', nextEpoch: '2', evidence: compaction('c') }), {
+    ok: false, absorbed: false, error: 'NonSequentialEpoch',
+  })
 })

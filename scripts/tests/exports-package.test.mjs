@@ -25,7 +25,7 @@ test('SPEC[build-009] every declared library and type is delivered unchanged wit
   succeed(spawnSync('npm', ['install', '--ignore-scripts', '--omit=dev', '--no-audit', '--no-fund', path.join(directory, packed.filename)], { cwd: consumer, env, encoding: 'utf8', timeout: 30000 }))
   const installed = path.join(consumer, 'node_modules/wanxiangli')
   const metadata = JSON.parse(readFileSync(path.join(installed, 'package.json'), 'utf8'))
-  const entries = ['durable-work', 'events', 'eventstore', 'fs', 'grounding', 'identity', 'ownership', 'process', 'resources', 'supervision', 'time', 'time-node', 'time-testing', 'trace', 'wait', 'work']
+  const entries = ['durable-work', 'events', 'eventstore', 'fs', 'identity', 'ownership', 'process', 'resources', 'supervision', 'time', 'time-node', 'time-testing', 'trace', 'wait', 'work']
   assert.deepEqual(Object.keys(metadata.exports).sort(), entries.map(name => './' + name))
   const members = new Set(packed.files.map(file => file.path))
   for (const target of Object.values(metadata.exports)) {

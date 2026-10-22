@@ -24,6 +24,7 @@ test('SPEC[programming-001] JsPlan expands to Read/Write/Ask', () => {
   assert.ok(surface.members.includes('ask'))
   assert.ok(surface.members.includes('write'))
   assert.ok(surface.members.includes('cat'))
+  assert.ok(!surface.members.includes('mkdir'))
 })
 
 test('SPEC[programming-001] Orchestrator Fork becomes Commission on the member surface', () => {

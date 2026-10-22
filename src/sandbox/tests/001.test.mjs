@@ -71,6 +71,8 @@ test('SPEC[sandbox-001] membrane denies escape via global api / globalThis / mis
   for (const body of [
     reach(`api.constructor.constructor('return process')()`),
     reach(`globalThis.constructor.constructor('return process')()`),
+    reach(`Object.getPrototypeOf(globalThis).constructor.constructor('return process')()`),
+    reach(`globalThis.__proto__.constructor.constructor('return process')()`),
     reach(`__deadlineRef.constructor.constructor('return process')()`),
   ]) {
     const result = await runMembrane(body, api)

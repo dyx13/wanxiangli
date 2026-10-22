@@ -1,7 +1,12 @@
-/** Handle returned by `run` / `runNaive`. */
-export interface SandboxRunHandle {
+export interface NaiveSandboxRunHandle {
   readonly programPromise: Promise<string>
   readonly deadlineRef: { current: number }
+}
+
+/** The host must reset an expired deadline before resuming paused work. */
+export interface SandboxRunHandle extends NaiveSandboxRunHandle {
+  pause(): void
+  resume(): void
 }
 
 export interface SandboxMessages {
@@ -23,7 +28,7 @@ export interface SandboxMessages {
     deadlineMs: number,
     baseClassSource: string,
     modelSource: string,
-  ): SandboxRunHandle
+  ): NaiveSandboxRunHandle
 
   resetDeadline(deadlineRef: { current: number }, epochMs: number): void
 }

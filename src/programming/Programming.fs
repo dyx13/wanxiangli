@@ -71,9 +71,10 @@ module internal Projection =
 
     let membersFor (capabilities: Set<string>) (roleName: string) : string array =
         let manager = roleName.Trim().ToLowerInvariant() = "manager"
+        let plan = roleName.Trim().ToLowerInvariant() = "plan"
         fragments
         |> List.choose (fun (cap, name, extra) ->
-            if isProjected capabilities cap extra then
+            if isProjected capabilities cap extra && not (plan && name = "mkdir") then
                 let memberName =
                     if manager && List.contains name [ "cat"; "stat"; "ls"; "rg" ] then
                         "reviewOnly." + name

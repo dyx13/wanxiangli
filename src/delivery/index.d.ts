@@ -10,6 +10,11 @@ export interface DeliveryPiece {
   readonly text: string
 }
 
+/** 未发布的材料凭据；绑定签发实例和会话，pieces 是冻结副本。 */
+export interface CapturedDelivery {
+  readonly pieces: readonly DeliveryPiece[]
+}
+
 export type ClaimRequest =
   | { readonly mode: 'peek' }
   | { readonly mode: 'fence'; readonly providerRun: string; readonly toolCallId: string }
@@ -35,6 +40,10 @@ export interface DeliveryMessages {
   seal(sessionId: string, fence: DeliveryFence, material: string | null, keys: readonly string[]): boolean
   /** 恢复不透明持久见证字节，不补造游标keys。 */
   restore(sessionId: string, fence: DeliveryFence | null, material: string): void
+  /** 捕获本次交还材料，不发布交付格，也不推进游标。 */
+  capture(sessionId: string, view: unknown, candidates: readonly DeliveryPiece[], assistant: string | null): CapturedDelivery
+  /** 持久提交后发布封存材料；已被新格或clear取代时返回false。 */
+  publish(sessionId: string, fence: DeliveryFence, captured: CapturedDelivery, material: string | null): boolean
   /** 取走交付格的视图；暂存格保持原样，返回 null。 */
   take(sessionId: string): unknown
   /** 交付格的视图；暂存格不算，返回 null。 */

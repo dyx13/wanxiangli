@@ -20,9 +20,9 @@ const BASE = `class JsProgram {
 }`
 const api = { ls: async () => ['a.txt', 'sub/'], cat: async () => 'hello' }
 
-async function runMembrane(body, deadlineMs = 2000) {
+async function runMembrane(body, deadlineMs = 2000, suppliedApi = api) {
   const src = `class Js extends JsProgram { async run() { ${body} } }`
-  const handle = law.run(api, deadlineMs, Date.now() + 60_000, BASE, src)
+  const handle = law.run(suppliedApi, deadlineMs, Date.now() + 60_000, BASE, src)
   try {
     const json = await handle.programPromise
     if (typeof json === 'string' && json.includes('__jsProgramFailed')) return { ok: false, json: JSON.parse(json) }
@@ -66,4 +66,61 @@ test('SPEC[sandbox-003] membrane still returns normal ls data after intrinsic ch
   const r = await runMembrane(`const o = WeakMap.prototype.has; WeakMap.prototype.has = o; return { entries: await this.ls('.') };`)
   assert.equal(r.ok, true, JSON.stringify(r))
   assert.deepEqual(r.value.entries, ['a.txt', 'sub/'])
+})
+
+test('SPEC[sandbox-003] host budget refusal retains its safe minimum without exposing the host failure object', async () => {
+  const error = new Error('output budget is too small')
+  error.__jsFailure = {
+    code: 'CALL_OUTPUT_BUDGET_TOO_SMALL',
+    reason: error.message,
+    minimumOutputBudgetBytes: 1024,
+    hostObject: { secret: true },
+  }
+  const result = await runMembrane(`
+    Number.isSafeInteger = () => { throw new Error('patched intrinsic was called'); };
+    try { await this.cat('.'); } catch (error) {
+      const failure = error.__jsFailure;
+      let escaped = false;
+      try { escaped = !!failure.constructor.constructor('return process')(); } catch (_) {}
+      return { failure, keys: Object.keys(failure).sort(), escaped };
+    }
+  `, 2000, { cat: async () => { throw error } })
+  assert.equal(result.ok, true, JSON.stringify(result))
+  assert.deepEqual(result.value, {
+    failure: { code: 'CALL_OUTPUT_BUDGET_TOO_SMALL', reason: error.message, minimumOutputBudgetBytes: 1024 },
+    keys: ['code', 'minimumOutputBudgetBytes', 'reason'],
+    escaped: false,
+  })
+})
+
+test('SPEC[sandbox-003] host budget minimum rejects nonpositive, inexact and nonnumeric values without coercion', async () => {
+  let coercions = 0
+  for (const minimum of [undefined, 0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1, '1024', 1024n,
+    { valueOf() { coercions += 1; return 1024 } }]) {
+    const error = new Error('output budget is too small')
+    error.__jsFailure = { code: 'CALL_OUTPUT_BUDGET_TOO_SMALL', reason: error.message, minimumOutputBudgetBytes: minimum }
+    const result = await runMembrane(`
+      try { await this.cat('.'); } catch (error) {
+        return { keys: Object.keys(error.__jsFailure).sort() };
+      }
+    `, 2000, { cat: async () => { throw error } })
+    assert.equal(result.ok, true, JSON.stringify(result))
+    assert.deepEqual(result.value.keys, ['code', 'reason'])
+  }
+  assert.equal(coercions, 0)
+})
+
+test('SPEC[sandbox-003] an uncaught host budget refusal keeps its minimum in the host failure sentinel', async () => {
+  for (const minimum of [1024, 0, '1024', { valueOf() { throw new Error('must not coerce') } }]) {
+    const error = new Error('output budget is too small')
+    error.__jsFailure = { code: 'CALL_OUTPUT_BUDGET_TOO_SMALL', reason: error.message, minimumOutputBudgetBytes: minimum }
+    const result = await runMembrane(`return await this.cat('.');`, 2000, { cat: async () => { throw error } })
+    assert.equal(result.ok, true, JSON.stringify(result))
+    assert.deepEqual(result.value, {
+      __jsHostFailed: true,
+      code: 'CALL_OUTPUT_BUDGET_TOO_SMALL',
+      reason: error.message,
+      ...(minimum === 1024 ? { minimumOutputBudgetBytes: 1024 } : {}),
+    })
+  }
 })

@@ -18,6 +18,7 @@ let private installSource =
 (function () {
   "use strict";
   var Object = globalThis.Object;
+  Object.setPrototypeOf(globalThis, null);
   var Array = globalThis.Array;
   var Promise = globalThis.Promise;
   var Error = globalThis.Error;
@@ -28,6 +29,8 @@ let private installSource =
   var JSON = globalThis.JSON;
   var isArray = Array.isArray;
   var getOwnNames = Object.getOwnPropertyNames;
+  var getPrototypeOf = Object.getPrototypeOf;
+  var objectPrototype = Object.prototype;
   // Capture intrinsic methods before any model code runs, and invoke them via
   // the captured Reflect.apply. The membrane shares its realm with the model
   // program (DONT_CONTEXTIFY), so a model that monkeypatches e.g.
@@ -39,6 +42,7 @@ let private installSource =
   var WeakMapHas = WeakMap.prototype.has;
   var WeakMapGet = WeakMap.prototype.get;
   var WeakMapSet = WeakMap.prototype.set;
+  var numberIsSafeInteger = globalThis.Number.isSafeInteger;
   function mapHas(m, k) { return ReflectApply(WeakMapHas, m, [k]); }
   function mapGet(m, k) { return ReflectApply(WeakMapGet, m, [k]); }
   function mapSet(m, k, v) { ReflectApply(WeakMapSet, m, [k, v]); }
@@ -47,7 +51,7 @@ let private installSource =
   var slot = null;
   globalThis.__put = function (v) { slot = v; };
   globalThis.__take = function () { var s = slot; slot = null; return s; };
-  globalThis.__makeRunner = function (hostApi, hostDeadlineRef, hostNow, hostThen, hostKick, baseClassSource, modelSource) {
+  globalThis.__makeRunner = function (hostApi, hostDeadlineRef, hostNow, hostThen, hostKick, hostIsPaused, baseClassSource, modelSource) {
     var hostToGuest = new WeakMap();
     var guestToHost = new WeakMap();
     function isPrimitive(v) {
@@ -61,6 +65,10 @@ let private installSource =
           code: String(hostErr.__jsFailure.code || ""),
           reason: String(hostErr.__jsFailure.reason || hostErr.__jsFailure.code || ""),
         };
+        var minimum = hostErr.__jsFailure.minimumOutputBudgetBytes;
+        if (numberIsSafeInteger(minimum) && minimum > 0) {
+          g.__jsFailure.minimumOutputBudgetBytes = minimum;
+        }
       }
       if (hostErr && hostErr.__jsAbandoned) g.__jsAbandoned = true;
       if (hostErr && hostErr.__jsDelivered) g.__jsDelivered = wrap(hostErr.__jsDelivered);
@@ -131,6 +139,7 @@ let private installSource =
       }
       if (typeof hostValue === "function") {
         var guestFn = function () {
+          if (hostIsPaused()) throw new Error("program is parked");
           if (hostNow() > Number(hostDeadlineRef.current)) {
             var err = new Error("program exceeded its deadline");
             err.__jsFailure = { code: "PROGRAM_TIMEOUT", reason: "program exceeded its deadline" };
@@ -206,6 +215,8 @@ let private installSource =
         for (var i2 = 0; i2 < guestValue.length; i2++) ha[i2] = unwrap(guestValue[i2]);
         return ha;
       }
+      var prototype = getPrototypeOf(guestValue);
+      if (prototype !== null && prototype !== objectPrototype) return bridgeInstance(guestValue);
       var ho = {};
       mapSet(guestToHost, guestValue, ho);
       mapSet(hostToGuest, ho, guestValue);
@@ -230,6 +241,7 @@ let private installSource =
       "    return JSON.stringify({\n" +
       "      __jsHostFailed: true,\n" +
       "      code: __e.__jsFailure.code,\n" +
+      "      minimumOutputBudgetBytes: __e.__jsFailure.minimumOutputBudgetBytes,\n" +
       "      reason: String(__e.__jsFailure.reason || __e.__jsFailure.code)\n" +
       "    });\n" +
       "  }\n" +
@@ -271,6 +283,10 @@ let private launch
   var ctx = createContext(vmConstants.DONT_CONTEXTIFY, { microtaskMode: "afterEvaluate" });
   runInContext(INSTALL, ctx, { timeout: 5000 });
   var deadlineRef = { current: Number(deadlineEpochMs) };
+  var paused = false;
+  var finished = false;
+  var pendingSettlements = [];
+  var hostIsPaused = function () { return paused; };
   var hostNow = function () { return Date.now(); };
   // Wake protocol. With microtaskMode "afterEvaluate" the program's reactions
   // only run inside runInContext, so the driver must re-enter the context
@@ -285,23 +301,56 @@ let private launch
     kicked = true;
     if (wake !== null) { var w = wake; wake = null; w(); }
   };
+  var pause = function () {
+    if (finished) return;
+    paused = true;
+    hostKick();
+  };
+  var resume = function () {
+    if (finished) return;
+    paused = false;
+    var pending = pendingSettlements;
+    pendingSettlements = [];
+    for (var i = 0; i < pending.length; i++) {
+      if (finished || (box && box.done)) break;
+      pending[i]();
+    }
+    hostKick();
+  };
+  var close = function () {
+    finished = true;
+    pendingSettlements = [];
+    wake = null;
+  };
   var hostThen = function (p, onValue, onError) {
+    var settled = false;
+    var settle = function (continuation, value) {
+      if (settled || finished || (box && box.done)) return;
+      settled = true;
+      var deliver = function () {
+        try { continuation(value); }
+        finally { hostKick(); }
+      };
+      if (paused) pendingSettlements.push(deliver);
+      else deliver();
+    };
     p.then(
-      function (v) { try { onValue(v); } finally { hostKick(); } },
-      function (e) { try { onError(e); } finally { hostKick(); } }
+      function (v) { settle(onValue, v); },
+      function (e) { settle(onError, e); }
     );
   };
   var put = runInContext("__put", ctx);
-  put({ api: api, deadlineRef: deadlineRef, hostNow: hostNow, hostThen: hostThen, hostKick: hostKick, base: baseClass, model: model });
+  put({ api: api, deadlineRef: deadlineRef, hostNow: hostNow, hostThen: hostThen, hostKick: hostKick, hostIsPaused: hostIsPaused, base: baseClass, model: model });
   var progPromise;
   try {
     progPromise = runInContext(
-      "(function(){ var t = __take(); var make = __makeRunner; delete globalThis.__put; delete globalThis.__take; delete globalThis.__makeRunner; return make(t.api, t.deadlineRef, t.hostNow, t.hostThen, t.hostKick, t.base, t.model); })()",
+      "(function(){ var t = __take(); var make = __makeRunner; delete globalThis.__put; delete globalThis.__take; delete globalThis.__makeRunner; return make(t.api, t.deadlineRef, t.hostNow, t.hostThen, t.hostKick, t.hostIsPaused, t.base, t.model); })()",
       ctx,
       { timeout: Number(deadlineMs) }
     );
   } catch (e) {
-    return { deadlineRef: deadlineRef, programPromise: Promise.reject(e) };
+    close();
+    return { deadlineRef: deadlineRef, programPromise: Promise.reject(e), pause: pause, resume: resume };
   }
   var box = { done: false, value: null, error: null, failed: false };
   var register = runInContext(
@@ -311,6 +360,11 @@ let private launch
   register(progPromise, box);
   var driven = (async function () {
     while (!box.done) {
+      if (paused) {
+        kicked = false;
+        await new Promise(function (resolve) { wake = resolve; });
+        continue;
+      }
       var now = Date.now();
       var deadlineNow = Number(deadlineRef.current);
       if (now > deadlineNow) {
@@ -339,7 +393,7 @@ let private launch
     if (box.failed) throw box.error;
     return box.value;
   })();
-  return { deadlineRef: deadlineRef, programPromise: driven };
+  return { deadlineRef: deadlineRef, programPromise: driven.finally(close), pause: pause, resume: resume };
 })($0, $1, $2, $3, $4, $5, $6)
 """
 

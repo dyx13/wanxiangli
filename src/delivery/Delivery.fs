@@ -12,6 +12,8 @@ type DeliveryMessages =
     abstract deliver: sessionId: string * fence: obj * view: obj -> unit
     abstract seal: sessionId: string * fence: obj * material: obj * keys: string array -> bool
     abstract restore: sessionId: string * fence: obj * material: string -> unit
+    abstract capture: sessionId: string * view: obj * candidates: obj array * assistant: obj -> obj
+    abstract publish: sessionId: string * fence: obj * captured: obj * material: obj -> bool
     abstract take: sessionId: string -> obj
     abstract peek: sessionId: string -> obj
     abstract peekCached: sessionId: string -> obj
@@ -35,6 +37,13 @@ type private Cell =
       Keys: string array }
 
 type private Piece = { Key: string; Text: string }
+
+type private CapturedMaterial =
+    { SessionId: string
+      Owner: obj
+      Previous: Cell option
+      Keys: string array
+      mutable Spent: bool }
 
 /// 一次 claim 的凭据状态。凭据本身只是冻结的 `{ view }`；状态留在签发实例里，调用方改不到。
 type private Ticket =
@@ -146,6 +155,8 @@ let Delivery () : DeliveryMessages =
     let cells = Dictionary<string, Cell>()
     let returnedKeys = Dictionary<string, HashSet<string>>()
     let tickets = weakMap ()
+    let captures = weakMap ()
+    let captureOwners = Dictionary<string, obj>()
     let mutable busy = false
 
     let guard action =
@@ -176,6 +187,20 @@ let Delivery () : DeliveryMessages =
         match cells.TryGetValue sessionId with
         | true, cell -> Some cell
         | false, _ -> None
+
+    let captureOwner sessionId =
+        match captureOwners.TryGetValue sessionId with
+        | true, owner -> owner
+        | false, _ ->
+            let owner = obj ()
+            captureOwners[sessionId] <- owner
+            owner
+
+    let sameCell previous current =
+        match previous, current with
+        | None, None -> true
+        | Some previous, Some current -> obj.ReferenceEquals(previous, current)
+        | _ -> false
 
     let issue sessionId (cell: Cell) advance =
         let ticket =
@@ -338,6 +363,69 @@ let Delivery () : DeliveryMessages =
                       Material = material
                       Keys = [||] })
 
+        member _.capture(sessionId, view, candidates, assistant) =
+            guard (fun () ->
+                let sessionId = text "sessionId" sessionId
+                let previous = tryCell sessionId
+                let ticket = issue sessionId (openCell view None) false
+                let pieces = handOff ticket candidates assistant
+                let captured = freeze (createObj [ "pieces" ==> freeze (box pieces) ])
+
+                let state: CapturedMaterial =
+                    { SessionId = sessionId
+                      Owner = captureOwner sessionId
+                      Previous = previous
+                      Keys = pieces |> Array.map (fun piece -> text "key" (ownField piece "key"))
+                      Spent = false }
+
+                emitJsStatement (captures, captured, state) "$0.set($1, $2)"
+                captured)
+
+        member _.publish(sessionId, fence, captured, material) =
+            guard (fun () ->
+                let sessionId = text "sessionId" sessionId
+                let fence = fenceOf fence
+                let material = materialOf material
+                let state: obj = emitJsExpr (captures, captured) "$0.get($1)"
+
+                if isAbsent state then
+                    fail "Capture was not issued by this delivery"
+
+                let captured = unbox<CapturedMaterial> state
+
+                if captured.SessionId <> sessionId then
+                    fail "Capture belongs to another session"
+
+                if captured.Spent then
+                    invalidOp "Capture is already spent"
+
+                if isAbsent material && captured.Keys.Length > 0 then
+                    fail "keys require sealed material"
+
+                captured.Spent <- true
+
+                let owned =
+                    match captureOwners.TryGetValue sessionId with
+                    | true, owner -> obj.ReferenceEquals(owner, captured.Owner)
+                    | _ -> false
+
+                let current = tryCell sessionId
+
+                let alreadySealed =
+                    current |> Option.exists (fun cell -> cell.Sealed && cell.Fence = Some fence)
+
+                if owned && sameCell captured.Previous current && not alreadySealed then
+                    cells[sessionId] <-
+                        { View = (null: obj)
+                          Fence = Some fence
+                          Sealed = true
+                          Material = material
+                          Keys = captured.Keys }
+
+                    true
+                else
+                    false)
+
         member _.take(sessionId) =
             guard (fun () ->
                 let sessionId = text "sessionId" sessionId
@@ -379,7 +467,10 @@ let Delivery () : DeliveryMessages =
             guard (fun () -> handOff ticket candidates assistant)
 
         member _.clear(sessionId) =
-            guard (fun () -> cells.Remove(text "sessionId" sessionId) |> ignore)
+            guard (fun () ->
+                let sessionId = text "sessionId" sessionId
+                cells.Remove sessionId |> ignore
+                captureOwners.Remove sessionId |> ignore)
 
         member _.clearReturned(sessionId) =
             guard (fun () -> returnedKeys.Remove(text "sessionId" sessionId) |> ignore)
@@ -387,4 +478,5 @@ let Delivery () : DeliveryMessages =
         member _.clearAll() =
             guard (fun () ->
                 cells.Clear()
-                returnedKeys.Clear()) }
+                returnedKeys.Clear()
+                captureOwners.Clear()) }

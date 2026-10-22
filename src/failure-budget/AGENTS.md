@@ -24,6 +24,9 @@
     - 推理：较早的 attempt 已被后来的 attempt 取代，再授权会重复发送。
     - 实现：`replay`：最新键 = 该键 → 预算余量决定 RetryAuthorized / RetryExhausted；否则 EpisodeSuperseded。
 
+4. [本模块 AXIOM 1, 2；vibe-fs provider-attempt-recovery WHAT 001/003/005] 持久化预算的身份保留整个 Logical Run，首条失败提交预算版本与上限，后续失败不能换上限；同身份的 count、reason 或 spec 冲突必须拒绝。成功只清连续计数，旧成功不能清除新失败；达到上限的那条失败立即耗尽，迟到成功不能重开。
+    - 实现：`recorded*` 消息处理显式的完整记录状态，`recordedObserveFailure` 同时决定新记录与重放回答。旧窗口 API 保留其公开合同，不被猜测成完整持久化记录。
+
 # SPEC
 
 1. [本模块 LEMMA 1] 去重键逐字节与 vibe-fs 宿主历史键一致，同一 attempt 第二次观察不推进。
@@ -32,6 +35,8 @@
     - 证明：`tests/001.test.mjs` SPEC[failure-budget-2]、SPEC[failure-budget-4]。
 3. [本模块 LEMMA 3] 重放只授权最新 attempt。
     - 证明：`tests/001.test.mjs` SPEC[failure-budget-3]。
+4. [本模块 LEMMA 4] 60 次成功重置仍保留全部失败与成功身份，冲突计数、原因、预算和跨 root 拒绝；旧成功与缺失耗尽确认不能重新开放预算。调用方只映射结果与写事实。
+    - 证明：`tests/002.test.mjs` SPEC[failure-budget-5] 至 SPEC[failure-budget-10]，Node22 全库与 Bun 本模块均已通过；实际包外 Node/Bun 消费通过。主仓 provider-attempt-recovery-003 仍需正式验收，不以库证明代替宿主持久化接线。
 
 # TODO
 

@@ -1,4 +1,4 @@
-/** 一次永久区间替换：替换时拍下的区间 `[anchor, until)` 与摘要。 */
+/** 一次永久区间变化：当时拍下的区间 `[anchor, until)` 与摘要；空摘要表示丢弃区间。 */
 export interface AnchorReplacement {
   readonly anchor: number
   /** Exclusive end; Int32.MAX_VALUE is valid after the largest legal anchor. */
@@ -67,7 +67,7 @@ export interface CompressionMessages {
   parseView(value: unknown): ParsedView
   /** 当前存活锚点：0 永远存活，被替换过的真实锚点退出。 */
   live(anchors: readonly number[], history: readonly AnchorReplacement[]): readonly number[]
-  /** 本轮声明产生的新替换（不含 history），按锚点升序；小于 prefixUntil 或已不存活的锚点静默忽略。 */
+  /** 本轮声明产生的新变化（不含 history），按锚点升序；保护 prefixUntil 前缀，忽略已死锚点。其余区间的 null 保留、摘要替换、未列出则丢弃。 */
   plan(anchors: readonly number[], history: readonly AnchorReplacement[], view: AnchorView): readonly AnchorReplacement[]
   /** 按 history 先后折叠输入行；`positions[i]` 为第 i 条消息所属锚点位置。 */
   project(positions: readonly number[], history: readonly AnchorReplacement[], prefixUntil: number): Projection

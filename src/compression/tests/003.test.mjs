@@ -27,7 +27,7 @@ test('SPEC[compression-003] answers are frozen and independent of later caller m
   const history = [{ anchor: 2, until: 3, summary: 's' }]
   const positions = [0, 1, 2]
   const projected = law.project(positions, history, 0)
-  const planned = law.plan([1, 2], [], view(0, [[1, 'a']]))
+  const planned = law.plan([1, 2], [], view(0, [[0, null], [1, 'a'], [2, null]]))
   assert.ok(Object.isFrozen(projected) && Object.isFrozen(projected.entries) && Object.isFrozen(projected.entries[0]))
   assert.ok(Object.isFrozen(planned) && Object.isFrozen(planned[0]))
   history[0].anchor = 0
@@ -36,9 +36,9 @@ test('SPEC[compression-003] answers are frozen and independent of later caller m
   assert.deepEqual(projected.replaced, [2])
 })
 
-test('SPEC[compression-003] a direct plan cannot bypass non-blank view summaries', () => {
-  for (const summary of ['', '  \r\n']) {
+test('SPEC[compression-003] a direct plan cannot bypass strict null and non-blank view summaries', () => {
+  for (const summary of ['', '  \r\n', undefined]) {
     assert.throws(() => law.plan([1], [], view(0, [[1, summary]])), /non-blank/)
   }
-  assert.deepEqual(law.plan([1], [], view(0, [[1, null]])), [])
+  assert.deepEqual(law.plan([1], [], view(0, [[0, null], [1, null]])), [])
 })

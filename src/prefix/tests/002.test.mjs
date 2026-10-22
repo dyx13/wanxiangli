@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { Prefix } from '../../../dist/prefix/Prefix.js'
+import { Prefix } from 'wanxiangli/prefix'
 
 const prefix = new Prefix()
 const compaction = run => ({ kind: 'compaction', run })

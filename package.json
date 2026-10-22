@@ -1,6 +1,6 @@
 {
   "name": "wanxiangli",
-  "version": "0.11.0",
+  "version": "0.66.1",
   "private": true,
   "description": "Independent work, journal, process, trace and resource ownership libraries, written in F#.",
   "type": "module",
@@ -68,33 +68,165 @@
       "types": "./src/wait/index.d.ts",
       "import": "./dist/wait/Wait.js"
     },
+    "./delivery": {
+      "types": "./src/delivery/index.d.ts",
+      "import": "./dist/delivery/Delivery.js"
+    },
     "./prefix": {
       "types": "./src/prefix/index.d.ts",
       "import": "./dist/prefix/Prefix.js"
     },
-    "./compression": {
-      "types": "./src/compression/index.d.ts",
-      "import": "./dist/compression/Compression.js"
+    "./degeneration": {
+      "types": "./src/degeneration/index.d.ts",
+      "import": "./dist/degeneration/Degeneration.js"
     },
-    "./delivery": {
-      "types": "./src/delivery/index.d.ts",
-      "import": "./dist/delivery/Delivery.js"
+    "./spool": {
+      "types": "./src/spool/index.d.ts",
+      "import": "./dist/spool/OutputSpool.js"
+    },
+    "./convergence": {
+      "types": "./src/convergence/index.d.ts",
+      "import": "./dist/convergence/KWayMerge.js"
+    },
+    "./pty": {
+      "types": "./src/pty/index.d.ts",
+      "import": "./dist/pty/Terminal.js"
     },
     "./retention": {
       "types": "./src/retention/index.d.ts",
       "import": "./dist/retention/WriterRetention.js"
     },
-    "./permit": {
-      "types": "./src/permit/index.d.ts",
-      "import": "./dist/permit/ExecutionPermits.js"
+    "./segments": {
+      "types": "./src/segments/index.d.ts",
+      "import": "./dist/segments/WriterSegments.js"
+    },
+    "./casebook": {
+      "types": "./src/casebook/index.d.ts",
+      "import": "./dist/casebook/CasebookIndexLaw.js"
+    },
+    "./quarantine": {
+      "types": "./src/quarantine/index.d.ts",
+      "import": "./dist/quarantine/RuleQuarantine.js"
+    },
+    "./casebook-access": {
+      "types": "./src/casebook-access/index.d.ts",
+      "import": "./dist/casebook-access/CasebookAccessLaw.js"
+    },
+    "./casebook-maintenance": {
+      "types": "./src/casebook-maintenance/index.d.ts",
+      "import": "./dist/casebook-maintenance/CasebookMaintenanceLaw.js"
+    },
+    "./ablation": {
+      "types": "./src/ablation/index.d.ts",
+      "import": "./dist/ablation/Ablation.js"
+    },
+    "./compression": {
+      "types": "./src/compression/index.d.ts",
+      "import": "./dist/compression/Compression.js"
+    },
+    "./projection": {
+      "types": "./src/projection/index.d.ts",
+      "import": "./dist/projection/Projection.js"
+    },
+    "./capability": {
+      "types": "./src/capability/index.d.ts",
+      "import": "./dist/capability/Capability.js"
+    },
+    "./sandbox": {
+      "types": "./src/sandbox/index.d.ts",
+      "import": "./dist/sandbox/Sandbox.js"
     },
     "./routing": {
       "types": "./src/routing/index.d.ts",
       "import": "./dist/routing/RoutingProtocol.js"
     },
-    "./casebook": {
-      "types": "./src/casebook/index.d.ts",
-      "import": "./dist/casebook/CasebookIndexLaw.js"
+    "./authority": {
+      "types": "./src/authority/index.d.ts",
+      "import": "./dist/authority/Authority.js"
+    },
+    "./programming": {
+      "types": "./src/programming/index.d.ts",
+      "import": "./dist/programming/Programming.js"
+    },
+    "./permit": {
+      "types": "./src/permit/index.d.ts",
+      "import": "./dist/permit/ExecutionPermits.js"
+    },
+    "./capacity": {
+      "types": "./src/capacity/index.d.ts",
+      "import": "./dist/capacity/CapacityReconciliation.js"
+    },
+    "./admission-queue": {
+      "types": "./src/admission-queue/index.d.ts",
+      "import": "./dist/admission-queue/AdmissionQueue.js"
+    },
+    "./dispatch": {
+      "types": "./src/dispatch/index.d.ts",
+      "import": "./dist/dispatch/Dispatch.js"
+    },
+    "./borrowing": {
+      "types": "./src/borrowing/index.d.ts",
+      "import": "./dist/borrowing/CapacityBorrowing.js"
+    },
+    "./chat-execution": {
+      "types": "./src/chat-execution/index.d.ts",
+      "import": "./dist/chat-execution/ChatExecutionLaw.js"
+    },
+    "./association": {
+      "types": "./src/association/index.d.ts",
+      "import": "./dist/association/SessionAssociationLaw.js"
+    },
+    "./run-witness": {
+      "types": "./src/run-witness/index.d.ts",
+      "import": "./dist/run-witness/ProviderRunWitness.js"
+    },
+    "./git-porcelain": {
+      "types": "./src/git-porcelain/index.d.ts",
+      "import": "./dist/git-porcelain/GitPorcelain.js"
+    },
+    "./integration": {
+      "types": "./src/integration/index.d.ts",
+      "import": "./dist/integration/IntegrationLaw.js"
+    },
+    "./failure": {
+      "types": "./src/failure/index.d.ts",
+      "import": "./dist/failure/ExecutionFailurePolicy.js"
+    },
+    "./failure-budget": {
+      "types": "./src/failure-budget/index.d.ts",
+      "import": "./dist/failure-budget/ProviderFailureBudget.js"
+    },
+    "./attachment-lease": {
+      "types": "./src/attachment-lease/index.d.ts",
+      "import": "./dist/attachment-lease/AttachmentLeaseLaw.js"
+    },
+    "./bayes": {
+      "types": "./src/bayes/index.d.ts",
+      "import": "./dist/bayes/BayesLaw.js"
+    },
+    "./ordinal": {
+      "types": "./src/ordinal/index.d.ts",
+      "import": "./dist/ordinal/OrdinalLaw.js"
+    },
+    "./warm-start": {
+      "types": "./src/warm-start/index.d.ts",
+      "import": "./dist/warm-start/WarmStartLaw.js"
+    },
+    "./advisor": {
+      "types": "./src/advisor/index.d.ts",
+      "import": "./dist/advisor/AdvisorLaw.js"
+    },
+    "./handle-lifecycle": {
+      "types": "./src/handle-lifecycle/index.d.ts",
+      "import": "./dist/handle-lifecycle/HandleLifecycleLaw.js"
+    },
+    "./delegate-batch": {
+      "types": "./src/delegate-batch/index.d.ts",
+      "import": "./dist/delegate-batch/DelegateBatchLaw.js"
+    },
+    "./fission-group": {
+      "types": "./src/fission-group/index.d.ts",
+      "import": "./dist/fission-group/FissionGroupLaw.js"
     }
   },
   "files": [
@@ -116,28 +248,62 @@
     "src/time-node/index.d.ts",
     "src/time-testing/index.d.ts",
     "src/wait/index.d.ts",
-    "src/prefix/index.d.ts",
-    "src/compression/index.d.ts",
     "src/delivery/index.d.ts",
-    "src/casebook/index.d.ts",
+    "src/prefix/index.d.ts",
+    "src/degeneration/index.d.ts",
+    "src/spool/index.d.ts",
+    "src/convergence/index.d.ts",
     "src/retention/index.d.ts",
-    "src/permit/index.d.ts",
+    "src/segments/index.d.ts",
+    "src/casebook/index.d.ts",
+    "src/casebook-maintenance/index.d.ts",
+    "src/casebook-access/index.d.ts",
+    "src/quarantine/index.d.ts",
+    "src/pty/index.d.ts",
+    "src/ablation/index.d.ts",
+    "src/compression/index.d.ts",
+    "src/projection/index.d.ts",
+    "src/capability/index.d.ts",
+    "src/authority/index.d.ts",
+    "src/sandbox/index.d.ts",
     "src/routing/index.d.ts",
+    "src/permit/index.d.ts",
+    "src/capacity/index.d.ts",
+    "src/admission-queue/index.d.ts",
+    "src/dispatch/index.d.ts",
+    "src/borrowing/index.d.ts",
+    "src/chat-execution/index.d.ts",
+    "src/association/index.d.ts",
+    "src/run-witness/index.d.ts",
+    "src/git-porcelain/index.d.ts",
+    "src/integration/index.d.ts",
+    "src/attachment-lease/index.d.ts",
+    "src/ordinal/index.d.ts",
+    "src/bayes/index.d.ts",
+    "src/warm-start/index.d.ts",
+    "src/advisor/index.d.ts",
+    "src/handle-lifecycle/index.d.ts",
+    "src/delegate-batch/index.d.ts",
+    "src/fission-group/index.d.ts",
     "README.md",
     "PROCESS.md",
     "TRACE.md",
     "OWNERSHIP.md",
     "MIGRATION.md",
-    "THIRD_PARTY_NOTICES"
+    "THIRD_PARTY_NOTICES",
+    "src/programming/index.d.ts",
+    "src/failure/index.d.ts",
+    "src/failure-budget/index.d.ts"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "npm run build && node --test src/lifecycle/tests/*.test.mjs src/eventstore/tests/*.test.mjs src/assembly/tests/*.test.mjs src/process/tests/*.test.mjs src/supervision/tests/*.test.mjs src/trace/tests/*.test.mjs src/session/tests/*.test.mjs src/resources/tests/*.test.mjs src/identity/tests/*.test.mjs src/events/tests/*.test.mjs src/fs/tests/*.test.mjs src/time/tests/*.test.mjs src/wait/tests/*.test.mjs src/prefix/tests/*.test.mjs src/compression/tests/*.test.mjs src/delivery/tests/*.test.mjs src/casebook/tests/*.test.mjs src/retention/tests/*.test.mjs src/permit/tests/*.test.mjs src/routing/tests/*.test.mjs scripts/tests/*.test.mjs",
+    "test": "npm run build && node --test src/lifecycle/tests/*.test.mjs src/eventstore/tests/*.test.mjs src/assembly/tests/*.test.mjs src/process/tests/*.test.mjs src/supervision/tests/*.test.mjs src/trace/tests/*.test.mjs src/session/tests/*.test.mjs src/resources/tests/*.test.mjs src/identity/tests/*.test.mjs src/events/tests/*.test.mjs src/fs/tests/*.test.mjs src/time/tests/*.test.mjs src/wait/tests/*.test.mjs src/prefix/tests/*.test.mjs src/delivery/tests/*.test.mjs src/degeneration/tests/*.test.mjs src/spool/tests/*.test.mjs src/convergence/tests/*.test.mjs src/retention/tests/*.test.mjs src/segments/tests/*.test.mjs src/casebook/tests/*.test.mjs src/casebook-maintenance/tests/*.test.mjs src/casebook-access/tests/*.test.mjs src/quarantine/tests/*.test.mjs src/pty/tests/*.test.mjs src/ablation/tests/*.test.mjs src/capability/tests/*.test.mjs src/authority/tests/*.test.mjs src/compression/tests/*.test.mjs src/projection/tests/*.test.mjs src/sandbox/tests/*.test.mjs src/routing/tests/*.test.mjs src/permit/tests/*.test.mjs src/capacity/tests/*.test.mjs src/admission-queue/tests/*.test.mjs src/dispatch/tests/*.test.mjs src/borrowing/tests/*.test.mjs src/chat-execution/tests/*.test.mjs src/association/tests/*.test.mjs src/programming/tests/*.test.mjs src/run-witness/tests/*.test.mjs src/git-porcelain/tests/*.test.mjs src/integration/tests/*.test.mjs src/failure/tests/*.test.mjs src/failure-budget/tests/*.test.mjs src/attachment-lease/tests/*.test.mjs src/warm-start/tests/*.test.mjs src/handle-lifecycle/tests/*.test.mjs src/delegate-batch/tests/*.test.mjs src/ordinal/tests/*.test.mjs src/bayes/tests/*.test.mjs src/fission-group/tests/*.test.mjs src/advisor/tests/*.test.mjs scripts/tests/*.test.mjs",
     "prepack": "npm run build"
   },
   "devDependencies": {
     "@fable-org/fable-compiler-js": "3.8.1",
     "@fable-org/fable-library-js": "2.8.1",
+    "bun-pty": "0.4.10",
     "esbuild": "0.28.2",
     "typescript": "7.0.2"
   }

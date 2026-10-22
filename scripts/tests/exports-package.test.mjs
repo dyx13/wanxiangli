@@ -25,7 +25,15 @@ test('SPEC[build-009] every declared library and type is delivered unchanged wit
   succeed(spawnSync('npm', ['install', '--ignore-scripts', '--omit=dev', '--no-audit', '--no-fund', path.join(directory, packed.filename)], { cwd: consumer, env, encoding: 'utf8', timeout: 30000 }))
   const installed = path.join(consumer, 'node_modules/wanxiangli')
   const metadata = JSON.parse(readFileSync(path.join(installed, 'package.json'), 'utf8'))
-  const entries = ['casebook', 'compression', 'delivery', 'durable-work', 'events', 'eventstore', 'fs', 'identity', 'ownership', 'permit', 'prefix', 'process', 'resources', 'retention', 'routing', 'supervision', 'time', 'time-node', 'time-testing', 'trace', 'wait', 'work']
+  const entries = [
+    'ablation', 'admission-queue', 'advisor', 'association', 'attachment-lease', 'authority', 'bayes', 'borrowing',
+    'capability', 'capacity', 'casebook', 'casebook-access', 'casebook-maintenance', 'chat-execution', 'compression',
+    'convergence', 'degeneration', 'delegate-batch', 'delivery', 'dispatch', 'durable-work', 'events', 'eventstore',
+    'failure', 'failure-budget', 'fission-group', 'fs', 'git-porcelain', 'handle-lifecycle', 'identity', 'integration',
+    'ordinal', 'ownership', 'permit', 'prefix', 'process', 'programming', 'projection', 'pty', 'quarantine', 'resources',
+    'retention', 'routing', 'run-witness', 'sandbox', 'segments', 'spool', 'supervision', 'time', 'time-node',
+    'time-testing', 'trace', 'wait', 'warm-start', 'work',
+  ]
   assert.deepEqual(Object.keys(metadata.exports).sort(), entries.map(name => './' + name))
   const members = new Set(packed.files.map(file => file.path))
   for (const target of Object.values(metadata.exports)) {
@@ -38,18 +46,22 @@ test('SPEC[build-009] every declared library and type is delivered unchanged wit
   }
   assert.equal(existsSync(path.join(consumer, 'node_modules/@fable-org')), false)
   assert.equal(existsSync(path.join(consumer, 'node_modules/typescript')), false)
+  const declarations = Object.values(metadata.exports).map(target => path.join(installed, target.types))
+  succeed(spawnSync(process.execPath, [path.join(root, 'node_modules/typescript/bin/tsc'), '--noEmit', '--strict',
+    '--target', 'es2022', '--module', 'nodenext', ...declarations],
+  { cwd: consumer, env, encoding: 'utf8', timeout: 30000 }))
   const script = path.join(consumer, 'imports.mjs')
   writeFileSync(script, `for (const name of ${JSON.stringify(entries)}) {
     const module = await import('wanxiangli/' + name)
     if (Object.keys(module).length === 0) throw Error('empty export: ' + name)
   }
-  process.stdout.write('all 22 imports passed\\n')
+  process.stdout.write('all public imports passed\\n')
   `)
   const runtimes = [['node', process.execPath]]
   if (spawnSync('bun', ['--version'], { env, encoding: 'utf8' }).status === 0) runtimes.push(['bun', 'bun'])
   for (const [name, executable] of runtimes) {
     await t.test(`all public imports outside the workspace on ${name}`, () => {
-      assert.match(succeed(spawnSync(executable, [script], { cwd: tmpdir(), env, encoding: 'utf8', timeout: 15000 })), /all 22 imports passed/)
+      assert.match(succeed(spawnSync(executable, [script], { cwd: tmpdir(), env, encoding: 'utf8', timeout: 15000 })), /all public imports passed/)
     })
   }
 })

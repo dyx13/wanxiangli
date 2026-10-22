@@ -14,6 +14,22 @@
 
 归属入口是 `wanxiangli/ownership` / `Ownership`：作用域森林、唯一资源预留、取消与排空、带实例身份的终态和递归 blocker。Reserved、Unknown、信号与超时都不会释放归属；固定父范围资源不随子任期关闭。本库不调用前三刀，C 分别组合归属、物理观察、持久提交和 Work 退休。完整协议和限制见 `OWNERSHIP.md`。
 
+收敛入口是 `wanxiangli/convergence` / `KWayMerge`：多 writer 事实流的结构归并。各 writer 内追加顺序不变，parent 先于 child，就绪 head 之间按 EventId 文本序；同 id 同字节去重、异字节为身份碰撞（裁决委托 `wanxiangli/events`），同名 writer 流拒绝而不静默折叠；`mergeRetained` 把整个保留集合之外的 parent 视为 retention 窗口边界。纯计算，不读文件、不加锁、不解释业务事件；段聚合、retention 截止与业务折叠归调用方。规则与证明见 `src/convergence/AGENTS.md`。
+
+保留入口是 `wanxiangli/retention` / `WriterRetention`：整条 writer 的 UTC 日期分组保留规则（今天与昨天保留，更早整条过期）。截止时刻与活动时刻由调用方给出，非有限时间拒绝而非判过期；不读时钟、不读文件、不删除。见 `src/retention/AGENTS.md`。
+
+段名入口是 `wanxiangli/segments` / `WriterSegments`：writer 段文件的命名与分组律（`<writerId>-dddd.ndjson`，恰好四位 ASCII 数字，序号 0..9999 越界拒绝；连续段系列并组、断续名降为旧式 stem；旧式与段共存的形态命名），以及调用方读出的字节上的 writer 流成帧（`decodeStream`）与共存裁决（`coexistence`：series / legacy / continuation / diverged）。不读目录、不读写文件、不删除、不加锁。见 `src/segments/AGENTS.md`。
+
+Casebook 索引入口是 `wanxiangli/casebook` / `CasebookIndexLaw`：公开索引的纯投影（标题与 shelfmark、稳定排序与定位、epoch 是否推进、LRU 淘汰名单）。不读存储、不持有快照、不写事件。见 `src/casebook/AGENTS.md`。
+
+Casebook 维护入口是 `wanxiangli/casebook-maintenance` / `CasebookMaintenanceLaw`：fetch 按差异维护的纯决策（B→T 零上下文 diff、是否请求 CaseRefresh、读取故障不冒充 Missing、预算截断）。不读文件、不读写 payload、不调 Bookkeeper。见 `src/casebook-maintenance/AGENTS.md`。
+
+Casebook 访问入口是 `wanxiangli/casebook-access` / `CasebookAccessLaw`：实质访问的纯分类（哪些访问计入 relatedPaths、工具结果的路径、规范形、执行器单文件读取）。不读文件、不持有会话状态。见 `src/casebook-access/AGENTS.md`。
+
+规则隔离入口是 `wanxiangli/quarantine` / `RuleQuarantine`：Integrator 业务规则的 (rule, scope) 隔离账（失败登记、隔离期跳过、解除）与 `ProjectionCutTail` 截尾载荷编解码、截尾何时生效。不持有 Current、不做全量重放、不写事件；规则本体与重放预算归调用方。见 `src/quarantine/AGENTS.md`。
+
+调度协议入口是 `wanxiangli/routing` / `RoutingProtocol`：用户 `wanxiangshu.mjs` 的协议 2 ABI owner——模块导出形状与版本、同步调用 `route(role, running, previous)`（冻结副本）、target 严格解码、理论容量查询只认布尔。不读文件、不加载模块、不持有容量；选择策略全部属于用户 MJS。见 `src/routing/AGENTS.md`。
+
 ## 第一刀：两个独立个体，一个组合者
 
 | 入口 | 对象 | 职责 |

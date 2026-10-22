@@ -121,7 +121,7 @@ let private arrayValues (name: string) (value: obj) : obj array =
     if not isArray then
         fail (name + " must be an array")
 
-    Array.init (unbox<int> value?length) (fun index -> ownField value (string index))
+    Array.init (unbox<int> (value?length: obj)) (fun index -> ownField value (string index))
 
 let private cellValue (cell: Cell) =
     if cell.Sealed then cell.Material else cell.View
@@ -130,7 +130,7 @@ let private openCell (view: obj) (fence: Fence option) : Cell =
     { View = stored view
       Fence = fence
       Sealed = false
-      Material = null
+      Material = (null: obj)
       Keys = [||] }
 
 /// 散文游标键沿用宿主原定义：会话、UTF-16 长度与前 24 个码元。
@@ -314,7 +314,7 @@ let Delivery () : DeliveryMessages =
                 | Some cell when cell.Fence = Some fence && not cell.Sealed ->
                     cells[sessionId] <-
                         { cell with
-                            View = null
+                            View = (null: obj)
                             Sealed = true
                             Material = material
                             Keys = keys }
@@ -332,7 +332,7 @@ let Delivery () : DeliveryMessages =
                     fail "restore requires material"
 
                 cells[sessionId] <-
-                    { View = null
+                    { View = (null: obj)
                       Fence = fence
                       Sealed = true
                       Material = material

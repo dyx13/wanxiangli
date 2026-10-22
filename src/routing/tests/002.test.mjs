@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { RoutingProtocol } from '../../../dist/routing/RoutingProtocol.js'
+import { RoutingProtocol } from 'wanxiangli/routing'
 
 const protocol = new RoutingProtocol()
 const ROUTING = /^execution-model-routing: /

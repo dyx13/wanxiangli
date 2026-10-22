@@ -41,6 +41,8 @@ test('SPEC[eventstore-001] two real processes cannot both win revision zero', { 
   first.send('go')
   second.send('go')
   const replies = (await Promise.all(results)).map(value => value.reply)
+  // Each worker closes its connection after replying; the last close checkpoints
+  // the WAL. Reopen only after both have exited, or busy_timeout=0 races that close.
   assert.equal(replies.filter(reply => reply.status === 'Committed').length, 1)
   assert.ok(replies.some(reply => ['NotWritten', 'Conflict'].includes(reply.status)))
   for (const exit of await Promise.all(exits)) assert.deepEqual(exit, [0, null])

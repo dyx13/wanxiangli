@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { ExecutionPermits } from '../../../dist/permit/ExecutionPermits.js'
+import { ExecutionPermits } from 'wanxiangli/permit'
 
 const identity = (fields = {}) => ({
   sessionId: 'ses-a',

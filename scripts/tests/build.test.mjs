@@ -59,7 +59,7 @@ function succeed(result) {
   assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`)
 }
 
-for (const name of ['lifecycle', 'eventstore', 'process', 'trace', 'session']) {
+for (const name of ['lifecycle', 'eventstore', 'process', 'trace', 'session', 'delivery', 'degeneration', 'spool', 'pty', 'ablation', 'compression', 'sandbox', 'routing', 'projection', 'authority', 'permit', 'capacity', 'admission-queue', 'dispatch', 'borrowing', 'run-witness', 'git-porcelain', 'integration', 'failure', 'attachment-lease', 'warm-start', 'handle-lifecycle', 'failure-budget', 'delegate-batch', 'fission-group', 'ordinal', 'bayes', 'advisor']) {
   test(`SPEC[build-001] ${name} compiles and runs its own tests without any sibling owner source`, { timeout: 90000 }, t => {
     const directory = fixture(t, [name])
     assert.deepEqual(readdirSync(path.join(directory, 'src')).sort(), name === 'process' ? ['native-process', name].sort() : [name])
@@ -91,12 +91,12 @@ test('SPEC[build-001] a selected build leaves another module output untouched', 
 
 test('SPEC[build-001] the second cut builds without replacing any first-cut artifact', { timeout: 60000 }, t => {
   const directory = fixture(t, ['process'])
-  for (const name of ['lifecycle', 'eventstore', 'assembly']) {
+  for (const name of ['lifecycle', 'eventstore', 'assembly', 'failure']) {
     mkdirSync(path.join(directory, 'dist', name), { recursive: true })
     writeFileSync(path.join(directory, 'dist', name, 'keep.txt'), name)
   }
   succeed(run(directory, ['scripts/build.mjs', 'process']))
-  for (const name of ['lifecycle', 'eventstore', 'assembly']) {
+  for (const name of ['lifecycle', 'eventstore', 'assembly', 'failure']) {
     assert.equal(readFileSync(path.join(directory, 'dist', name, 'keep.txt'), 'utf8'), name)
     assert.deepEqual(readdirSync(path.join(directory, 'dist', name)), ['keep.txt'])
   }
@@ -117,12 +117,12 @@ test('SPEC[build-001] a real compiler error fails without replacing a previous a
 
 test('SPEC[build-001] the third cut leaves both earlier cuts untouched and has no sibling imports', { timeout: 60000 }, t => {
   const directory = fixture(t, ['trace'])
-  for (const name of ['lifecycle', 'eventstore', 'assembly', 'process']) {
+  for (const name of ['lifecycle', 'eventstore', 'assembly', 'process', 'failure']) {
     mkdirSync(path.join(directory, 'dist', name), { recursive: true })
     writeFileSync(path.join(directory, 'dist', name, 'keep'), `unchanged-${name}`)
   }
   succeed(run(directory, ['scripts/build.mjs', 'trace']))
-  for (const name of ['lifecycle', 'eventstore', 'assembly', 'process']) {
+  for (const name of ['lifecycle', 'eventstore', 'assembly', 'process', 'failure']) {
     assert.equal(readFileSync(path.join(directory, 'dist', name, 'keep'), 'utf8'), `unchanged-${name}`)
     assert.deepEqual(readdirSync(path.join(directory, 'dist', name)), ['keep'])
   }
@@ -141,12 +141,12 @@ test('SPEC[build-001] cross-project references are rejected by the same build en
 
 test('SPEC[build-001] ownership builds without the three earlier cuts and cannot import their services', { timeout: 60000 }, t => {
   const directory = fixture(t, ['session'])
-  for (const name of ['lifecycle', 'eventstore', 'assembly', 'process', 'trace']) {
+  for (const name of ['lifecycle', 'eventstore', 'assembly', 'process', 'trace', 'failure']) {
     mkdirSync(path.join(directory, 'dist', name), { recursive: true })
     writeFileSync(path.join(directory, 'dist', name, 'keep'), `original-${name}`)
   }
   succeed(run(directory, ['scripts/build.mjs', 'session']))
-  for (const name of ['lifecycle', 'eventstore', 'assembly', 'process', 'trace']) {
+  for (const name of ['lifecycle', 'eventstore', 'assembly', 'process', 'trace', 'failure']) {
     assert.equal(readFileSync(path.join(directory, 'dist', name, 'keep'), 'utf8'), `original-${name}`)
     assert.deepEqual(readdirSync(path.join(directory, 'dist', name)), ['keep'])
   }
@@ -157,7 +157,7 @@ test('SPEC[build-001] ownership builds without the three earlier cuts and cannot
 
 test('SPEC[build-001] composition compiles without sibling sources and runs against their artifacts', { timeout: 90000 }, t => {
   const directory = fixture(t, ['assembly'])
-  for (const name of ['lifecycle', 'eventstore']) {
+  for (const name of ['lifecycle', 'eventstore', 'failure']) {
     cpSync(path.join(root, 'dist', name), path.join(directory, 'dist', name), { recursive: true })
   }
   const before = readFileSync(path.join(directory, 'dist/lifecycle/Work.js'), 'utf8')
@@ -197,4 +197,59 @@ test('SPEC[build-001] a shared native path does not permit another cross-directo
   const built = run(directory, ['scripts/build.mjs', 'process'])
   assert.notEqual(built.status, 0)
   assert.match(built.stderr, /Source must be local and explicit/)
+})
+
+function snapshot(directory) {
+  const files = {}
+  const walk = (folder, prefix) => {
+    for (const entry of readdirSync(folder, { withFileTypes: true })) {
+      const relative = prefix ? `${prefix}/${entry.name}` : entry.name
+      if (entry.isDirectory()) walk(path.join(folder, entry.name), relative)
+      else files[relative] = readFileSync(path.join(folder, entry.name), 'utf8')
+    }
+  }
+  walk(directory, '')
+  return files
+}
+
+test('SPEC[build-002] incremental build skips unchanged modules and rebuilds changed, tampered or forced ones', { timeout: 120000 }, t => {
+  const directory = fixture(t, ['ordinal', 'bayes'])
+  const build = (...args) => {
+    const result = run(directory, ['scripts/build.mjs', ...args])
+    succeed(result)
+    return result.stdout
+  }
+  const status = (output, name) => output.match(new RegExp(`\\[build\\] ${name}: (cached|\\d+ ms)`))?.[1]
+  let output = build()
+  assert.match(status(output, 'ordinal'), /ms$/)
+  assert.match(status(output, 'bayes'), /ms$/)
+  const cold = snapshot(path.join(directory, 'dist'))
+
+  output = build()
+  assert.equal(status(output, 'ordinal'), 'cached')
+  assert.equal(status(output, 'bayes'), 'cached')
+
+  const source = path.join(directory, 'src/ordinal', readdirSync(path.join(directory, 'src/ordinal')).filter(file => file.endsWith('.fs'))[0])
+  const original = readFileSync(source, 'utf8')
+  writeFileSync(source, `${original}\n// incremental probe\n`)
+  output = build()
+  assert.match(status(output, 'ordinal'), /ms$/)
+  assert.equal(status(output, 'bayes'), 'cached')
+  writeFileSync(source, original)
+  output = build()
+  assert.match(status(output, 'ordinal'), /ms$/)
+
+  const artifact = path.join(directory, 'dist/bayes', readdirSync(path.join(directory, 'dist/bayes')).find(file => file.endsWith('.js')))
+  writeFileSync(artifact, `${readFileSync(artifact, 'utf8')}// tampered\n`)
+  output = build()
+  assert.equal(status(output, 'ordinal'), 'cached')
+  assert.match(status(output, 'bayes'), /ms$/)
+  const cached = snapshot(path.join(directory, 'dist'))
+
+  output = build('--force')
+  assert.match(status(output, 'ordinal'), /ms$/)
+  assert.match(status(output, 'bayes'), /ms$/)
+  const forced = snapshot(path.join(directory, 'dist'))
+  assert.deepEqual(cached, forced)
+  assert.deepEqual(cold, forced)
 })

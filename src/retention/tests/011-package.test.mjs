@@ -7,6 +7,7 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = fileURLToPath(new URL('../../../', import.meta.url))
+const version = JSON.parse(fs.readFileSync(join(root, 'package.json'), 'utf8')).version
 const { NODE_PATH, NODE_OPTIONS, ...env } = process.env
 const succeed = result => {
   assert.ifError(result.error)
@@ -22,7 +23,7 @@ test('WHAT[durable-convergence-011] actual retention tarball works without sourc
   const packedJson = JSON.parse(succeed(spawnSync('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', directory],
     { cwd: root, env: packageEnv, encoding: 'utf8', timeout: 30000 })))
   const packed = Array.isArray(packedJson) ? packedJson[0] : packedJson.wanxiangli
-  assert.equal(packed.version, '0.9.2')
+  assert.equal(packed.version, version)
   assert.ok(packed.files.some(file => file.path === 'src/retention/index.d.ts'))
   assert.ok(packed.files.some(file => file.path === 'dist/retention/WriterRetention.js'))
   for (const file of packed.files) assert.doesNotMatch(file.path, /\.fs(?:proj|i)?$|^scripts\/|^node_modules\//)

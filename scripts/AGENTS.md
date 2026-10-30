@@ -1,7 +1,7 @@
 # 构建与交付
 
 ## AXIOM
-1. [开发者] 修改一个库时，不应编译其他库，也不应先安装 .NET。
+1. [开发者] 修改一个模块时，不应编译其他模块，也不应先安装 .NET。
    - 理由：维护成本包括等待验证的时间。
 2. [使用者] npm 包必须在没有本仓源码、旧仓和编译器的目录中使用。
    - 理由：只有真实安装能证明它已经是库。
@@ -16,7 +16,7 @@
 4. [AXIOM 1; LEMMA 1] 构建按模块增量：模块的编译输入是 fsproj 文本、其显式列出的源文件、工具链版本（Fable 编译器、Fable 运行库、esbuild、Node 主版本）与构建脚本本身。输入摘要未变、且 `dist/<name>` 与上次记录的逐文件摘要一致时跳过该模块；`--force` 或 `WANXIANGLI_BUILD_FORCE=1` 全部重编。产物不得含进程号等非输入信息，同样输入得到同样字节。
    - 推理：fsproj 已是唯一输入清单，摘要可以完整覆盖它；产物逐文件核对使被改动或被换掉的 dist 不会被误认成缓存。摘要记录在 `.build-stamps/`，仅在产物原子替换成功后写入。
 
-此条约束独立发行验收，不禁止宿主在开发期通过 submodule 和 `file:wanxiangli` 消费源码依赖。任何打包所得 `.tgz` 都只能是临时构建产物，永远不得进入 Git。开发接线的通过不能代替发行包验收。
+此条约束实际 npm 包的隔离安装验收，不要求每个模块独立发行。wanxiangli 当前以一个包交付，模块可单独编译和验证。用户已确定两仓采用并列目录；主程序现有 submodule／`file:wanxiangli` 接线尚待调整，版本取得方式与迁移边界见根《本项目》和 `MIGRATION.md`。开发接线不能代替发行包验收；新打包的 `.tgz` 只作为临时构建产物，不进入 Git。固定历史证据按根例外清单保留。
 
 ## SPEC
 1. [LEMMA 1] `npm run build -- lifecycle`、`eventstore`、`assembly`、`process`、`trace`、`session` 可分别运行；不允许源码跨工程编译。assembly 的运行依赖由公开入口及类型声明表达，不靠 ProjectReference 或私有 dist 路径。process、trace、session 不依赖其他职责或 SQLite。

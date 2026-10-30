@@ -1,10 +1,16 @@
 # wanxiangli
 
-逐步承接旧系统职责的独立库。F# 实现，编译为独立 ESM，通过 npm 包使用。2026-10-20 合并 a8b89a4，退出自动 grounding 入口及 Blogger/Replica 身份；15 个入口保留进程监管与分离时基。
+wanxiangli 是从主程序 wanxiangshu 抽取职责、专门服务于主程序的配套库。两仓作为同一产品协同演进；主程序通过 npm 公开入口单向依赖本库。
 
-当前不是完整新宿主。第一刀是 **工作开立 → 评审 → 接力或交付 → 持久恢复**；第二刀是独立的真实进程会话；第三刀是确认轨迹、字节原件和固定取材区间；0.5.0 第四刀是资源归属与收尾。0.6.0 补完整采集、监管组合和追加 Opening 绑定。主仓已消费库，完整职责迁移仍以主仓验收为准；原 `src/` 中只有说明、没有 fsproj 的目录仍是草稿。
+本仓交付一个 `wanxiangli` npm 包，内部模块通过 `wanxiangli/work`、`wanxiangli/resources` 等子路径导出。模块使用 F# 实现、编译为独立 ESM，可分别构建和验证，但共用包版本；独立验证不要求分别发行。库契约更新后，主程序须安排适配、必要的数据迁移和相关验证。术语与演进原则见 [AGENTS.md](AGENTS.md#本项目)。
 
-0.8.1整合候选保留本地已验核心并接收上游新增模块。时间能力通过 `wanxiangli/time`（Time纯计算）、`wanxiangli/time-node`（NodeTime物理时基）、`wanxiangli/time-testing`（TimeTesting验证时基）分别交付；UtcNow返回Date。Wait的等待入口只需observer capability，冻结deadline可直接消费。迁移与验收边界见[MIGRATION](MIGRATION.md)和[施工记录](施工顺序.md)。
+2026-10-30 用户确定采用 `vibe-fs/` 与 `wanxiangli/` 并列目录。主程序现有主线仍使用 submodule／`file:wanxiangli` 接线，并列目录下的版本取得与构建方案尚待落实。本次只澄清文档，不更换依赖或迁移运行数据；现状与历史边界见 [MIGRATION.md](MIGRATION.md)。
+
+2026-10-20 合并 a8b89a4 时退出自动 grounding 入口及 Blogger/Replica 身份，该批 15 个入口保留进程监管与分离时基。后续版本与入口以当前 `package.json` 和[施工记录](施工顺序.md)为准，不把历史数量当成现状。
+
+本库承接领域和物理能力，实际 Host 适配与产品组装仍由主程序负责。第一刀是 **工作开立 → 评审 → 接力或交付 → 持久恢复**；第二刀是独立的真实进程会话；第三刀是确认轨迹、字节原件和固定取材区间；0.5.0 第四刀是资源归属与收尾。0.6.0 补完整采集、监管组合和追加 Opening 绑定。主仓已消费库，完整职责迁移仍以真实调用切换、旧实现退出和主仓行为验证为准；原 `src/` 中只有说明、没有 fsproj 的目录仍是草稿。
+
+历史 0.8.1 整合候选保留本地已验核心并接收当时上游新增模块。时间能力通过 `wanxiangli/time`（Time纯计算）、`wanxiangli/time-node`（NodeTime物理时基）、`wanxiangli/time-testing`（TimeTesting验证时基）分别交付；UtcNow返回Date。Wait的等待入口只需observer capability，冻结deadline可直接消费。迁移与验收边界见[MIGRATION](MIGRATION.md)和[施工记录](施工顺序.md)。
 
 进程入口是 `wanxiangli/process` / `ProcessSession`：真实启动、有界 stdin、双路原始输出尾部或显式 Capture、独立等待和 POSIX 进程组信号。它不导入下面三个入口，下面三个入口也不导入它。完整用法、字节游标和监管边界见 `PROCESS.md`。
 
